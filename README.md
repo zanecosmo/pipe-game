@@ -3,7 +3,7 @@ A puzzle game that revolves around putting pieces of pipes together. Fluid will 
 
 My purpose for this project was the following:
 * improve my ability to use the basic tools of Javascript in more interesting and advanced ways
-* build an project using a rendering technology (HTML5 Canvas) besides CSS and HTML elements
+* build a project using a rendering technology (HTML5 Canvas) besides CSS and HTML elements
 
 ## Status
 In development.
