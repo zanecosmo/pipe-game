@@ -1,6 +1,6 @@
 // TODO
 /*
-1. get rid of that stupid mousemove bug
+1. refactor this bad boy, i can't tell whats going on
 2. render rotation
 3. enable pipe-connections
 4. figure out how to handle open pipe connections
@@ -10,46 +10,7 @@
 
 import {canvas, c} from "./utils.js";
 import draw from "./render.js";
-
-let areas = [
-    {
-        name: "field",
-        start: {x: 0, y: 0},
-        width: canvas.width,
-        height: canvas.height*(.75),
-        grid: {
-            rows: 6,
-            columns: 10,
-            rule: function() {return (canvas.width/this.columns)}
-        },
-        mod: 0,
-        units: []
-    }, {
-        name: "inventory",
-        start: {x: 0, y: 300},
-        width: canvas.width*(.6),
-        height: canvas.height*(.25),
-        grid: {
-            rows: 2,
-            columns: 6,
-            rule: function() {return (canvas.width*(.6)/this.columns)}
-        },
-        mod: 10,
-        units: []
-    }, {
-        name: "menu",
-        start: {x: 300, y: 300},
-        width: canvas.width*(.4),
-        height: canvas.height*(.25),
-        grid: {
-            rows: 2,
-            columns: 4,
-            rule: function() {return (canvas.width*(.4)/this.columns)}
-        },
-        mod: 0,
-        units: []
-    }
-];
+import areas from "./areas.js";
 
 const layoutGrids = () => {
     const createGrid = (area) => {
@@ -73,34 +34,6 @@ const layoutGrids = () => {
         };
     };
     for (let i = 0; i < areas.length; i++) createGrid(areas[i]);
-};
-
-const whichArea = (position) => {
-    for (let i = 0; i < areas.length; i++) {
-        const area = areas[i];
-        if (
-            position.x < area.start.x + area.width
-            && position.x > area.start.x
-            && position.y < area.start.y + area.height
-            && position.y > area.start.y
-            ) {
-            return area;
-        };
-    };
-};
-
-const whichUnit = (area, position) => {
-    for (let i = 0; i < area.units.length; i++) {
-        const unit = area.units[i];
-        if (
-            position.x < unit.start.x +unit.width
-            && position.x > unit.start.x
-            && position.y < unit.start.y + unit.height
-            && position.y > unit.start.y
-            ) {
-            return unit;
-        };
-    };
 };
 
 const inventoryArea = areas[1];
@@ -212,7 +145,8 @@ const render = () => {
     draw.screen();
     draw.menuOutline();
     if (mouseUnit.area !== null) {
-        draw.hoverSquare(
+        // console.log(mouseUnit);
+        draw.hoverSquare( ///////////////////////////////
             mouseUnit.unit.start.x + 2,
             mouseUnit.unit.start.y + 2,
             mouseUnit.area.grid.rule() - 4,
@@ -233,18 +167,48 @@ const getEventPosition = (e) => {
     return mousePosition;
 };
 
+const whichArea = (position) => {
+    for (let i = 0; i < areas.length; i++) {
+        const area = areas[i];
+        if (
+            position.x < area.start.x + area.width
+            && position.x > area.start.x
+            && position.y < area.start.y + area.height
+            && position.y > area.start.y
+            ) {
+            return area;
+        }
+    };
+};
+
+const whichUnit = (area, position) => {
+    for (let i = 0; i < area.units.length; i++) {
+        const unit = area.units[i];
+        if (
+            position.x < unit.start.x +unit.width
+            && position.x > unit.start.x
+            && position.y < unit.start.y + unit.height
+            && position.y > unit.start.y
+            ) {
+            return unit;
+        };
+    };
+};
+
 canvas.addEventListener("mousemove", (e) => {
 
     const mousePosition = getEventPosition(e); // gets MOUSE POSITION (X,Y) in relation to the canvas
-    const area = whichArea(mousePosition); // tests MOUSE POSITION (X,Y) against all AREAS and UNITS
-    const unit = whichUnit(area, mousePosition);
-    
-    mouseUnit.start.x = mousePosition.x - (area.grid.rule()/2);
-    mouseUnit.start.y = mousePosition.y - (area.grid.rule()/2);
-    mouseUnit.width = area.grid.rule()
-    mouseUnit.mod = area.mod;
-    mouseUnit.area = area;
-    mouseUnit.unit = unit;
+    if (mousePosition.x > 0 && mousePosition.y > 0) {
+        const area = whichArea(mousePosition); // tests MOUSE POSITION (X,Y) against all AREAS and UNITS
+        const unit = whichUnit(area, mousePosition);
+        
+        mouseUnit.start.x = mousePosition.x - (area.grid.rule()/2);
+        mouseUnit.start.y = mousePosition.y - (area.grid.rule()/2);
+        mouseUnit.width = area.grid.rule()
+        mouseUnit.mod = area.mod;
+        mouseUnit.area = area;
+        mouseUnit.unit = unit;
+    };
     
     render();
 
