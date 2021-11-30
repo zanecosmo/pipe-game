@@ -1,10 +1,4 @@
-import {
-    canvas,
-    c,
-    screenColor,
-    renderColor,
-    hoverColor
-} from "./utils.js";
+const canvas = document.getElementById("screen");
 
 export default [
     {
@@ -45,3 +39,4 @@ export default [
         units: []
     }
 ];
+

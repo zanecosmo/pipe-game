@@ -1,10 +1,8 @@
-import {
-    canvas,
-    c,
-    screenColor,
-    renderColor,
-    hoverColor
-} from "./utils.js";
+const canvas = document.getElementById("screen");
+const c = document.getElementById("screen").getContext("2d");
+const screenColor = "rgb(190, 0, 190)";
+const renderColor = "rgb(170, 255, 0)";
+const hoverColor = "rgb(250, 60, 200)"
 
 export default {
     screen: () => {
@@ -12,19 +10,19 @@ export default {
         c.fillRect(0, 0, canvas.width, canvas.height);
     },
 
+    clearScreen: () => c.clearRect(0, 0, canvas.width, canvas.height),
+
     menuOutline: () => {
         c.beginPath();
+        c.lineWidth = 2;
+        c.strokeStyle = renderColor;
+        
         c.moveTo(0, 300);
         c.lineTo(canvas.width, 300);
-        c.strokeStyle = renderColor;
-        c.lineWidth = 2;
-        c.stroke();
     
-        c.beginPath();
         c.moveTo(300, 300);
         c.lineTo(300, 400);
-        c.strokeStyle = renderColor;
-        c.lineWidth = 2;
+        
         c.stroke();
     },
 
@@ -106,6 +104,9 @@ export default {
         c.beginPath();
         this.itemPaths[kind](unit.width, X, Y, mod, padding);
         c.stroke();
+
+        // c.translate()
+        // c.rotate(90 * Math.PI/180);
     },
 
     stackQuantity: (quantity, x,y) => {
