@@ -37,9 +37,13 @@ const renderStackNumbers = () => {
 };
 
 const renderGrabbed = () => {
-    if (mouseUnit.grabbed.length !== 0) {
-        draw.item(mouseUnit, mouseUnit.mod, mouseUnit.grabbed[0].kind);
+    if (mouseUnit.occupiedBy.length !== 0) {
+        draw.item(mouseUnit, mouseUnit.mod, mouseUnit.occupiedBy[0].kind);
     };
+};
+
+const renderRotation = (mouseUnit) => {
+    draw.rotation(mouseUnit);
 };
 
 export default function render() {
@@ -57,6 +61,9 @@ export default function render() {
     renderStackNumbers();
     renderInventoryPipes();
     renderFieldPipes();
+    // if (mouseUnit.grabbed.length > 0) {
+    //     renderRotation(mouseUnit);
+    // };
     renderGrabbed();
     
 };

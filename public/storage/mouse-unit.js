@@ -4,5 +4,5 @@ export default {
     area: null,
     unit: null,
     mod: 0,
-    grabbed: []
+    occupiedBy: []
 };

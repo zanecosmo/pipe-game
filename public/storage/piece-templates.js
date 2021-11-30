@@ -1,6 +1,7 @@
 export default {
     ["end-cap"]: {
         kind: "end-cap",
+        rotationState: 0,
         connectable: [
             {top: null},
             {right: false},
@@ -10,6 +11,7 @@ export default {
     },
     ["two-way"]: {
         kind: "two-way",
+        rotationState: 0,
         connectable: [
             {top: null},
             {right: false},
@@ -19,6 +21,7 @@ export default {
     },
     ["three-way"]: {
         kind: "three-way",
+        rotationState: 0,
         connectable: [
             {top: null},
             {right: false},
@@ -28,6 +31,7 @@ export default {
     },
     ["four-way"]: {
         kind: "four-way",
+        rotationState: 0,
         connectable: [
             {top: false},
             {right: false},
@@ -37,6 +41,7 @@ export default {
     },
     ["elbow"]: {
         kind: "elbow",
+        rotationState: 0,
         connectable: [
             {top: null},
             {right: null},

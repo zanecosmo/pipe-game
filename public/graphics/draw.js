@@ -6,11 +6,15 @@ const hoverColor = "rgb(250, 60, 200)"
 
 export default {
     screen: () => {
+        // c.save();
         c.fillStyle = screenColor;
         c.fillRect(0, 0, canvas.width, canvas.height);
     },
 
-    clearScreen: () => c.clearRect(0, 0, canvas.width, canvas.height),
+    clearScreen: () => {
+        // c.restore()
+        c.clearRect(0, 0, canvas.width, canvas.height);
+    },
 
     menuOutline: () => {
         c.beginPath();
@@ -37,6 +41,12 @@ export default {
         c.lineWidth = .25;
         c.strokeStyle = "white";
         c.strokeRect(x,y,width,height);
+    },
+
+    rotation: function(unit) {
+        c.translate(unit.start.x + unit.width/2, unit.start.y + unit.width/2)
+        c.rotate(unit.occupiedBy[0].rotationState * Math.PI/180);
+        c.translate(-1*(unit.start.x + unit.width/2), -1*(unit.start.y + unit.width/2))
     },
 
     itemPaths: {
@@ -96,17 +106,19 @@ export default {
     item: function(unit, mod, kind) {
         const X = unit.start.x;
         const Y = unit.start.y;
+        const mouseX = unit.start.x + unit.width;
+        const mouseY = unit.start.y + unit.width;
         const padding = 10;
         
         c.strokeStyle = renderColor;
         c.lineWidth = 2;
 
+        c.save()
         c.beginPath();
+        this.rotation(unit);
         this.itemPaths[kind](unit.width, X, Y, mod, padding);
         c.stroke();
-
-        // c.translate()
-        // c.rotate(90 * Math.PI/180);
+        c.restore();
     },
 
     stackQuantity: (quantity, x,y) => {

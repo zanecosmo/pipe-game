@@ -7,8 +7,8 @@ export default [
         width: canvas.width,
         height: canvas.height*(.75),
         grid: {
-            rows: 6,
-            columns: 10,
+            rows: 3,
+            columns: 5,
             rule: function() {return (canvas.width/this.columns)}
         },
         mod: 0,

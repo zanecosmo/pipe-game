@@ -23,10 +23,10 @@ canvas.addEventListener("click", (e) => {
     const unit = mouseEvent.whichUnit(area, mousePosition);
 
     if (area.name === "inventory") {
-        if (mouseUnit.grabbed.length === 0) {
+        if (mouseUnit.occupiedBy.length === 0) {
             if (unit.occupiedBy.length > 0) player.grabItem(unit.occupiedBy);
         } else {
-            if (unit.occupiedBy.length > 0 && unit.occupiedBy[0].kind === mouseUnit.grabbed[0].kind) {
+            if (unit.occupiedBy.length > 0 && unit.occupiedBy[0].kind === mouseUnit.occupiedBy[0].kind) {
                 player.placeItem(unit.occupiedBy);
             } else if (unit.occupiedBy.length === 0) {
                 player.placeItem(unit.occupiedBy);
@@ -34,17 +34,17 @@ canvas.addEventListener("click", (e) => {
         };
 
     } else if (area.name === "field") {
-        if (mouseUnit.grabbed.length === 0) {
+        if (mouseUnit.occupiedBy.length === 0) {
             if (unit.occupiedBy.length > 0) player.grabItem(unit.occupiedBy);
         } else if (unit.occupiedBy.length === 0) player.placeItem(unit.occupiedBy);
     
-    } else if (mouseUnit.grabbed.length === 0) player.pressButton(unit);
+    } else if (mouseUnit.occupiedBy.length === 0) player.pressButton(unit);
 
     render();
 });
 
 document.addEventListener("keypress", (e) => {
-    if (e.key === " " && mouseUnit.grabbed.length === 1) {
+    if (e.key === " " && mouseUnit.occupiedBy.length === 1) {
         player.rotateItem();
         render();
     };

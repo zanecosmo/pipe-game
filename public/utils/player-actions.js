@@ -2,10 +2,11 @@ import mouseUnit from "../storage/mouse-unit.js";
 
 export default {
     rotateItem: function() {
-        const grabbedConns = mouseUnit.grabbed[0].connectable;
+        mouseUnit.occupiedBy[0].rotationState += 90;
+        console.log(mouseUnit);
+
+        const grabbedConns = mouseUnit.occupiedBy[0].connectable;
         let rotation = [];
-        
-        console.log(grabbedConns);
         
         for (let i = 0; i < grabbedConns.length; i++) {
             const value = Object.values(grabbedConns[i])
@@ -26,11 +27,11 @@ export default {
 
     grabItem: function(slot) {
         const grabbedItem = slot.pop();
-        mouseUnit.grabbed.push(grabbedItem);
+        mouseUnit.occupiedBy.push(grabbedItem);
     },
 
     placeItem: function(slot) {
-        const grabbedItem = mouseUnit.grabbed.pop();
+        const grabbedItem = mouseUnit.occupiedBy.pop();
         slot.push(grabbedItem);
     },
 
