@@ -26,7 +26,8 @@ export default {
     layoutGrids: function() {for (let i = 0; i < areas.length; i++) this.createGrid(areas[i])},
 
     createItem: function(item) {
-        inventoryArea.units[item.position].occupiedBy.push(pieces[item.kind]);
+        const newPiece = JSON.parse(JSON.stringify(pieces[item.kind]))
+        inventoryArea.units[item.position].occupiedBy.push(newPiece);
     },
 
     fillInventory: function() {

@@ -1,9 +1,11 @@
 import mouseUnit from "../storage/mouse-unit.js";
+import areas from "../storage/areas.js";
 
 export default {
     rotateItem: function() {
         mouseUnit.occupiedBy[0].rotationState += 90;
         console.log(mouseUnit);
+        console.log(areas[1].units);
 
         const grabbedConns = mouseUnit.occupiedBy[0].connectable;
         let rotation = [];

@@ -42,10 +42,6 @@ const renderGrabbed = () => {
     };
 };
 
-const renderRotation = (mouseUnit) => {
-    draw.rotation(mouseUnit);
-};
-
 export default function render() {
     draw.clearScreen();
     draw.screen();
@@ -61,9 +57,5 @@ export default function render() {
     renderStackNumbers();
     renderInventoryPipes();
     renderFieldPipes();
-    // if (mouseUnit.grabbed.length > 0) {
-    //     renderRotation(mouseUnit);
-    // };
     renderGrabbed();
-    
 };
