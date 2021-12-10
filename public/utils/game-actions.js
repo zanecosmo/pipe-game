@@ -34,5 +34,11 @@ export default {
         for (let i = 0; i < items.length; i++) {
             for (let j = 0; j < items[i].number; j++) this.createItem(items[i]);
         };
-    }
+    },
+
+    // checkSystem: function() { ///////////////////////////////////////////////////////////////////////////
+    //     if (system.connected.every((connected) => connected === true)) {
+    //         endLevel();
+    //     };
+    // }
 };

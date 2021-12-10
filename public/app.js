@@ -3,8 +3,10 @@ import game from "./utils/game-actions.js";
 import player from "./utils/player-actions.js";
 import mouseEvent from "./utils/mouse-event-handlers.js";
 import render from "./graphics/render.js";
+import pages from "./pages.js";
 
 const canvas = document.getElementById("screen");
+let pageView = "play-page";
 
 canvas.addEventListener("mousemove", (e) => {
     const mousePosition = mouseEvent.getPosition(e);
@@ -14,7 +16,7 @@ canvas.addEventListener("mousemove", (e) => {
 
         mouseEvent.updateMouseUnit(mousePosition, area, unit);
     };
-    render();
+    render(pages[pageView]);
 });
 
 canvas.addEventListener("click", (e) => {
@@ -36,21 +38,24 @@ canvas.addEventListener("click", (e) => {
     } else if (area.name === "field") {
         if (mouseUnit.occupiedBy.length === 0) {
             if (unit.occupiedBy.length > 0) player.grabItem(unit.occupiedBy);
-        } else if (unit.occupiedBy.length === 0) player.placeItem(unit.occupiedBy);
+        } else if (unit.occupiedBy.length === 0) {
+            player.placeItem(unit.occupiedBy);
+            // game.checkSystem(); ///////////////////////////////////////////////////////////////
+        }
     
     } else if (mouseUnit.occupiedBy.length === 0) player.pressButton(unit);
 
-    render();
+    render(pages[pageView]);
 });
 
 document.addEventListener("keypress", (e) => {
     if (e.key === " " && mouseUnit.occupiedBy.length === 1) {
         player.rotateItem();
-        render();
+        render(pages[pageView]);
     };
 });
 
 game.layoutGrids();
 game.fillInventory();
 
-render();
+render(pages[pageView]);

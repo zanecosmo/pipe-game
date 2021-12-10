@@ -1,7 +1,17 @@
 import areas from "../storage/areas.js";
 import mouseUnit from "../storage/mouse-unit.js";
+import game from "./game-actions.js";
 
 const canvas = document.getElementById("screen");
+
+const checkBounds = (position, bounds) => {
+    if (position.x < bounds.start.x + bounds.width
+        && position.x >= bounds.start.x
+        && position.y < bounds.start.y + bounds.height
+        && position.y >= bounds.start.y
+        ) {return true}
+        else return false
+};
 
 export default {
     getPosition: function(e) {
@@ -16,16 +26,22 @@ export default {
     whichArea: function(position) {
         for (let i = 0; i < areas.length; i++) {
             const area = areas[i];
-            if (
-                position.x < area.start.x + area.width
-                && position.x >= area.start.x
-                && position.y < area.start.y + area.height
-                && position.y >= area.start.y
-                ) {
+            if (checkBounds(position, area) === true) {
                 return area;
             }
         };
     },
+
+    // playPressCheck: function(position) { //////////////////////////////////////////////////////////
+    //     if (
+    //         position.x < playButton.start.x + playButton.width
+    //         && position.x >= playButton.start.x
+    //         && position.y < playButton.start.y + playButton.height
+    //         && position.y >= playButton.start.y
+    //         ) {
+    //             game.startGame() ////////////////////////////////////////////////////////////
+    //     }
+    // },
 
     whichUnit: function(area, position) {
         const eventPositionX = position.x - area.start.x;
