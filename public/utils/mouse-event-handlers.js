@@ -1,10 +1,11 @@
 import areas from "../storage/areas.js";
 import mouseUnit from "../storage/mouse-unit.js";
 import game from "./game-actions.js";
+import buttons from "../storage/buttons.js";
 
 const canvas = document.getElementById("screen");
 
-const checkBounds = (position, bounds) => {
+const isInBounds = (position, bounds) => {
     if (position.x < bounds.start.x + bounds.width
         && position.x >= bounds.start.x
         && position.y < bounds.start.y + bounds.height
@@ -26,9 +27,20 @@ export default {
     whichArea: function(position) {
         for (let i = 0; i < areas.length; i++) {
             const area = areas[i];
-            if (checkBounds(position, area) === true) {
+            if (isInBounds(position, area) === true) {
                 return area;
             }
+        };
+    },
+
+    setButtonHover: function(position) {
+        for (const button in buttons) {
+            const butt = buttons[button];
+            butt.hover = false;
+            if (isInBounds(position, butt.bounds) === true) {
+                // console.log(butt);
+                butt.hover = true;
+            };
         };
     },
 

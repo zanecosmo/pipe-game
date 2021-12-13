@@ -30,9 +30,9 @@ export default {
         inventoryArea.units[item.position].occupiedBy.push(newPiece);
     },
 
-    fillInventory: function() {
-        for (let i = 0; i < items.length; i++) {
-            for (let j = 0; j < items[i].number; j++) this.createItem(items[i]);
+    fillInventory: function(level) {
+        for (let i = 0; i < items[level].length; i++) {
+            for (let j = 0; j < items[level][i].number; j++) this.createItem(items[level][i]);
         };
     },
 

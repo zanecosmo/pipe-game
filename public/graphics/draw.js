@@ -6,13 +6,11 @@ const hoverColor = "rgb(250, 60, 200)"
 
 export default {
     screen: () => {
-        // c.save();
         c.fillStyle = screenColor;
         c.fillRect(0, 0, canvas.width, canvas.height);
     },
 
     clearScreen: () => {
-        // c.restore()
         c.clearRect(0, 0, canvas.width, canvas.height);
     },
 
@@ -47,6 +45,38 @@ export default {
         c.translate(unit.start.x + unit.width/2, unit.start.y + unit.width/2)
         c.rotate(unit.occupiedBy[0].rotationState * Math.PI/180);
         c.translate(-1*(unit.start.x + unit.width/2), -1*(unit.start.y + unit.width/2))
+    },
+
+    gameTitle: function() {
+        c.font ="65px sans-serif";
+        c.fillStyle = renderColor;
+        c.fillText("pipe-connect", 60, 150);
+    },
+
+    button: function(button) {
+        const start = button.bounds.start;
+        const textPosition = button.text.start;
+        const text = button.text.value;
+        const textStyle = button.text.style;
+        let boxColor = screenColor;
+        let textColor = renderColor;
+
+        if (button.hover === true) {
+            boxColor = renderColor;
+            textColor = screenColor;
+        };
+
+        c.beginPath();
+        c.fillStyle = boxColor;
+        c.fillRect(start.x, start.y, button.bounds.width, button.bounds.height);
+        c.closePath();
+
+        c.beginPath();
+        c.fillStyle = textColor;
+        c.lineWidth = 2;
+        c.font = textStyle;
+        c.fillText(text, textPosition.x, textPosition.y);
+        c.closePath();
     },
 
     itemPaths: {
