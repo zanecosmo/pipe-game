@@ -1,3 +1,8 @@
+import game from "../utils/game-actions.JS";
+import state from "./state.js"
+import render from "../graphics/render.js";
+import pages from "../pages.js";
+
 export default {
     ["play-button"]: {
         bounds: {
@@ -10,7 +15,15 @@ export default {
             value: "play",
             style: "20px sans-serif"
         },
-        hover: false
+        hover: false,
+        clickAction: () => {
+            game.removeEventListeners();
+            state.page = "play-page";
+            game.addEventListeners();
+            game.layoutGrids();
+            game.fillInventory(1);
+            render(pages[state.page].components);
+        }
     },
 
     ["levels-button"]: {

@@ -1,6 +1,6 @@
 import mouseUnit from "./storage/mouse-unit.js";
 import player from "./utils/player-actions.js";
-import mouseEvent from "./utils/mouse-event-handlers.js";
+import mouseEvent from "./utils/mouse-event-utils.js";
 import render from "./graphics/render.js";
 import pages from "./pages.js";
 import state from "./storage/state.js"
@@ -20,6 +20,11 @@ export default {
 
         ["click"]: function(e) {
             console.log("mouse clicked");
+            const mousePosition = mouseEvent.getPosition(e);
+            const button = mouseEvent.whichButton(mousePosition);
+            if (button !== undefined){
+                button.clickAction()
+            };
         }
     },
 

@@ -1,7 +1,6 @@
 import mouseUnit from "../storage/mouse-unit.js";
 import areas from "../storage/areas.js";
 import buttons from "../storage/buttons.js";
-
 import draw from "./draw.js";
 
 const inventoryArea = areas[1];

@@ -1,7 +1,8 @@
 import areas from "../storage/areas.js";
 import mouseUnit from "../storage/mouse-unit.js";
-import game from "./game-actions.js";
+
 import buttons from "../storage/buttons.js";
+
 
 const canvas = document.getElementById("screen");
 
@@ -35,25 +36,23 @@ export default {
 
     setButtonHover: function(position) {
         for (const button in buttons) {
-            const butt = buttons[button];
-            butt.hover = false;
-            if (isInBounds(position, butt.bounds) === true) {
+            const btn = buttons[button];
+            btn.hover = false;
+            if (isInBounds(position, btn.bounds) === true) {
                 // console.log(butt);
-                butt.hover = true;
+                btn.hover = true;
             };
         };
     },
 
-    // playPressCheck: function(position) { //////////////////////////////////////////////////////////
-    //     if (
-    //         position.x < playButton.start.x + playButton.width
-    //         && position.x >= playButton.start.x
-    //         && position.y < playButton.start.y + playButton.height
-    //         && position.y >= playButton.start.y
-    //         ) {
-    //             game.startGame() ////////////////////////////////////////////////////////////
-    //     }
-    // },
+    whichButton: function(position) {
+        for (const button in buttons) {
+            const btn = buttons[button];
+            if (isInBounds(position, btn.bounds) === true) {
+                return btn;
+            };
+        };
+    },
 
     whichUnit: function(area, position) {
         const eventPositionX = position.x - area.start.x;
