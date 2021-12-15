@@ -3,6 +3,24 @@ import state from "./state.js"
 import render from "../graphics/render.js";
 import pages from "../pages.js";
 
+const startLevelOne = () => {
+    game.removeEventListeners();
+    state.page = "play-page";
+    state.level = 1;
+    game.addEventListeners();
+    game.startFirstLevel();
+
+    render(pages[state.page].components);
+};
+
+const openLevelSelection = () => { ///////////////////////////////////////
+    game.removeEventListeners();
+    state.page = "levels-page";
+    game.addEventListeners();
+
+    render(pages[state.page].components);
+};
+
 export default {
     ["play-button"]: {
         bounds: {
@@ -16,14 +34,7 @@ export default {
             style: "20px sans-serif"
         },
         hover: false,
-        clickAction: () => {
-            game.removeEventListeners();
-            state.page = "play-page";
-            game.addEventListeners();
-            game.layoutGrids();
-            game.fillInventory(1);
-            render(pages[state.page].components);
-        }
+        clickAction: startLevelOne
     },
 
     ["levels-button"]: {
@@ -37,6 +48,22 @@ export default {
             value: "levels",
             style: "20px sans-serif"
         },
-        hover: false
+        hover: false,
+        clickAction: openLevelSelection
+    },
+
+    ["back-button"]: {
+        bounds: {
+            start: {x: 200, y: 200},
+            width: 100,
+            height: 28
+        },
+        text: {
+            start: {x: 224, y: 261},
+            value: "back",
+            style: "20px sans-serif"
+        },
+        hover: false,
+        // clickAction: openLevelSelection
     }
 };

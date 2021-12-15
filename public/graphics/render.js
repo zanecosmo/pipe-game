@@ -1,10 +1,12 @@
 import mouseUnit from "../storage/mouse-unit.js";
 import areas from "../storage/areas.js";
 import buttons from "../storage/buttons.js";
+import levelsArea from "../storage/levels-area.js";
 import draw from "./draw.js";
 
 const inventoryArea = areas[1];
 const fieldArea = areas[0];
+const levelArea = levelsArea[0];
 
 const renders = {
     ["field-pipes"]: () => {
@@ -29,10 +31,7 @@ const renders = {
         for (let i = 0; i < inventoryArea.units.length; i++) {
             if (inventoryArea.units[i].occupiedBy.length !== 0) {
                 const unit = inventoryArea.units[i];
-                draw.stackQuantity(
-                    unit.occupiedBy.length,
-                    unit.start.x,
-                    unit.start.y
+                draw.stackQuantity(unit.occupiedBy.length, unit.start.x, unit.start.y
                 );
             };
         };
@@ -57,18 +56,36 @@ const renders = {
         };
     },
 
-    ["title"]: () => {
+    ["game-title"]: () => {
         draw.gameTitle();
     },
 
     ["play-button"]: () => {
-        // console.log(buttons["play-button"].bounds);
         draw.button(buttons["play-button"]);
     },
 
+    ["back-button"]: () => {
+        draw.button(buttons["back-button"]);
+    },
+
     ["levels-button"]: () => {
-        // console.log("levels-button DRAWN");
         draw.button(buttons["levels-button"]);
+    },
+
+    ["level-numbers"]: () => { ////////////////////////////////////////////////
+        for (let i = 0; i < levelsArea.units.length; i++) {
+            const unit = levelsArea.units[i];
+
+            if (unit === mouseUnit.unit) {
+                draw.levelNumber((i+1), unit, true)
+            } else {
+                draw.levelNumber((i+1), unit, false);
+            };
+        };
+    },
+
+    ["levels-title"]: () => {
+        draw.levelsTitle();
     }
 };
 

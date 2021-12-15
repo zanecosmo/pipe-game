@@ -2,7 +2,7 @@ const canvas = document.getElementById("screen");
 const c = document.getElementById("screen").getContext("2d");
 const screenColor = "rgb(190, 0, 190)";
 const renderColor = "rgb(170, 255, 0)";
-const hoverColor = "rgb(250, 60, 200)"
+const hoverColor = "rgb(250, 60, 200)";
 
 export default {
     screen: () => {
@@ -53,11 +53,19 @@ export default {
         c.fillText("pipe-connect", 60, 150);
     },
 
+    levelsTitle: function() {
+        c.font ="45px sans-serif";
+        c.fillStyle = renderColor;
+        c.textBaseline = "hanging";
+        c.fillText("select level", 25, 10);
+    },
+
     button: function(button) {
         const start = button.bounds.start;
         const textPosition = button.text.start;
         const text = button.text.value;
         const textStyle = button.text.style;
+        
         let boxColor = screenColor;
         let textColor = renderColor;
 
@@ -136,8 +144,6 @@ export default {
     item: function(unit, mod, kind) {
         const X = unit.start.x;
         const Y = unit.start.y;
-        const mouseX = unit.start.x + unit.width;
-        const mouseY = unit.start.y + unit.width;
         const padding = 10;
         
         c.strokeStyle = renderColor;
@@ -158,6 +164,27 @@ export default {
             c.textBaseline = "hanging";
             c.fillText(quantity, x+2, y+3)
         };
+    },
+
+    levelNumber: (number, unit, isHovered) => {
+        let boxColor = screenColor;
+        let textColor = renderColor;
+
+        if (isHovered === true) {
+            boxColor = renderColor;
+            textColor = screenColor;
+        };
+        
+        c.beginPath();
+        c.fillStyle = boxColor;
+        c.fillRect(unit.start.x, unit.start.y, unit.width, unit.width);
+        c.closePath();
+
+        c.beginPath();
+        c.fillStyle = textColor;
+        c.lineWidth = 2;
+        c.font = "40px sans-serif";
+        c.fillText(number, unit.start.x + 5, unit.start.y + 10);
+        c.closePath();
     }
 };
-

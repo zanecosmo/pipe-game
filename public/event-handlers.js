@@ -4,14 +4,11 @@ import mouseEvent from "./utils/mouse-event-utils.js";
 import render from "./graphics/render.js";
 import pages from "./pages.js";
 import state from "./storage/state.js"
-import buttons from "./storage/buttons.js"
+import levelsArea from "./storage/levels-area.js"
 
 export default {
     ["start-page"]: {
         ["mousemove"]: function(e) {
-            for (let i = 0; i < pages[state.page].buttons.length; i++) {
-                buttons[pages[state.page].buttons[i]].hover = false;
-            };
             const mousePosition = mouseEvent.getPosition(e);
             mouseEvent.setButtonHover(mousePosition);
 
@@ -19,7 +16,6 @@ export default {
         },
 
         ["click"]: function(e) {
-            console.log("mouse clicked");
             const mousePosition = mouseEvent.getPosition(e);
             const button = mouseEvent.whichButton(mousePosition);
             if (button !== undefined){
@@ -76,5 +72,21 @@ export default {
                 render(pages[state.page].components);
             };
         },
+    },
+
+    ["levels-page"]: { ////////////////////////////////////////////////
+        ["mousemove"]: function(e) {
+            const mousePosition = mouseEvent.getPosition(e);
+            if (mousePosition.x > 0 && mousePosition.y > 0) {
+                if (mouseEvent.isInBounds(mousePosition, levelsArea.bounds) === true) {
+                    const unit = mouseEvent.whichUnit(levelsArea, mousePosition);
+                    mouseEvent.updateMouseUnit(mousePosition, levelsArea, unit);
+                } else {
+                    mouseEvent.updateMouseUnit(mousePosition, null, null);
+                };
+            };
+
+            render(pages[state.page].components);
+        },
     }
-}
+};

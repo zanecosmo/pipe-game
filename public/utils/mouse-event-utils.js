@@ -6,16 +6,16 @@ import buttons from "../storage/buttons.js";
 
 const canvas = document.getElementById("screen");
 
-const isInBounds = (position, bounds) => {
-    if (position.x < bounds.start.x + bounds.width
-        && position.x >= bounds.start.x
-        && position.y < bounds.start.y + bounds.height
-        && position.y >= bounds.start.y
-        ) {return true}
-        else return false
-};
-
 export default {
+    isInBounds: function(position, bounds) {
+        if (position.x < bounds.start.x + bounds.width
+            && position.x >= bounds.start.x
+            && position.y < bounds.start.y + bounds.height
+            && position.y >= bounds.start.y
+            ) {return true}
+            else return false
+    },
+
     getPosition: function(e) {
         const screen = canvas.getBoundingClientRect();
         const eventPosition = {
@@ -28,9 +28,9 @@ export default {
     whichArea: function(position) {
         for (let i = 0; i < areas.length; i++) {
             const area = areas[i];
-            if (isInBounds(position, area) === true) {
+            if (this.isInBounds(position, area.bounds) === true) {
                 return area;
-            }
+            };
         };
     },
 
@@ -38,8 +38,7 @@ export default {
         for (const button in buttons) {
             const btn = buttons[button];
             btn.hover = false;
-            if (isInBounds(position, btn.bounds) === true) {
-                // console.log(butt);
+            if (this.isInBounds(position, btn.bounds) === true) {
                 btn.hover = true;
             };
         };
@@ -48,15 +47,15 @@ export default {
     whichButton: function(position) {
         for (const button in buttons) {
             const btn = buttons[button];
-            if (isInBounds(position, btn.bounds) === true) {
+            if (this.isInBounds(position, btn.bounds) === true) {
                 return btn;
             };
         };
     },
 
     whichUnit: function(area, position) {
-        const eventPositionX = position.x - area.start.x;
-        const eventPositionY = position.y - area.start.y;
+        const eventPositionX = position.x - area.bounds.start.x;
+        const eventPositionY = position.y - area.bounds.start.y;
     
         const unitRule = area.grid.rule();
     
@@ -69,11 +68,20 @@ export default {
     },
 
     updateMouseUnit: function(mousePosition, area, unit) {
-        mouseUnit.start.x = mousePosition.x - (area.grid.rule()/2);
-        mouseUnit.start.y = mousePosition.y - (area.grid.rule()/2);
-        mouseUnit.width = area.grid.rule()
-        mouseUnit.mod = area.mod;
-        mouseUnit.area = area;
-        mouseUnit.unit = unit;
+        if (area === null) {
+            mouseUnit.start.x = 0
+            mouseUnit.start.y = 0
+            mouseUnit.width = 0
+            mouseUnit.mod = 0;
+            mouseUnit.area = area;
+            mouseUnit.unit = unit;
+        } else {
+            mouseUnit.start.x = mousePosition.x - (area.grid.rule()/2);
+            mouseUnit.start.y = mousePosition.y - (area.grid.rule()/2);
+            mouseUnit.width = area.grid.rule()
+            mouseUnit.mod = area.mod;
+            mouseUnit.area = area;
+            mouseUnit.unit = unit;
+        };
     }
 };

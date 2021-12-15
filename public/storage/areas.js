@@ -3,9 +3,11 @@ const canvas = document.getElementById("screen");
 export default [
     {
         name: "field",
-        start: {x: 0, y: 0},
-        width: canvas.width,
-        height: canvas.height*(.75),
+        bounds: {
+            start: {x: 0, y: 0},
+            width: canvas.width,
+            height: canvas.height*(.75),
+        },
         grid: {
             rows: 3,
             columns: 5,
@@ -15,9 +17,11 @@ export default [
         units: []
     }, {
         name: "inventory",
-        start: {x: 0, y: 300},
-        width: canvas.width*(.6),
-        height: canvas.height*(.25),
+        bounds: {
+            start: {x: 0, y: 300},
+            width: canvas.width*(.6),
+            height: canvas.height*(.25),
+        },
         grid: {
             rows: 2,
             columns: 6,
@@ -27,9 +31,11 @@ export default [
         units: []
     }, {
         name: "menu",
-        start: {x: 300, y: 300},
-        width: canvas.width*(.4),
-        height: canvas.height*(.25),
+        bounds: {
+            start: {x: 300, y: 300},
+            width: canvas.width*(.4),
+            height: canvas.height*(.25),
+        },
         grid: {
             rows: 2,
             columns: 4,

@@ -5,6 +5,7 @@ import pages from "../pages.js";
 import state from "../storage/state.js"
 import handlers from "../event-handlers.js";
 import render from "../graphics/render.js";
+import levelsArea from "../storage/levels-area.js";
 
 const canvas = document.getElementById("screen");
 
@@ -14,16 +15,18 @@ export default {
     createGrid: function(area) {
         for (let row = 0; row < area.grid.rows; row++) {
             for (let i = 0; i < area.grid.columns; i++) {
-                
+
                 const unitObject = {
                     area: area.name,
                     start: {
-                        x: (area.start.x + (i*area.grid.rule())),
-                        y: (area.start.y + (row*area.grid.rule()))
+                        x: (area.bounds.start.x + (i*area.grid.rule())),
+                        y: (area.bounds.start.y + (row*area.grid.rule()))
                     },
                     width: area.grid.rule(),
+                    mod: area.mod,
                     occupiedBy: []
                 };
+
                 area.units.push(unitObject);
             };
         };
@@ -40,6 +43,10 @@ export default {
         for (let i = 0; i < items[level].length; i++) {
             for (let j = 0; j < items[level][i].number; j++) this.createItem(items[level][i]);
         };
+    },
+
+    startFirstLevel: function() {
+        this.fillInventory(state.level);
     },
 
     addEventListeners: () => {
@@ -66,9 +73,8 @@ export default {
         };
     },
 
-    // checkSystem: function() { ///////////////////////////////////////////////////////////////////////////
-    //     if (system.connected.every((connected) => connected === true)) {
-    //         endLevel();
-    //     };
-    // }
+    start: function() {
+        this.layoutGrids();
+        this.createGrid(levelsArea);
+    }
 };
