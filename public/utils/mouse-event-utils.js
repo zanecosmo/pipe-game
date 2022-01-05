@@ -1,6 +1,7 @@
 import areas from "../storage/areas.js";
 import mouseUnit from "../storage/mouse-unit.js";
-
+import pages from "../pages.js";
+import state from "../storage/state.js"
 import buttons from "../storage/buttons.js";
 
 
@@ -35,20 +36,23 @@ export default {
     },
 
     setButtonHover: function(position) {
-        for (const button in buttons) {
-            const btn = buttons[button];
+        const pageButtons = pages[state.page].buttons;
+        for (let i = 0; i < pageButtons.length; i++) {
+            const btn = buttons[pageButtons[i]];
             btn.hover = false;
             if (this.isInBounds(position, btn.bounds) === true) {
-                // console.log(btn.bounds);
+                console.log(pageButtons[i]);
                 btn.hover = true;
             };
         };
     },
 
     whichButton: function(position) {
-        for (const button in buttons) {
-            const btn = buttons[button];
+        const pageButtons = pages[state.page].buttons;
+        for (let i = 0; i < pageButtons.length; i++){
+            const btn = buttons[pageButtons[i]];
             if (this.isInBounds(position, btn.bounds) === true) {
+                console.log(btn);
                 return btn;
             };
         };

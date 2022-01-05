@@ -26,7 +26,7 @@ const backToStart = () => {
     state.page = "start-page";
     state.level = 0;
     game.addEventListeners();
-    console.log(pages);
+    // console.log(pages);
 
     render(pages[state.page].components);
 };
