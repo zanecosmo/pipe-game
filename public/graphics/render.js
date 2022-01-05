@@ -68,6 +68,10 @@ const renders = {
         draw.button(buttons["back-button"]);
     },
 
+    ["exit-button"]: () => {
+        draw.button(buttons["exit-button"]);
+    },
+
     ["levels-button"]: () => {
         draw.button(buttons["levels-button"]);
     },
@@ -90,6 +94,7 @@ const renders = {
 };
 
 export default function render(pageComponents) {
+    // console.log(buttons["back-button"]);
     draw.clearScreen();
     draw.screen();
     for (let i = 0; i < pageComponents.length; i++) {

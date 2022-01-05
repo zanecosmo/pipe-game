@@ -27,17 +27,26 @@ export default {
     ["play-page"]: {
         ["mousemove"]: function(e) {
             const mousePosition = mouseEvent.getPosition(e);
+            mouseEvent.setButtonHover(mousePosition);
             if (mousePosition.x > 0 && mousePosition.y > 0) {
                 const area = mouseEvent.whichArea(mousePosition);
-                const unit = mouseEvent.whichUnit(area, mousePosition);
-        
-                mouseEvent.updateMouseUnit(mousePosition, area, unit);
+                if (area !== undefined) {
+                    const unit = mouseEvent.whichUnit(area, mousePosition);
+                    mouseEvent.updateMouseUnit(mousePosition, area, unit);
+                };
             };
             render(pages[state.page].components);
         },
 
         ["click"]: function(e) {
             const mousePosition = mouseEvent.getPosition(e);
+
+            const button = mouseEvent.whichButton(mousePosition);
+            if (button !== undefined){
+                button.clickAction()
+                return
+            };
+
             const area = mouseEvent.whichArea(mousePosition);
             const unit = mouseEvent.whichUnit(area, mousePosition);
         
@@ -66,9 +75,9 @@ export default {
         },
 
         ["keypress"]: function(e) {
-            console.log("made it here");
             if (e.key === " " && mouseUnit.occupiedBy.length === 1) {
-                player.rotateItem();
+                mouseUnit.occupiedBy[0].rotationState++;
+                player.rotateAlt(mouseUnit.occupiedBy[0]);
                 render(pages[state.page].components);
             };
         },
@@ -83,10 +92,27 @@ export default {
                     mouseEvent.updateMouseUnit(mousePosition, levelsArea, unit);
                 } else {
                     mouseEvent.updateMouseUnit(mousePosition, null, null);
+                    mouseEvent.setButtonHover(mousePosition);
                 };
             };
-
             render(pages[state.page].components);
         },
+
+        ["click"]: function(e) {
+            const mousePosition = mouseEvent.getPosition(e);
+            if (mousePosition.x > 0 && mousePosition.y > 0) {
+                if (mouseEvent.isInBounds(mousePosition, levelsArea.bounds) === true) {
+                    const unit = mouseEvent.whichUnit(levelsArea, mousePosition);
+                    mouseEvent.updateMouseUnit(mousePosition, levelsArea, unit);
+
+                } else {
+                    mouseEvent.updateMouseUnit(mousePosition, null, null);
+                    const button = mouseEvent.whichButton(mousePosition);
+                    if (button !== undefined) {
+                        button.clickAction();
+                     };
+                };
+            };
+        }
     }
 };

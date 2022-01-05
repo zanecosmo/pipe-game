@@ -13,7 +13,7 @@ export default {
             && position.y < bounds.start.y + bounds.height
             && position.y >= bounds.start.y
             ) {return true}
-            else return false
+        else return false;
     },
 
     getPosition: function(e) {
@@ -39,6 +39,7 @@ export default {
             const btn = buttons[button];
             btn.hover = false;
             if (this.isInBounds(position, btn.bounds) === true) {
+                // console.log(btn.bounds);
                 btn.hover = true;
             };
         };
@@ -84,4 +85,31 @@ export default {
             mouseUnit.unit = unit;
         };
     }
+};
+
+const findAreaRecursive = (mpx, mpy, areaInQuestion) => {
+    const doesAreaSubdivide = (areaInQuestion) => {
+        if (areaInQuestion.columns !== null) return true;
+        else return false;
+    };
+
+    if (mpx > areaInQuestion.start.x && mpx < areaInQuestion.start.x + width &&
+        mpy > areaInQuestion.start.y && mpy < areaInQuestion.start.y + height) {
+
+        if (doesAreaSubdivide(areaInQuestion) === true) {
+            const posX = mpx - areaInQuestion.start.x;
+            const posY = mpy - areaInQuestion.start.y;
+            
+            unitsDeepX = Math.floor(posX/area.columnWidth);
+            unitsDeepY = Math.floor(posY/area.rowHeight);
+            
+            const foundUnit = unitsDeepY*areaInQuestion.columns + unitsDeepX
+
+            findAreaRecursive(mpx, mpy, buttonArea[foundUnit]);
+
+        } else return areaInQuestion;
+
+    } else {
+        return areaInQuestion;
+    };
 };

@@ -45,7 +45,7 @@ export default {
         };
     },
 
-    startFirstLevel: function() {
+    startLevel: function() {
         this.fillInventory(state.level);
     },
 

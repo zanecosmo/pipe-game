@@ -29,20 +29,21 @@ export default [
         },
         mod: 10,
         units: []
-    }, {
-        name: "menu",
-        bounds: {
-            start: {x: 300, y: 300},
-            width: canvas.width*(.4),
-            height: canvas.height*(.25),
-        },
-        grid: {
-            rows: 2,
-            columns: 4,
-            rule: function() {return (canvas.width*(.4)/this.columns)}
-        },
-        mod: 0,
-        units: []
     }
+    // }, {
+    //     name: "menu",
+    //     bounds: {
+    //         start: {x: 300, y: 300},
+    //         width: canvas.width*(.4),
+    //         height: canvas.height*(.25),
+    //     },
+    //     grid: {
+    //         rows: 2,
+    //         columns: 4,
+    //         rule: function() {return (canvas.width*(.4)/this.columns)}
+    //     },
+    //     mod: 0,
+    //     units: []
+    // }
 ];
 
