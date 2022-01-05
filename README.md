@@ -9,7 +9,7 @@ My purpose for this project was the following:
 ## Status
 In development.
 
-### Possible Features
+#### Possible Features:
 * ability to save level states and progress with password (this would entail creating a DB and wiring up some async HTTP-request functionality)
 
 ## About
