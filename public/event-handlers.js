@@ -19,8 +19,10 @@ export default {
             const mousePosition = mouseEvent.getPosition(e);
             const button = mouseEvent.whichButton(mousePosition);
             if (button !== undefined){
-                button.clickAction()
+                button.clickAction(button.link);
+                mouseEvent.setButtonHover(mousePosition);
             };
+            render(pages[state.page].components)
         }
     },
 
@@ -43,7 +45,9 @@ export default {
 
             const button = mouseEvent.whichButton(mousePosition);
             if (button !== undefined){
-                button.clickAction()
+                button.clickAction(button.link);
+                mouseEvent.setButtonHover(mousePosition);
+                render(pages[state.page].components);
                 return
             };
 
@@ -109,10 +113,12 @@ export default {
                     mouseEvent.updateMouseUnit(mousePosition, null, null);
                     const button = mouseEvent.whichButton(mousePosition);
                     if (button !== undefined) {
-                        button.clickAction();
+                        button.clickAction(button.link);
+                        mouseEvent.setButtonHover(mousePosition);
                      };
                 };
             };
+            render(pages[state.page].components)
         }
     }
 };

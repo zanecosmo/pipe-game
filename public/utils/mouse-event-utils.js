@@ -36,12 +36,13 @@ export default {
     },
 
     setButtonHover: function(position) {
+        // console.log("HERE");
         const pageButtons = pages[state.page].buttons;
         for (let i = 0; i < pageButtons.length; i++) {
             const btn = buttons[pageButtons[i]];
             btn.hover = false;
             if (this.isInBounds(position, btn.bounds) === true) {
-                console.log(pageButtons[i]);
+                // console.log(btn.hover);
                 btn.hover = true;
             };
         };
@@ -52,7 +53,7 @@ export default {
         for (let i = 0; i < pageButtons.length; i++){
             const btn = buttons[pageButtons[i]];
             if (this.isInBounds(position, btn.bounds) === true) {
-                console.log(btn);
+                // console.log(btn);
                 return btn;
             };
         };

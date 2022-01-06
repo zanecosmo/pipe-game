@@ -3,32 +3,18 @@ import state from "./state.js"
 import render from "../graphics/render.js";
 import pages from "../pages.js";
 
+const changePage = (pageName) => {
+    game.removeEventListeners();
+    state.page = pageName;
+    game.addEventListeners();
+};
+
 const startLevelOne = () => {
     game.removeEventListeners();
     state.page = "play-page";
     state.level = 1;
     game.addEventListeners();
     game.startLevel();
-
-    render(pages[state.page].components);
-};
-
-const openLevelSelection = () => { ///////////////////////////////////////
-    game.removeEventListeners();
-    state.page = "levels-page";
-    game.addEventListeners();
-
-    render(pages[state.page].components);
-};
-
-const backToStart = () => {
-    game.removeEventListeners();
-    state.page = "start-page";
-    state.level = 0;
-    game.addEventListeners();
-    // console.log(pages);
-
-    render(pages[state.page].components);
 };
 
 export default {
@@ -44,7 +30,8 @@ export default {
             style: "20px sans-serif"
         },
         hover: false,
-        clickAction: startLevelOne
+        clickAction: startLevelOne,
+        link: "play-page"
     },
 
     ["levels-button"]: {
@@ -59,7 +46,8 @@ export default {
             style: "20px sans-serif"
         },
         hover: false,
-        clickAction: openLevelSelection
+        clickAction: changePage,
+        link: "levels-page"
     },
 
     ["back-button"]: {
@@ -74,7 +62,8 @@ export default {
             style: "20px sans-serif"
         },
         hover: false,
-        clickAction: backToStart
+        clickAction: changePage,
+        link: "start-page"
     },
 
     ["exit-button"]: {
@@ -89,6 +78,7 @@ export default {
             style: "20px sans-serif"
         },
         hover: false,
-        clickAction: backToStart
+        clickAction: changePage,
+        link: "start-page"
     }
 };
