@@ -140,13 +140,7 @@ export default {
             c.lineTo(X + mod + padding, Y + width - padding - mod);
             c.lineTo(X + mod + padding, Y + width - mod);
         },
-        ["placeHolder"]: function() {console.log(this.name)},
-        ["placeHolder"]: function() {console.log(this.name)},
-        ["placeHolder"]: function() {console.log(this.name)},
-        ["placeHolder"]: function() {console.log(this.name)},
-        ["placeHolder"]: function() {console.log(this.name)},
-        ["placeHolder"]: function() {console.log(this.name)},
-        ["placeHolder"]: function() {console.log(this.name)},
+        ["placeHolder"]: function() {console.log(this.name)}
     },
 
     item: function(unit, mod, kind) {
@@ -169,7 +163,6 @@ export default {
         if (quantity !== 0) {
             c.font = "12px sans-serif";
             c.fillStyle = renderColor;
-            // c.textBaseline = "hanging";
             c.fillText(quantity, x+3, y+13)
         };
     },

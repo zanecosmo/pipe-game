@@ -18,21 +18,12 @@ const renders = {
         };
     },
 
-    ["inventory-pipes"]: () => {
+    ["inventory"]: () => {
         for (let i = 0; i < inventoryArea.units.length; i++) {
             const unit = inventoryArea.units[i];
             if (unit.occupiedBy.length > 0) {
                 draw.item(unit, inventoryArea.mod, unit.occupiedBy[0].kind);
-            };
-        };
-    },
-
-    ["stack-numbers"]: () => {
-        for (let i = 0; i < inventoryArea.units.length; i++) {
-            if (inventoryArea.units[i].occupiedBy.length !== 0) {
-                const unit = inventoryArea.units[i];
-                draw.stackQuantity(unit.occupiedBy.length, unit.start.x, unit.start.y
-                );
+                draw.stackQuantity(unit.occupiedBy.length, unit.start.x, unit.start.y);
             };
         };
     },
@@ -53,7 +44,7 @@ const renders = {
                 mouseUnit.area.grid.rule() - 4,
                 mouseUnit.area.grid.rule() - 4
             );
-        };
+        }
     },
 
     ["game-title"]: () => {

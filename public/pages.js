@@ -1,3 +1,5 @@
+// import state from "./storage/state";
+
 export default {
     ["start-page"]: {
         components: ["game-title", "play-button", "levels-button"],
@@ -6,7 +8,7 @@ export default {
     },
     
     ["play-page"]: {
-        components: ["hover-square" ,"menu-outline", "stack-numbers", "inventory-pipes", "field-pipes", "grabbed", "exit-button"],
+        components: ["hover-square" ,"menu-outline", "inventory", "field-pipes", "grabbed", "exit-button"],
         events: ["mousemove", "click"],
         buttons: ["exit-button"]
     },
@@ -19,70 +21,46 @@ export default {
     }
 };
 
-// let pageQueue = ["start-menu"];
-
-// const addPageToQueue = (pagename) => pageQueue.push(pagename);
-// const closeOut = () => pageQueue.pop(pageQueue[pageQueue.length-1]);
-
-// const openGameMenu = () => addPageToQueue("game-menu");
-
-// const buttons = {
-//     ["new-game"]: {
-//         text: {
-//             value: "NEW GAME",
-//             x: 226,
-//             y: 222,
-//             style: "20px sans-serif",
-//         },
-//         borderBounds: {
-//             x: 200,
-//             y: 200,
-//             width: 100,
-//             height: 28
-//         },
-//         inactive: false,
-//         hover: false,
-//         onClick: openGameMenu
-//     },
-//     ["load-game"]: {
-//         text: {
-//             value: "LOAD SAVED GAME",
-//             x: 226,
-//             y: 262,
-//             style: "20px sans-serif",
-//         },
-//         borderBounds: {
-//             x: 200,
-//             y: 240,
-//             width: 100,
-//             height: 28
-//         },
-//         inactive: false,
-//         hover: false,
-//         onClick: openGameMenu
-//     },
-//     ["play-button"]: {
-//         bounds: {
-//             start: {x: 200, y: 200},
-//             width: 100,
-//             height: 28
-//         },
-//         text: {
-//             start: {x: 226, y: 222},
-//             value: "PLAY",
-//             style: "20px sans-serif"
-//         },
-//         hover: false,
-//         clickAction: startLevelOne
-//     },
+// const onGameStart = () => {
+//     const canvas = document.getElementById("screen");
+//     populateAreas();
+//     canvas.addEventListener("mousemove", onMouseMove);
+//     canvas.addEventListener("click", onClick);
+//     render(pageQueue[pageQueue.length-1]);
 // };
 
-// const onClick = () => {
-//     // if it is on a button:
-
+// const hovered = {
+    
+//     behavior
 // }
 
-// screen.addEventListener("click", onClick);
+// let hoveredUnit = null;
+
+// let pageQueue = ["start-menu"];
+
+// const pushPageToQueue = (pagename) => pageQueue.push(pagename);
+// const popPageFromQueue = () => pageQueue.pop(pageQueue[pageQueue.length-1]);
+
+// const buttons = {
+//     ["new-game"]: () => {
+//         pushPageToQueue("game-menu");
+//         render(pages[pageQueue.length-1]);  
+//     },
+//     ["load-game"]: () => console.log("LOAD GAME BUTTON PRESSED"),
+//     ["async-load"]: () => console.log("ASYNC LOAD BUTTON PRESSED"),
+//     ["play-continue"]: () => console.log("PLAY BUTTON PRESSED"),
+//     ["save-progress"]: () => console.log("SAVE PROGRESS BUTTON PRESSED"),
+//     ["async-save"]: () => console.log("ASYNC SAVE BUTTON PRESSED"),
+//     ["close-out"]: () => {
+//         popPageFromQueue();
+//         if (pageQueue.length-1 !== "play-page") {
+//             document.removeEventListener("keypress", whateverItIs)
+//         };
+//         render(pages[pageQueue.length-1]);
+//     }
+// };
+
+// const onClick = () => {if (hoveredUnit !== null) hoveredUnit.behavior()};
 
 // const isInBounds =  (position, bounds) => {
 //     if (position.x < bounds.start.x + bounds.width
@@ -102,7 +80,7 @@ export default {
 //     return eventPosition;
 // };
 
-// const discernUnit = (area, position) => {
+// const whichUnit = (area, position) => {
 //     const eventPositionX = position.x - area.bounds.start.x;
 //     const eventPositionY = position.y - area.bounds.start.y;
 
@@ -112,98 +90,92 @@ export default {
 //     const unitsDeepX = Math.floor(eventPositionX/unitWidth);
 //     const unitsDeepY = Math.floor(eventPositionY/unitHeight);
 
-//     const pageUnit =  {
-//         type: area.type,
-//         areas: [{
-//             bounds: {
-//                 start: {
-//                     x: unitsDeepX*unitWidth,
-//                     y: unitsDeepY*unitHeight
-//                 },
-//                 width: unitWidth,
-//                 height: unitHeight
-//             }
-//         }]
-        
-//     };
-    
-    
-//     // unitsDeepY*area.grid.columns+unitsDeepX;
+//     const foundUnit = unitsDeepY*area.grid.columns+unitsDeepX;
 
-//     return pageUnit;
+//     return area.units[foundUnit];
 // };
 
-// const onMouseMove = (page) => {
-//     return function curriedMouseMove(e) {
-//         const mousePosition = getPosition(e)
+// const populateAreas = () => {
+//     for (pagename in pages) {
+//         const page = pages[pagename];
 //         for (let i = 0; i < page.areas.length; i++) {
-//             if (isInBounds(mousePosition, page.areas[i].bounds)) {
-//                 discernUnit(page.areas[i], mousePosition);
-
-//             }
-//         }
-//     }
-// }
-
-// /*
-// on mouse move:
-//     see if mouse position falls within an area bounds
-//         if it does not:
-//             if hovered state is not null: set to null
-//             if hovered state is null: do nothing
-//         if it does: find out which unit it is in
-
-//             if given unit type is button: find out if mouse falls within that unit's button bounds
-//                 if it does not: 
-//                     if hovered state is not null: set to null
-//                     if hovered state is null: do nothing
-//                 if it does: 
-//                     turn that buttons hover state to true
-//                     and set hovered state to that button
-//             if unit type is slot: update mouse unit
-//     rerender()
-// */
-
-// const findArea = (mousePosition, page) => {
-//     for (let i = 0; i < page.areas.length; i++) {
-//         if (isInBounds(mousePosition, page.areas[i].bounds)) {
-//             return discernUnit(page, mousePosition);
-//         } else {
-//             if (hoveredState === !null) hoveredState = null
-//             else return;
+//             generateUnits(areas[i]);
 //         };
 //     };
 // };
 
+// const generateUnits = (area) => {
+//     for (let column = 0; column < area.grid.columns; column++) {
+//         for (let row = 0; row < area.grid.rows; row++) {
+//             const unitObject = {
+//                 area: area.name,
+//                 name: area[area.type][area.grid.columns * row + column].name,
+//                 type: area.type,
+//                 bounds: {
+//                     start: {
+//                         x: (area.bounds.start.x + (column * area.grid.unitWidth())),
+//                         y: (area.bounds.start.y + (row * area.grid.unitHeight()))
+//                     },
+//                     width: area.grid.unitWidth(),
+//                     height: area.grid.unitHeight(),
+//                 },
+//                 padding: area.padding,
+//                 behavior: area[area.type][area.grid.columns * row + column].behavior,
+//                 occupiedBy: area.type === "buttons" ? null : []
+//             };
+//             area.units.push(unitObject);
+//         };
+//     };
+// };
+
+// const resetHoveredUnit = () => {
+//     if (hoveredUnit !== null) hoveredUnit = null;
+//     else return;
+// }
+
+// const getUnitFromArea = (mousePosition, page) => {
+//     for (let i = 0; i < page.areas.length; i++) {
+//         if (isInBounds(mousePosition, page.areas[i].bounds)) {
+//             return whichUnit(page, mousePosition);
+//         };
+//     };
+// };
+
+// const copyObject = (object) => JSON.parse(JSON.stringify(object));
+
+// const areaTypes = {
+//     ["buttons"]: {
+//         action: (mousePosition, unit) => {
+//             const innerUnit = copyObject(unit);
+
+//             innerUnit.bounds.start.x = unit.bounds.start.x + unit.padding;
+//             innerUnit.bounds.start.y = unit.bounds.start.y + unit.padding;
+//             innerUnit.bounds.height = unit.bounds.height - unit.padding / 2;
+//             innerUnit.bounds.width = unit.bounds.width - unit.padding / 2;
+
+//             if (isInBounds(mousePosition, innerUnit.bounds)) {
+//                 hoveredUnit = unit;
+//             } else resetHoveredUnit()
+//         }
+//     },
+//     ["slot"]: {
+//         action: () => {
+
+//         }
+//     }
+// }
+
 // const onMouseMove = (e) => {
 //     const mousePosition = getPosition(e);
 //     const page = pageQueue[pageQueue.length-1];
-
-//     const findArea
+//     const unit = getUnitFromArea(mousePosition, page);
     
-    
-    
-    
-    
-//     const mousePosition = getPosition(e);
-//     let recursed = false;
-//     const discernArea = (page) => {
-//         for (let i = 0; i < page.areas.length; i++) {
-//             if (isInBounds(mousePosition, page.areas[i].bounds)) {
-//                 if (recursed) {
-//                     const pageUnit = discernUnit(page.areas[i], mousePosition);
-//                     discernArea(pageUnit);
-//                     recursion++;
-//                 } else {return }
-//             }
-//         }
-//     }
-//     discernArea(pageQueue[pageQueue.length-1]);
+//     if (unit !== undefined) {
+//         areaType[unit.type].action(mousePosition, unit);
+//     } else resetHoveredUnit();
 // }
 
 // screen.addEventListener("mousemove", onMouseMove(pageQueue[pageQueue.length-1]));
-
-// const buttonClick = (button) => button.onClick();
 
 // const buttonAreaWidth = 300;
 // const buttonAreaHeight = 120;
@@ -215,30 +187,52 @@ export default {
 //             x: 40,
 //             y: 180
 //         },
-//         areas: [{
-//             name: "start-menu-buttons",
-//             type: "buttons",
-//             bounds: {
-//                 start: {x: 150, y: 200},
-//                 width: buttonAreaWidth,
-//                 height: buttonAreaHeight
-//             },
-//             grid: {
-//                 rows: 3,
-//                 columns: 1,
-//                 unitWidth: function() {return buttonAreaWidth/this.columns},
-//                 unitHeight: function() {return buttonAreaHeight/this.rows}
-//             },
-//             behavior: buttonClick,
-//             ["buttons"]: [
-//                 buttons["new-game"],
-//                 buttons["load-game"]
-//             ]
-//         }],
-//         eventListeners: [
-//             () => {
+//         areas: [
+//             {
+//                 name: "start-menu-buttons",
+//                 type: "buttons",
+//                 bounds: {
+//                     start: {x: 150, y: 200},
+//                     width: buttonAreaWidth,
+//                     height: buttonAreaHeight
+//                 },
+//                 grid: {
+//                     rows: 2,
+//                     columns: 1,
+//                     unitWidth: function() {return buttonAreaWidth/this.columns},
+//                     unitHeight: function() {return buttonAreaHeight/this.rows}
+//                 },
+//                 padding: 10,
+//                 units: [],
+//                 ["buttons"]: [
+//                     {
+//                         name: "new-game-button",
+//                         text: {
+//                             value: "NEW GAME",
+//                             x: 226,
+//                             y: 222,
+//                             style: "20px sans-serif",
+//                         },
+//                         bounds: {
+//                             start: {x: 200, y: 200},
+//                             width: 100,
+//                             height: 28
+//                         },
+//                         behavior: buttons["new-game"],
+//                     },
 
+//                     {
+//                         name: "load-game-button",
+//                         text: {
+//                             value: "LOAD GAME",
+//                             style: "20px sans-serif"
+//                         }
+//                     }
+//                 ]
 //             }
+//         ],
+//         componentsToRender: [
+//             this
 //         ]
-//     }
+//     },
 // }
