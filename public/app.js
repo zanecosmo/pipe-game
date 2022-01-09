@@ -69,8 +69,6 @@ const draw = {
         c.closePath();
     },
     button: function(unit) {
-        // console.log(unit);
-
         let borderColor = renderColor;
         let boxColor = screenColor;
         let textColor = renderColor;
@@ -78,15 +76,14 @@ const draw = {
         const buttonBounds = button.bounds;
         const start = buttonBounds.start;
     
-        if (unit === hoveredUnit) {
+        if (unit.occupiedBy.clickable === false) c.globalAlpha = .5;
+        else if (unit === hoveredUnit) {
             boxColor = renderColor;
             textColor = screenColor;
         };
+        
+        
 
-        if (unit.occupiedBy.clickable === false) {
-            borderColor = hoverColor;
-            textColor = hoverColor;
-        };
         
         c.beginPath();
         c.fillStyle = boxColor;
@@ -109,6 +106,7 @@ const draw = {
         c.closePath();
     
         c.textAlign = "left";
+        c.globalAlpha = 1;
     
         if (unit.name === "select-level-button") {
             this.status(textColor, buttonBounds, button.status);
@@ -151,11 +149,15 @@ const buttonActions = {
         // if (pageQueue.length-1 !== "play-page") {
         //     document.removeEventListener("keypress", whateverItIs)
         // };
+        hoveredUnit = null;
         render(pages[pageQueue.length-1]);
     },
 };
 
-const onClick = () => {if (hoveredUnit !== null) hoveredUnit.occupiedBy.behavior()};
+const onClick = () => {
+    if (hoveredUnit === null) return
+    if (hoveredUnit.occupiedBy.clickable) hoveredUnit.occupiedBy.behavior();
+};
 
 const isInBounds =  (position, bounds) => {
     if (position.x < bounds.start.x + bounds.width && position.x >= bounds.start.x
@@ -181,8 +183,6 @@ const whichUnit = (area, position) => {
     const unitsDeepY = Math.floor(eventPositionY/unitHeight);
 
     const foundUnit = unitsDeepY*area.grid.columns+unitsDeepX;
-
-    // console.log(unitWidth);
 
     return area.units[foundUnit];
 };
@@ -235,8 +235,6 @@ const generateButton = (unitTemplate, unit, unitNumber) => {
             style: unitTemplate.text.style,
         };
     };
-
-    // return button;
 };
 
 const generateUnits = (area) => {
@@ -296,10 +294,8 @@ const areaHoverActions = {
 const onMouseMove = (e) => {
     const mousePosition = getPosition(e);
     const unit = getUnitFromArea(mousePosition, pages[pageQueue[pageQueue.length-1]]);
-
-    // console.log(areaHoverActions[unit.type]);
-
-    if (unit !== undefined) areaHoverActions[unit.areaType](mousePosition, unit);
+    if (unit === undefined) resetHoveredUnit();
+    else areaHoverActions[unit.areaType](mousePosition, unit);
     render();
 };
 
@@ -308,21 +304,28 @@ const pages = {
         title: {
             text: "PIPE-CONNECT",
             x: 250,
-            y: 180
+            y: 130
         },
         areas: [
             {
                 name: "start-menu-buttons",
                 type: "buttons",
                 bounds: {
-                    start: {x: 150, y: 200},
+                    start: {x: 150, y: 150},
                     width: 200,
-                    height: 100
+                    height: 150
                 },
-                grid: {rows: 2, columns: 1},
+                grid: {rows: 3, columns: 1},
                 padding: 5,
                 units: [],
                 unitTemplates: [
+                    {
+                        name: "continue-game-button",
+                        text: {value: "CONTINUE", style: "20px sans-serif"},
+                        behavior: buttonActions["continue-game"],
+                        clickable: false
+                    },
+
                     {
                         name: "new-game-button",
                         text: {value: "NEW GAME", style: "20px sans-serif"},
@@ -334,8 +337,8 @@ const pages = {
                         name: "load-game-button",
                         text: {value: "LOAD GAME", style: "20px sans-serif"},
                         behavior: () => {
-                            document.addEventListener("keypress", passwordInput);
-                            buttonActions["load-game"];
+                            // document.addEventListener("keypress", passwordInput);
+                            buttonActions["load-game"]();
                         },
                         clickable: true
                     }
@@ -396,7 +399,7 @@ const pages = {
                         name: "back-button",
                         text: {value: "BACK", style: "20px sans-serif"},
                         behavior: () => {
-                            document.removeListener("keypress", whateverItIs);
+                            // document.removeListener("keypress", whateverItIs);
                             buttonActions["close-out"]();
                         },
                         clickable: true
