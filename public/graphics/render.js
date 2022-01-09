@@ -92,3 +92,4 @@ export default function render(pageComponents) {
         renders[pageComponents[i]]();
     };
 };
+

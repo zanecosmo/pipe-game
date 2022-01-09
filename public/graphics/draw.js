@@ -160,11 +160,9 @@ export default {
     },
 
     stackQuantity: (quantity, x,y) => {
-        if (quantity !== 0) {
-            c.font = "12px sans-serif";
-            c.fillStyle = renderColor;
-            c.fillText(quantity, x+3, y+13)
-        };
+        c.font = "12px sans-serif";
+        c.fillStyle = renderColor;
+        c.fillText(quantity, x+3, y+13)
     },
 
     levelNumber: (number, unit, isHovered) => {
@@ -184,9 +182,9 @@ export default {
         c.beginPath();
         c.fillStyle = textColor;
         c.lineWidth = 2;
-        // c.textBaseline = "hanging";
         c.font = "40px sans-serif";
         c.fillText(number, unit.start.x + 6, unit.start.y + 40);
         c.closePath();
     }
 };
+
