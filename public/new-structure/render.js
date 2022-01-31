@@ -1,6 +1,5 @@
 import draw from "./draw.js";
 import { hoveredUnit } from "./state.js";
-import { currentPage } from "./utils.js";
 
 const unitTypeRenderers = {
     ["buttons"]: (unit, hoveredUnit) => draw.button(unit, hoveredUnit),
@@ -19,10 +18,17 @@ const renderUnits = (area) => {
     for (let i = 0; i < area.units.length; i++) unitTypeRenderers[area.type](area.units[i], hoveredUnit);
 };
 
-export default () => {
-    // const currentPage = pages[lastIn(pageQueue)];
+const renderAreas = (currentPage) => {
+    for (let i = 0; i < currentPage.areas.length; i++) {
+        // console.log(currentPage.areas[i].isModal);
+        if (currentPage.areas[i].isModal) draw.modal(currentPage.areas[i]);
+        renderUnits(currentPage.areas[i]);
+    };
+};
+
+export default (currentPage) => {
     draw.clearScreen();
     draw.screen();
-    if (currentPage().title !== null) draw.title(currentPage().title); 
-    for (let i = 0; i < currentPage().areas.length; i++) renderUnits(currentPage().areas[i]);
+    if (currentPage.title !== null) draw.title(currentPage.title);
+    renderAreas(currentPage);
 };

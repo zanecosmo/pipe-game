@@ -1,7 +1,5 @@
 import {hoveredUnit, setHoveredUnit} from "./state.js";
-import pages from "./pages.js";
-import {pageQueue} from "./state.js";
-import {lastIn} from "./utils.js";
+import { currentPage } from "./pages.js";
 import render from "./render.js";
 
 const areaHoverActions = {
@@ -64,9 +62,9 @@ export default {
     
     onMouseMove: (e) => {
         const mousePosition = getPosition(e);
-        const unit = getUnitFromArea(mousePosition, pages[lastIn(pageQueue)]);
+        const unit = getUnitFromArea(mousePosition, currentPage());
         if (unit === undefined || unit.clickable === false) resetHoveredUnit();
         else areaHoverActions[unit.areaType](mousePosition, unit);
-        render();
+        render(currentPage());
     }
 };

@@ -1,20 +1,34 @@
-import {safelyRemoveModal, pushPageToQueue, deactivatePage, popPageFromQueue} from "./utils.js";
-import {setHoveredUnit, pageQueue} from "./state.js";
+import {setHoveredUnit} from "./state.js";
 import levels from "./levels.js";
 import render from "./render.js";
-import {lastIn} from "./utils.js";
 
-const modalButtons = {
+let pageQueue = ["start-menu"];
+
+const currentPage = () => pages[pageQueue[pageQueue.length-1]];
+const pushPageToQueue = (pagename) => pageQueue.push(pagename);
+const popPageFromQueue = () => pageQueue.pop();
+const deactivatePage = () => {
+    for (let i = 0; i < currentPage().areas.length; i++) currentPage().areas[i].isActive = false;
+};
+const reactivatePage = () => {
+    for (let i = 0; i < currentPage().areas.length - 1; i++) currentPage().areas[i].isActive = true;
+};
+const safelyRemoveModal = () => {
+    reactivatePage();
+    currentPage().areas.pop();
+};
+
+const modalButtonActions = {
     ["new-game"]: () => {
         safelyRemoveModal();
         pushPageToQueue("game-menu");
-        render();
+        render(currentPage());
     },
     ["load-game"]: () => console.log("LOAD GAME BUTTON PRESSED"),
     ["close-modal"]: () => {
         safelyRemoveModal();
         setHoveredUnit(null);
-        render();
+        render(currentPage());
     }
 };
 
@@ -22,15 +36,16 @@ const buttonActions = {
     ["new-game-modal"]: function(button, text) {
         deactivatePage();
         setHoveredUnit(null);
-        if (levels[0].status === "unlocked") modalButtons[button]();
+        if (levels[0].status === "unlocked") modalButtonActions[button]();
         else {
             const modal = pages["new-game-modal"].areas[0];
             modal.units[0].occupiedBy.text.value = text;
-            modal.units[0].occupiedBy.behavior = modalButtons[button];
-            pages[lastIn(pageQueue)].areas.push(modal);
-            render();
+            modal.units[0].occupiedBy.behavior = modalButtonActions[button];
+            currentPage().areas.push(modal);
+            render(currentPage());
         };
     },
+    
     ["select-level"]: () => console.log("SELECT-LEVEL PRESSED"),
     ["text-input"]: () => console.log("TEXT INPUT ACTIVATED"),
     ["async-load"]: () => console.log("ASYNC LOAD BUTTON PRESSED"),
@@ -38,13 +53,12 @@ const buttonActions = {
     ["save-progress"]: () => console.log("SAVE PROGRESS BUTTON PRESSED"),
     ["submit-password"]: () => console.log("SUBMiT PASSWORD PRESSED"),
     ["async-save"]: () => console.log("ASYNC SAVE BUTTON PRESSED"),
+    
     ["close-out"]: () => {
         popPageFromQueue();
-        // if (pageQueue.length-1 !== "play-page") {
-        //     document.removeEventListener("keypress", whateverItIs)
-        // };
+        // remove event listener
         setHoveredUnit(null);
-        render();
+        render(currentPage());
     }
 };
 
@@ -66,6 +80,7 @@ const pages = {
                 },
                 grid: {rows: 3, columns: 1},
                 padding: 5,
+                isModal: false,
                 isActive: true,
                 units: [],
                 unitTemplates: [
@@ -117,6 +132,7 @@ const pages = {
                 },
                 grid: {rows: 1, columns: 1},
                 padding: 5,
+                isModal: false,
                 isActive: true,
                 units: [],
                 unitTemplates: [
@@ -139,6 +155,7 @@ const pages = {
                 },
                 grid: {rows: 2, columns: 1},
                 padding: 5,
+                isModal: false,
                 isActive: true,
                 units: [],
                 unitTemplates: [
@@ -180,6 +197,7 @@ const pages = {
                 },
                 grid: {rows: 4, columns: 1},
                 padding: 5,
+                isModal: false,
                 isActive: true,
                 units: [],
                 unitTemplates: [
@@ -232,6 +250,7 @@ const pages = {
                 },
                 grid: {rows: 4, columns: 1},
                 padding: 10,
+                isModal: false,
                 isActive: true,
                 units: [],
                 unitTemplates: [
@@ -254,6 +273,7 @@ const pages = {
                 },
                 grid: {rows: 3, columns: 1},
                 padding: 10,
+                isModal: false,
                 isActive: true,
                 units: [],
                 unitTemplates: [
@@ -289,18 +309,18 @@ const pages = {
                 name: "new-game-modal",
                 type: "buttons",
                 modalText: {
-                    value:
-                    `Creating a new game will overwrite any unsaved progress.
-                    Are you sure you would like to continue?`,
+                    style: "20px sans-serif",
+                    value: "Creating a new game will overwrite any unsaved progress. Are you sure you would like to continue?",
                 },
                 
                 bounds: {
-                    start: {x: 100, y: 175},
-                    width: 300,
-                    height: 75
+                    start: {x: 50, y: 160},
+                    width: 400,
+                    height: 130
                 },
                 grid: {rows: 2, columns: 1},
-                padding: 5,
+                padding: 8,
+                isModal: true,
                 isActive: true,
                 units: [],
                 unitTemplates: [
@@ -314,7 +334,7 @@ const pages = {
                     {
                         name: "modal-exit",
                         text: {value: "BACK", style: "20px sans-serif"},
-                        behavior: modalButtons["close-modal"],
+                        behavior: modalButtonActions["close-modal"],
                         clickable: true
                     }
                 ]
@@ -323,4 +343,4 @@ const pages = {
     }
 };
 
-export {pages as default};
+export { pages, currentPage };

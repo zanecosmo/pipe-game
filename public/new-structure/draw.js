@@ -1,8 +1,36 @@
+import { copy } from "./utils.js";
+
 const canvas = document.getElementById("screen");
 const c = document.getElementById("screen").getContext("2d");
 const screenColor = "rgb(190, 0, 190)";
 const renderColor = "rgb(170, 255, 0)";
 const hoverColor = "rgb(250, 60, 200)";
+
+const wrapText = (modalText, boxWidth, lineHeight, x, y) => {
+    const wordArray = modalText.split(" ");
+    
+    let lineNumber = 0;
+    let givenLine = "";
+    
+    const testLineWidth = (word) => {
+        let givenLineCopy = copy(givenLine);
+        let testLine = givenLineCopy += (word + " ");
+        const lineWidth = c.measureText(testLine).width;
+
+        if (lineWidth < boxWidth) givenLine += (word + " ")
+        else {
+            drawLine(givenLine);
+            givenLine = word + " ";
+            lineNumber++;
+        };
+    };
+    
+    const drawLine = (line) => c.fillText(line, x, y + (lineHeight * lineNumber));
+
+    for (let i = 0; i < wordArray.length; i++) testLineWidth(wordArray[i]);
+    
+    drawLine(givenLine);
+};
 
 export default {
     screen: () => {
@@ -28,6 +56,39 @@ export default {
             status,
             buttonBounds.start.x + buttonBounds.width - 4,
             buttonBounds.start.y + (buttonBounds.height / 2)
+        );
+        c.closePath();
+    },
+    modal: function(area) {
+        const lineHeight = area.modalText.style[0] + area.modalText.style[1];
+
+        c.beginPath;
+        c.fillStyle = screenColor;
+        c.fillRect(
+            area.bounds.start.x,
+            area.bounds.start.y,
+            area.bounds.width,
+            area.bounds.height
+            );
+            
+        c.textBaseline =  "top";
+        c.fillStyle = renderColor;
+        c.font = area.modalText.style;
+
+        wrapText(
+            area.modalText.value,
+            210,
+            lineHeight,
+            area.bounds.start.x + 6,
+            area.bounds.start.y + 6
+        );
+
+        c.strokeStyle = renderColor;
+        c.strokeRect(
+            area.bounds.start.x,
+            area.bounds.start.y,
+            area.bounds.width,
+            area.bounds.height
         );
         c.closePath();
     },
