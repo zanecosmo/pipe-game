@@ -39,18 +39,33 @@ const generateButton = (unitTemplate, unit, unitNumber) => {
         y: button.bounds.start.y + (button.bounds.height / 2),
         style: unitTemplate.text.style,
     };
-
+    
     return button;
+};
+
+const areaTypeActions = {
+    ["buttons"]: (area, unitNumber) => {
+
+    },
+    ["slot"]: () => console.log("SLOTS"),
+    ["text-input"]: () => console.log("TEXT-INPUT"),
 };
 
 const generateUnits = (area) => {
     const unitWidth = area.bounds.width / area.grid.columns;
     const unitHeight = area.bounds.height / area.grid.rows;
 
-    for (let column = 0; column < area.grid.columns; column++) {
-        for (let row = 0; row < area.grid.rows; row++) {
+    for (let row = 0; row < area.grid.rows; row++) {
+        for (let column = 0; column < area.grid.columns; column++) {
             const index = area.grid.columns * row + column;
+            console.log(index);
+            
+            // areaTypeActions[area.type](area, index);
+            
+            if (area.unitTemplates.length === 0) return;
+
             const unitTemplate = area.unitTemplates[index];
+            console.log(unitTemplate.name);
             
             const unitObject = {
                 areaType: area.type,
@@ -65,10 +80,7 @@ const generateUnits = (area) => {
                 padding: area.padding
             };
 
-            // console.log(unitTemplate)
-            // TODO console.log(unitTemplate); 3 "undefined"s in console BUG
-
-            if (area.type === "buttons" || area.type === "modal-buttons") {
+            if (area.type === "buttons") {
                 unitObject.occupiedBy = generateButton(unitTemplate, unitObject, index)
             } else unitObject.occupiedBy = [];
             area.units.push(unitObject);
@@ -76,11 +88,15 @@ const generateUnits = (area) => {
     };
 };
 
+const buildPage = (pageName) => {
+    const page = pages[pageName];
+    if (page.isBuilt) return;
+    for (let i = 0; i < page.areas.length; i++) generateUnits(page.areas[i]);
+};
+
 export default () => {
     for (const pagename in pages) {
         const page = pages[pagename];
-        for (let i = 0; i < page.areas.length; i++) {
-            generateUnits(page.areas[i]);
-        };
+        for (let i = 0; i < page.areas.length; i++) generateUnits(page.areas[i]);
     };
 };

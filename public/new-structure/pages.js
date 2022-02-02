@@ -2,7 +2,13 @@ import {setHoveredUnit} from "./state.js";
 import levels from "./levels.js";
 import render from "./render.js";
 
+const canvas = document.getElementById("screen");
+
 let pageQueue = ["start-menu"];
+
+//
+// const 
+//
 
 const currentPage = () => pages[pageQueue[pageQueue.length-1]];
 const pushPageToQueue = (pagename) => pageQueue.push(pagename);
@@ -21,6 +27,8 @@ const safelyRemoveModal = () => {
 const modalButtonActions = {
     ["new-game"]: () => {
         safelyRemoveModal();
+        // async get leveldata
+        // await loading media
         pushPageToQueue("game-menu");
         render(currentPage());
     },
@@ -46,7 +54,10 @@ const buttonActions = {
         };
     },
     
-    ["select-level"]: () => console.log("SELECT-LEVEL PRESSED"),
+    ["select-level"]: () => {
+        pushPageToQueue("level-select-menu");
+        render(currentPage());
+    },
     ["text-input"]: () => console.log("TEXT INPUT ACTIVATED"),
     ["async-load"]: () => console.log("ASYNC LOAD BUTTON PRESSED"),
     ["play-continue"]: () => console.log("PLAY BUTTON PRESSED"),
@@ -248,7 +259,7 @@ const pages = {
                     width: 300,
                     height: 60,
                 },
-                grid: {rows: 4, columns: 1},
+                grid: {rows: 1, columns: 1},
                 padding: 10,
                 isModal: false,
                 isActive: true,
@@ -298,6 +309,141 @@ const pages = {
                         clickable: true
                     }
                 ]
+            }
+        ],
+    },
+
+    ["level-select-menu"]: {
+        title: {
+            text: "LEVEL SELECT",
+            x: 100,
+            y: 100
+        },
+        areas: [
+            {
+                name: "level-select-buttons",
+                type: "buttons",
+                bounds: {
+                    start: {x: 50, y: 150},
+                    width: 400,
+                    height: 200
+                },
+                grid: {rows: 2, columns: 4},
+                padding: 10,
+                isModal: false,
+                isActive: true,
+                units: [],
+                unitTemplates: [
+                    {
+                        name: "level-1-button",
+                        text: {value: "1", style: "20px sans-serif"},
+                        behavior: () => buttonActions["select-level"]("level-1"),
+                        // clickable: levels[0].status === "locked" ? false : true
+                        clickable: true
+                    },
+
+                    {
+                        name: "level-2-button",
+                        text: {value: "2", style: "20px sans-serif"},
+                        behavior: () => buttonActions["select-level"]("level-2"),
+                        // clickable: levels[0].status === "locked" ? false : true
+                        clickable: true
+                    },
+
+                    {
+                        name: "level-3-button",
+                        text: {value: "3", style: "20px sans-serif"},
+                        behavior: () => buttonActions["select-level"]("level-1"),
+                        // clickable: levels[0].status === "locked" ? false : true            
+                        clickable: true
+                    },
+
+                    {
+                        name: "level-4-button",
+                        text: {value: "4", style: "20px sans-serif"},
+                        behavior: () => buttonActions["select-level"]("level-2"),
+                        // clickable: levels[0].status === "locked" ? false : true
+                        clickable: true
+                    },
+
+                    {
+                        name: "level-5-button",
+                        text: {value: "5", style: "20px sans-serif"},
+                        behavior: () => buttonActions["select-level"]("level-1"),
+                        // clickable: levels[0].status === "locked" ? false : true            
+                        clickable: true
+                    },
+
+                    {
+                        name: "level-6-button",
+                        text: {value: "6", style: "20px sans-serif"},
+                        behavior: () => buttonActions["select-level"]("level-2"),
+                        // clickable: levels[0].status === "locked" ? false : true
+                        clickable: true
+                    },
+
+                    {
+                        name: "level-7-button",
+                        text: {value: "7", style: "20px sans-serif"},
+                        behavior: () => buttonActions["select-level"]("level-1"),
+                        // clickable: levels[0].status === "locked" ? false : true
+                        clickable: true
+                        
+                    },
+
+                    {
+                        name: "level-8-button",
+                        text: {value: "8", style: "20px sans-serif"},
+                        behavior: () => buttonActions["select-level"]("level-2"),
+                        // clickable: levels[0].status === "locked" ? false : true
+                        clickable: true
+                    }
+                ]
+            }
+        ]
+    },
+
+    ["game-page"]: {
+        title: null,
+        areas: [
+            {
+                name: "field",
+                type: "slot",
+                bounds: {
+                    start: {x: 0, y: 0},
+                    width: canvas.width,
+                    height: canvas.height*(.75),
+                },
+                grid: {
+                    rows: 3,
+                    columns: 5,
+                    rule: function() {return (canvas.width/this.columns)}
+                },
+                padding: 0,
+                isModal: false,
+                isActive: true,
+                units: [],
+                unitTemplates: []
+            },
+
+            {
+                name: "inventory",
+                type: "slot",
+                bounds: {
+                    start: {x: 0, y: 300},
+                    width: canvas.width*(.6),
+                    height: canvas.height*(.25),
+                },
+                grid: {
+                    rows: 2,
+                    columns: 6,
+                    rule: function() {return (canvas.width*(.6)/this.columns)}
+                },
+                padding: 0,
+                isModal: false,
+                isActive: true,
+                units: [],
+                unitTemplates: []
             }
         ],
     },

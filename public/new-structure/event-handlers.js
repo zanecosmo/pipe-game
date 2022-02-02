@@ -5,7 +5,8 @@ import render from "./render.js";
 const areaHoverActions = {
     ["buttons"]: (mousePosition, unit) => {
         if (isInBounds(mousePosition, unit.occupiedBy.bounds)) setHoveredUnit(unit);
-        else resetHoveredUnit();
+        // else resetHoveredUnit();
+        else setHoveredUnit(null);
     },
     ["slot"]: (mousePosition, unit) => console.log("SLOT ACTION"),
     ["text-input"]: () => console.log("TEXT INPUT ACTION"),
@@ -40,10 +41,10 @@ const whichUnit = (area, position) => {
     return area.units[foundUnit];
 };
 
-const resetHoveredUnit = () => {
-    if (hoveredUnit === null) return;
-    setHoveredUnit(null);
-};
+// const resetHoveredUnit = () => {
+//     if (hoveredUnit === null) return;
+//     setHoveredUnit(null);
+// };
 
 const getUnitFromArea = (mousePosition, page) => {
     for (let i = 0; i < page.areas.length; i++) {
@@ -61,9 +62,11 @@ export default {
     },
     
     onMouseMove: (e) => {
+        // console.log(hoveredUnit);
         const mousePosition = getPosition(e);
         const unit = getUnitFromArea(mousePosition, currentPage());
-        if (unit === undefined || unit.clickable === false) resetHoveredUnit();
+        // if (unit === undefined || unit.clickable === false) resetHoveredUnit();
+        if (unit === undefined || unit.clickable === false) setHoveredUnit(null);
         else areaHoverActions[unit.areaType](mousePosition, unit);
         render(currentPage());
     }
