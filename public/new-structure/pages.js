@@ -20,6 +20,13 @@ const safelyRemoveModal = () => {
     currentPage().areas.pop();
 };
 
+const buildModal = (modalName, text, modalBehavior) => {
+    const modal = pages[modalName].areas[0];
+    modal.units[0].occupiedBy.text.value = text;
+    modal.units[0].occupiedBy.behavior = modalBehavior;
+    return modal;
+}
+
 const modalButtonActions = {
     ["new-game"]: () => {
         safelyRemoveModal();
@@ -41,9 +48,7 @@ const buttonActions = {
         } else {
             deactivatePage();
             setHoveredUnit(null);
-            const modal = pages["new-game-modal"].areas[0];
-            modal.units[0].occupiedBy.text.value = text;
-            modal.units[0].occupiedBy.behavior = modalButtonActions[button];
+            const modal = buildModal("new-game-modal", text, modalButtonActions[button]);
             currentPage().areas.push(modal);
             render(currentPage());
         }
@@ -56,9 +61,7 @@ const buttonActions = {
         } else {
             deactivatePage();
             setHoveredUnit(null);
-            const modal = pages["new-game-modal"].areas[0];
-            modal.units[0].occupiedBy.text.value = text;
-            modal.units[0].occupiedBy.behavior = modalButtonActions[button];
+            const modal = buildModal("new-game-modal", text, modalButtonActions[button]);
             currentPage().areas.push(modal);
             render(currentPage());
         };
@@ -127,8 +130,8 @@ const pages = {
                         name: "load-game-button",
                         text: {value: "LOAD GAME", style: "20px sans-serif"},
                         behavior: function() {
-                            // TO-DO fix load buttonto match level[0] state
-                            const buttonAction = buttonActions["new-game"].bind(buttonActions);
+                            // TO-DO fix load button to match level[0] state
+                            const buttonAction = buttonActions["load-game"].bind(buttonActions);
                             buttonAction("load-game", this.text.value);
                         },
                         clickable: true
