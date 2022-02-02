@@ -35,7 +35,19 @@ const modalButtonActions = {
 };
 
 const buttonActions = {
-    ["load-game"]: () => console.log("LOAD GAME BUTTON PRESSED"),
+    ["load-game"]: function(button, text) {
+        if (defaultGameState.levels[1].status === "unlocked") {
+            console.log("LOAD GAME GREENLIGHT");
+        } else {
+            deactivatePage();
+            setHoveredUnit(null);
+            const modal = pages["new-game-modal"].areas[0];
+            modal.units[0].occupiedBy.text.value = text;
+            modal.units[0].occupiedBy.behavior = modalButtonActions[button];
+            currentPage().areas.push(modal);
+            render(currentPage());
+        }
+    },
 
     ["new-game"]: function(button, text) {
         if (defaultGameState.levels[1].status === "unlocked") {

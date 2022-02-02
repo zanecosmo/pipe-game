@@ -2,7 +2,7 @@ export default {
     password: null,
     levels: {
         [1]: {
-            status: "unlocked",
+            status: "in-progress",
             state: {
                 field: [],
                 inventory: [
