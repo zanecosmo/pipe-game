@@ -1,14 +1,10 @@
 import {setHoveredUnit} from "./state.js";
-import levels from "./levels.js";
+import defaultGameState from "./game-instance.js";
 import render from "./render.js";
 
 const canvas = document.getElementById("screen");
 
 let pageQueue = ["start-menu"];
-
-//
-// const 
-//
 
 const currentPage = () => pages[pageQueue[pageQueue.length-1]];
 const pushPageToQueue = (pagename) => pageQueue.push(pagename);
@@ -25,12 +21,9 @@ const safelyRemoveModal = () => {
 };
 
 const modalButtonActions = {
-    ["new-game"]: () => {
+    ["new-game"]: (newGameFromModal) => {
         safelyRemoveModal();
-        // async get leveldata
-        // await loading media
-        pushPageToQueue("game-menu");
-        render(currentPage());
+        newGameFromModal();
     },
     ["load-game"]: () => console.log("LOAD GAME BUTTON PRESSED"),
     ["close-modal"]: () => {
@@ -41,23 +34,35 @@ const modalButtonActions = {
 };
 
 const buttonActions = {
+    ["new-game"]: () => {
+        // async get leveldata
+        // await loading media
+        pushPageToQueue("game-menu");
+        render(currentPage());
+    },
+
+    ["load-game"]: () => console.log("LOAD GAME BUTTON PRESSED"),
+
     ["new-game-modal"]: function(button, text) {
         deactivatePage();
         setHoveredUnit(null);
-        if (levels[0].status === "unlocked") modalButtonActions[button]();
+        if (defaultGameState.levels[1].status === "unlocked") this[button]();
         else {
             const modal = pages["new-game-modal"].areas[0];
             modal.units[0].occupiedBy.text.value = text;
-            modal.units[0].occupiedBy.behavior = modalButtonActions[button];
+            modal.units[0].occupiedBy.behavior = () => {
+                modalButtonActions[button](this[button]);
+            };
             currentPage().areas.push(modal);
             render(currentPage());
         };
     },
     
-    ["select-level"]: () => {
+    ["level-select"]: () => {
         pushPageToQueue("level-select-menu");
         render(currentPage());
     },
+    ["select-level"]: (levelNumber) => console.log(`LEVEL ${levelNumber} SELECTED`),
     ["text-input"]: () => console.log("TEXT INPUT ACTIVATED"),
     ["async-load"]: () => console.log("ASYNC LOAD BUTTON PRESSED"),
     ["play-continue"]: () => console.log("PLAY BUTTON PRESSED"),
@@ -222,7 +227,7 @@ const pages = {
                     {
                         name: "select-level-button",
                         text: {value: "LEVELS", style: "20x sans-serif"},
-                        behavior: buttonActions["select-level"],
+                        behavior: buttonActions["level-select"],
                         clickable: true
                     },
 
@@ -337,7 +342,7 @@ const pages = {
                     {
                         name: "level-1-button",
                         text: {value: "1", style: "20px sans-serif"},
-                        behavior: () => buttonActions["select-level"]("level-1"),
+                        behavior: () => buttonActions["select-level"]("1"),
                         // clickable: levels[0].status === "locked" ? false : true
                         clickable: true
                     },
@@ -345,7 +350,7 @@ const pages = {
                     {
                         name: "level-2-button",
                         text: {value: "2", style: "20px sans-serif"},
-                        behavior: () => buttonActions["select-level"]("level-2"),
+                        behavior: () => buttonActions["select-level"]("2"),
                         // clickable: levels[0].status === "locked" ? false : true
                         clickable: true
                     },
@@ -353,7 +358,7 @@ const pages = {
                     {
                         name: "level-3-button",
                         text: {value: "3", style: "20px sans-serif"},
-                        behavior: () => buttonActions["select-level"]("level-1"),
+                        behavior: () => buttonActions["select-level"]("3"),
                         // clickable: levels[0].status === "locked" ? false : true            
                         clickable: true
                     },
@@ -361,7 +366,7 @@ const pages = {
                     {
                         name: "level-4-button",
                         text: {value: "4", style: "20px sans-serif"},
-                        behavior: () => buttonActions["select-level"]("level-2"),
+                        behavior: () => buttonActions["select-level"]("4"),
                         // clickable: levels[0].status === "locked" ? false : true
                         clickable: true
                     },
@@ -369,7 +374,7 @@ const pages = {
                     {
                         name: "level-5-button",
                         text: {value: "5", style: "20px sans-serif"},
-                        behavior: () => buttonActions["select-level"]("level-1"),
+                        behavior: () => buttonActions["select-level"]("5"),
                         // clickable: levels[0].status === "locked" ? false : true            
                         clickable: true
                     },
@@ -377,7 +382,7 @@ const pages = {
                     {
                         name: "level-6-button",
                         text: {value: "6", style: "20px sans-serif"},
-                        behavior: () => buttonActions["select-level"]("level-2"),
+                        behavior: () => buttonActions["select-level"]("6"),
                         // clickable: levels[0].status === "locked" ? false : true
                         clickable: true
                     },
@@ -385,7 +390,7 @@ const pages = {
                     {
                         name: "level-7-button",
                         text: {value: "7", style: "20px sans-serif"},
-                        behavior: () => buttonActions["select-level"]("level-1"),
+                        behavior: () => buttonActions["select-level"]("7"),
                         // clickable: levels[0].status === "locked" ? false : true
                         clickable: true
                         
@@ -394,8 +399,31 @@ const pages = {
                     {
                         name: "level-8-button",
                         text: {value: "8", style: "20px sans-serif"},
-                        behavior: () => buttonActions["select-level"]("level-2"),
+                        behavior: () => buttonActions["select-level"]("8"),
                         // clickable: levels[0].status === "locked" ? false : true
+                        clickable: true
+                    }
+                ]
+            },
+
+            {
+                name: "level-select-back-button",
+                type: "buttons",
+                bounds: {
+                    start: {x: 50, y: 350},
+                    width: 100,
+                    height: 50
+                },
+                grid: {rows: 1, columns: 1},
+                padding: 5,
+                isModal: false,
+                isActive: true,
+                units: [],
+                unitTemplates: [
+                    {
+                        name: "level-select-back-button",
+                        text: {value: "BACK", style: "20px sans-serif"},
+                        behavior: buttonActions["close-out"],
                         clickable: true
                     }
                 ]
@@ -408,7 +436,7 @@ const pages = {
         areas: [
             {
                 name: "field",
-                type: "slot",
+                type: "slots",
                 bounds: {
                     start: {x: 0, y: 0},
                     width: canvas.width,
@@ -428,7 +456,7 @@ const pages = {
 
             {
                 name: "inventory",
-                type: "slot",
+                type: "slots",
                 bounds: {
                     start: {x: 0, y: 300},
                     width: canvas.width*(.6),
@@ -444,6 +472,61 @@ const pages = {
                 isActive: true,
                 units: [],
                 unitTemplates: []
+            },
+            
+            {
+                name: "menu",
+                type: "buttons",
+                bounds: {
+                    start: {x: 0, y: 250},
+                    width: 100,
+                    height: 250,
+                },
+                grid: {
+                    rows: 5,
+                    columns: 1,
+                    rule: function() {return (canvas.width*(.6)/this.columns)}
+                },
+                padding: 5,
+                isModal: false,
+                isActive: true,
+                units: [],
+                unitTemplates: [
+                    {
+                        name: "restart-button",
+                        text: {value: "RESTART", style: "10px sans-serif"},
+                        behavior: buttonActions["restart-level"],
+                        clickable: true
+                    },
+
+                    {
+                        name: "save-progressibuttn",
+                        text: {value: "SAVE", style: "10px sans-serif"},
+                        behavior: buttonActions["save-progress"],
+                        clickable: true
+                    },
+
+                    {
+                        name: "level-select-button",
+                        text: {value: "LEVELS", style: "10px sans-serif"},
+                        behavior: buttonActions["select-level"],
+                        clickable: true
+                    },
+
+                    {
+                        name: "exit-to-menu",
+                        text: {value: "EXIT", style: "10px sans-serif"},
+                        behavior: buttonActions["close-out"],
+                        clickable: true
+                    },
+
+                    {
+                        name: "next-level-button",
+                        text: {value: "NEXT", style: "10px sans-serif"},
+                        behavior: buttonActions["next-level"],
+                        clickable: false
+                    },
+                ]
             }
         ],
     },
@@ -465,7 +548,7 @@ const pages = {
                     height: 130
                 },
                 grid: {rows: 2, columns: 1},
-                padding: 8,
+                padding: 12,
                 isModal: true,
                 isActive: true,
                 units: [],

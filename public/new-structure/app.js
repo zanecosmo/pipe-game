@@ -1,10 +1,10 @@
 import populateAreas from "./game-tools.js";
 import eventHandlers from "./event-handlers.js";
 import render from "./render.js";
-import { currentPage } from "./pages.js";
+import { pages, currentPage } from "./pages.js";
 
 const canvas = document.getElementById("screen");
-populateAreas();
+populateAreas(pages);
 canvas.addEventListener("mousemove", eventHandlers.onMouseMove);
 canvas.addEventListener("click", eventHandlers.onClick);
 render(currentPage());

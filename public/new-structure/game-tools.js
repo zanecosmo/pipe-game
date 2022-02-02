@@ -1,5 +1,3 @@
-import { pages } from "./pages.js";
-
 const generateButton = (unitTemplate, unit, unitNumber) => {
     const button = {
         name: unitTemplate.name,
@@ -58,14 +56,14 @@ const generateUnits = (area) => {
     for (let row = 0; row < area.grid.rows; row++) {
         for (let column = 0; column < area.grid.columns; column++) {
             const index = area.grid.columns * row + column;
-            console.log(index);
+            // console.log(index);
             
             // areaTypeActions[area.type](area, index);
             
             if (area.unitTemplates.length === 0) return;
 
             const unitTemplate = area.unitTemplates[index];
-            console.log(unitTemplate.name);
+            // console.log(unitTemplate.name);
             
             const unitObject = {
                 areaType: area.type,
@@ -94,7 +92,7 @@ const buildPage = (pageName) => {
     for (let i = 0; i < page.areas.length; i++) generateUnits(page.areas[i]);
 };
 
-export default () => {
+export default (pages) => {
     for (const pagename in pages) {
         const page = pages[pagename];
         for (let i = 0; i < page.areas.length; i++) generateUnits(page.areas[i]);
