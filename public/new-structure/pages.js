@@ -21,9 +21,10 @@ const safelyRemoveModal = () => {
 };
 
 const modalButtonActions = {
-    ["new-game"]: (newGameFromModal) => {
+    ["new-game"]: () => {
         safelyRemoveModal();
-        newGameFromModal();
+        pushPageToQueue("game-menu");
+        render(currentPage());
     },
     ["load-game"]: () => console.log("LOAD GAME BUTTON PRESSED"),
     ["close-modal"]: () => {
@@ -34,25 +35,18 @@ const modalButtonActions = {
 };
 
 const buttonActions = {
-    ["new-game"]: () => {
-        // async get leveldata
-        // await loading media
-        pushPageToQueue("game-menu");
-        render(currentPage());
-    },
-
     ["load-game"]: () => console.log("LOAD GAME BUTTON PRESSED"),
 
-    ["new-game-modal"]: function(button, text) {
-        deactivatePage();
-        setHoveredUnit(null);
-        if (defaultGameState.levels[1].status === "unlocked") this[button]();
-        else {
+    ["new-game"]: function(button, text) {
+        if (defaultGameState.levels[1].status === "unlocked") {
+            pushPageToQueue("game-menu");
+            render(currentPage());
+        } else {
+            deactivatePage();
+            setHoveredUnit(null);
             const modal = pages["new-game-modal"].areas[0];
             modal.units[0].occupiedBy.text.value = text;
-            modal.units[0].occupiedBy.behavior = () => {
-                modalButtonActions[button](this[button]);
-            };
+            modal.units[0].occupiedBy.behavior = modalButtonActions[button];
             currentPage().areas.push(modal);
             render(currentPage());
         };
@@ -111,7 +105,7 @@ const pages = {
                         name: "new-game-button",
                         text: {value: "NEW GAME", style: "20px sans-serif"},
                         behavior: function() {
-                            const buttonAction = buttonActions["new-game-modal"].bind(buttonActions);
+                            const buttonAction = buttonActions["new-game"].bind(buttonActions);
                             buttonAction("new-game", this.text.value);
                         },
                         clickable: true
@@ -121,7 +115,8 @@ const pages = {
                         name: "load-game-button",
                         text: {value: "LOAD GAME", style: "20px sans-serif"},
                         behavior: function() {
-                            const buttonAction = buttonActions["new-game-modal"].bind(buttonActions);
+                            // TO-DO fix load buttonto match level[0] state
+                            const buttonAction = buttonActions["new-game"].bind(buttonActions);
                             buttonAction("load-game", this.text.value);
                         },
                         clickable: true

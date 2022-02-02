@@ -37,7 +37,6 @@ const whichUnit = (area, position) => {
     const unitsDeepY = Math.floor(eventPositionY/unitHeight);
 
     const foundUnit = unitsDeepY*area.grid.columns+unitsDeepX;
-
     return area.units[foundUnit];
 };
 
@@ -47,6 +46,7 @@ const whichUnit = (area, position) => {
 // };
 
 const getUnitFromArea = (mousePosition, page) => {
+    
     for (let i = 0; i < page.areas.length; i++) {
         if (page.areas[i].isActive === false) continue;
         if (isInBounds(mousePosition, page.areas[i].bounds) === true) {
@@ -66,6 +66,7 @@ export default {
         const mousePosition = getPosition(e);
         const unit = getUnitFromArea(mousePosition, currentPage());
         // if (unit === undefined || unit.clickable === false) resetHoveredUnit();
+        // console.log(unit);
         if (unit === undefined || unit.clickable === false) setHoveredUnit(null);
         else areaHoverActions[unit.areaType](mousePosition, unit);
         render(currentPage());
