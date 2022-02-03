@@ -27,6 +27,7 @@ const renderAreas = (currentPage) => {
 };
 
 export default (currentPage) => {
+    // console.log(currentPage);
     draw.clearScreen();
     draw.screen();
     // console.log(currentPage.title);

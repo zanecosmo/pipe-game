@@ -1,3 +1,5 @@
+// import gameInstance from "./game-instance.js";
+
 const generateButton = (unitTemplate, unit, unitNumber) => {
     const button = {
         name: unitTemplate.name,
@@ -49,6 +51,18 @@ const areaTypeActions = {
     ["text-input"]: () => console.log("TEXT-INPUT"),
 };
 
+const buildUnitObject = () => {
+    return {
+        areaType: null,
+        bounds: {
+            start: {x: null, y: null},
+            width: null,
+            height: null,
+        },
+        padding: null
+    }
+};
+
 const generateUnits = (area) => {
     const unitWidth = area.bounds.width / area.grid.columns;
     const unitHeight = area.bounds.height / area.grid.rows;
@@ -56,45 +70,60 @@ const generateUnits = (area) => {
     for (let row = 0; row < area.grid.rows; row++) {
         for (let column = 0; column < area.grid.columns; column++) {
             const index = area.grid.columns * row + column;
-            // console.log(index);
             
-            // areaTypeActions[area.type](area, index);
-            
-            if (area.unitTemplates.length === 0) return;
+            // area.type === "slots"
+            // ? []
+            // : area.type === "buttons"
+            //     ? generateButton(area.unitTemplates[index], unitObject, index)
+            //     : textEditRenderer()
+            console.log(`GENERATING`);
+            console.log(area.unitTemplates.length);
+            if (area.unitTemplates.length === 0) continue;
 
-            const unitTemplate = area.unitTemplates[index];
-            // console.log(unitTemplate.name);
-            
-            const unitObject = {
-                areaType: area.type,
-                bounds: {
-                    start: {
-                        x: (area.bounds.start.x + (column * unitWidth)),
-                        y: (area.bounds.start.y + (row * unitHeight))
+            if (area.type === "slots") {
+                const unitObject = {
+                    areaType: area.type,
+                    bounds: {
+                        start: {
+                            x: (area.bounds.start.x + (column * unitWidth)),
+                            y: (area.bounds.start.y + (row * unitHeight))
+                        },
+                        width: unitWidth,
+                        height: unitHeight,
                     },
-                    width: unitWidth,
-                    height: unitHeight,
-                },
-                padding: area.padding
+                    padding: area.padding
+                };
+                unitObject.occupiedBy = [];
+                area.units.push(unitObject);
+                continue;
             };
-
+            
             if (area.type === "buttons") {
-                unitObject.occupiedBy = generateButton(unitTemplate, unitObject, index)
-            } else unitObject.occupiedBy = [];
-            area.units.push(unitObject);
+                const unitObject = {
+                    areaType: area.type,
+                    bounds: {
+                        start: {
+                            x: (area.bounds.start.x + (column * unitWidth)),
+                            y: (area.bounds.start.y + (row * unitHeight))
+                        },
+                        width: unitWidth,
+                        height: unitHeight,
+                    },
+                    padding: area.padding
+                };
+                unitObject.occupiedBy = generateButton(area.unitTemplates[index], unitObject, index),
+                area.units.push(unitObject);
+            }
+            
         };
     };
 };
 
-const buildPage = (pageName) => {
-    const page = pages[pageName];
-    if (page.isBuilt) return;
-    for (let i = 0; i < page.areas.length; i++) generateUnits(page.areas[i]);
-};
-
-export default (pages) => {
+const populateAreas = (pages) => {
     for (const pagename in pages) {
         const page = pages[pagename];
         for (let i = 0; i < page.areas.length; i++) generateUnits(page.areas[i]);
     };
 };
+
+export {populateAreas, generateUnits};

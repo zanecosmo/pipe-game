@@ -1,7 +1,7 @@
-import populateAreas from "./game-tools.js";
+import {populateAreas} from "./game-tools.js";
 import eventHandlers from "./event-handlers.js";
 import render from "./render.js";
-import { pages, currentPage } from "./pages.js";
+import { pages, currentPage } from "./static-pages.js";
 
 const canvas = document.getElementById("screen");
 populateAreas(pages);

@@ -1,6 +1,8 @@
 import {setHoveredUnit} from "./state.js";
-import defaultGameState from "./game-instance.js";
+import gameInstance from "./game-instance.js";
 import render from "./render.js";
+import {populateAreas, generateUnits} from "./game-tools.js";
+import levelPage from "./dynamic-pages.js";
 
 const canvas = document.getElementById("screen");
 
@@ -25,11 +27,28 @@ const buildModal = (modalName, text, modalBehavior) => {
     modal.units[0].occupiedBy.text.value = text;
     modal.units[0].occupiedBy.behavior = modalBehavior;
     return modal;
-}
+};
+
+const generateLevelButtonTemplates = () => {
+    for (const levelNumber in gameInstance.levels) {
+        const levelSelectButtons = pages["level-select-menu"].areas[0];
+        const levelTemplate = {
+            name: `level-${levelNumber}-button`,
+            text: {value: `${levelNumber}`, style: "20px sans-serif"},
+            behavior: () => buttonActions["select-level"](levelNumber),
+            clickable: gameInstance.levels[levelNumber].status === "locked"
+                ? false
+                : true
+        };
+        levelSelectButtons.unitTemplates.push(levelTemplate);
+    };
+};
 
 const modalButtonActions = {
     ["new-game"]: () => {
         safelyRemoveModal();
+        generateLevelButtonTemplates();
+        generateUnits(pages["level-select-menu"].areas[0])
         pushPageToQueue("game-menu");
         render(currentPage());
     },
@@ -43,7 +62,7 @@ const modalButtonActions = {
 
 const buttonActions = {
     ["load-game"]: function(button, text) {
-        if (defaultGameState.levels[1].status === "unlocked") {
+        if (gameInstance.levels[1].status === "unlocked") {
             console.log("LOAD GAME GREENLIGHT");
         } else {
             deactivatePage();
@@ -55,7 +74,12 @@ const buttonActions = {
     },
 
     ["new-game"]: function(button, text) {
-        if (defaultGameState.levels[1].status === "unlocked") {
+        if (gameInstance.levels[1].status === "unlocked") {
+            // async get default level data from server
+            // put returned data into "gameInstance"
+            generateLevelButtonTemplates();
+            generateUnits(pages["level-select-menu"].areas[0])
+            populateAreas(levelPage);
             pushPageToQueue("game-menu");
             render(currentPage());
         } else {
@@ -74,7 +98,10 @@ const buttonActions = {
     ["select-level"]: (levelNumber) => console.log(`LEVEL ${levelNumber} SELECTED`),
     ["text-input"]: () => console.log("TEXT INPUT ACTIVATED"),
     ["async-load"]: () => console.log("ASYNC LOAD BUTTON PRESSED"),
-    ["play-continue"]: () => console.log("PLAY BUTTON PRESSED"),
+    ["play-continue"]: () => {
+        console.log("PLAY BUTTON PRESSED");
+        console.log(pages["game-page"]);
+    },
     ["save-progress"]: () => console.log("SAVE PROGRESS BUTTON PRESSED"),
     ["submit-password"]: () => console.log("SUBMiT PASSWORD PRESSED"),
     ["async-save"]: () => console.log("ASYNC SAVE BUTTON PRESSED"),
@@ -206,6 +233,56 @@ const pages = {
         ],
     },
 
+    ["level-select-menu"]: {
+        title: {
+            text: "LEVEL SELECT",
+            x: 100,
+            y: 100
+        },
+        areas: [
+            {
+                name: "level-select-buttons",
+                type: "buttons",
+                bounds: {
+                    start: {x: 50, y: 150},
+                    width: 400,
+                    height: 200
+                },
+                grid: {rows: 1, columns: 3},
+                padding: 10,
+                isModal: false,
+                isActive: true,
+                units: [],
+                unitTemplates: [
+                    
+                ]
+            },
+
+            {
+                name: "level-select-back-button",
+                type: "buttons",
+                bounds: {
+                    start: {x: 50, y: 350},
+                    width: 100,
+                    height: 50
+                },
+                grid: {rows: 1, columns: 1},
+                padding: 5,
+                isModal: false,
+                isActive: true,
+                units: [],
+                unitTemplates: [
+                    {
+                        name: "level-select-back-button",
+                        text: {value: "BACK", style: "20px sans-serif"},
+                        behavior: buttonActions["close-out"],
+                        clickable: true
+                    }
+                ]
+            }
+        ]
+    },
+
     ["game-menu"]: {
         title: {
             text: "PIPE-CONNECT",
@@ -328,112 +405,39 @@ const pages = {
         ],
     },
 
-    ["level-select-menu"]: {
-        title: {
-            text: "LEVEL SELECT",
-            x: 100,
-            y: 100
-        },
+    ["new-game-modal"]: {
+        title: null,
         areas: [
             {
-                name: "level-select-buttons",
+                name: "new-game-modal",
                 type: "buttons",
+                modalText: {
+                    style: "20px sans-serif",
+                    value: "Creating a new game will overwrite any unsaved progress. Are you sure you would like to continue?",
+                },
+                
                 bounds: {
-                    start: {x: 50, y: 150},
+                    start: {x: 50, y: 160},
                     width: 400,
-                    height: 200
+                    height: 130
                 },
-                grid: {rows: 2, columns: 4},
-                padding: 10,
-                isModal: false,
+                grid: {rows: 2, columns: 1},
+                padding: 12,
+                isModal: true,
                 isActive: true,
                 units: [],
                 unitTemplates: [
                     {
-                        name: "level-1-button",
-                        text: {value: "1", style: "20px sans-serif"},
-                        behavior: () => buttonActions["select-level"]("1"),
-                        // clickable: levels[0].status === "locked" ? false : true
+                        name: "new-game-modal-button",
+                        text: {value: "fart", style: "20px sans-serif"},
+                        behavior: null,
                         clickable: true
                     },
-
+        
                     {
-                        name: "level-2-button",
-                        text: {value: "2", style: "20px sans-serif"},
-                        behavior: () => buttonActions["select-level"]("2"),
-                        // clickable: levels[0].status === "locked" ? false : true
-                        clickable: true
-                    },
-
-                    {
-                        name: "level-3-button",
-                        text: {value: "3", style: "20px sans-serif"},
-                        behavior: () => buttonActions["select-level"]("3"),
-                        // clickable: levels[0].status === "locked" ? false : true            
-                        clickable: true
-                    },
-
-                    {
-                        name: "level-4-button",
-                        text: {value: "4", style: "20px sans-serif"},
-                        behavior: () => buttonActions["select-level"]("4"),
-                        // clickable: levels[0].status === "locked" ? false : true
-                        clickable: true
-                    },
-
-                    {
-                        name: "level-5-button",
-                        text: {value: "5", style: "20px sans-serif"},
-                        behavior: () => buttonActions["select-level"]("5"),
-                        // clickable: levels[0].status === "locked" ? false : true            
-                        clickable: true
-                    },
-
-                    {
-                        name: "level-6-button",
-                        text: {value: "6", style: "20px sans-serif"},
-                        behavior: () => buttonActions["select-level"]("6"),
-                        // clickable: levels[0].status === "locked" ? false : true
-                        clickable: true
-                    },
-
-                    {
-                        name: "level-7-button",
-                        text: {value: "7", style: "20px sans-serif"},
-                        behavior: () => buttonActions["select-level"]("7"),
-                        // clickable: levels[0].status === "locked" ? false : true
-                        clickable: true
-                        
-                    },
-
-                    {
-                        name: "level-8-button",
-                        text: {value: "8", style: "20px sans-serif"},
-                        behavior: () => buttonActions["select-level"]("8"),
-                        // clickable: levels[0].status === "locked" ? false : true
-                        clickable: true
-                    }
-                ]
-            },
-
-            {
-                name: "level-select-back-button",
-                type: "buttons",
-                bounds: {
-                    start: {x: 50, y: 350},
-                    width: 100,
-                    height: 50
-                },
-                grid: {rows: 1, columns: 1},
-                padding: 5,
-                isModal: false,
-                isActive: true,
-                units: [],
-                unitTemplates: [
-                    {
-                        name: "level-select-back-button",
+                        name: "modal-exit",
                         text: {value: "BACK", style: "20px sans-serif"},
-                        behavior: buttonActions["close-out"],
+                        behavior: modalButtonActions["close-modal"],
                         clickable: true
                     }
                 ]
@@ -453,8 +457,8 @@ const pages = {
                     height: canvas.height*(.75),
                 },
                 grid: {
-                    rows: 3,
-                    columns: 5,
+                    rows: 8,
+                    columns: 8,
                     rule: function() {return (canvas.width/this.columns)}
                 },
                 padding: 0,
@@ -540,46 +544,6 @@ const pages = {
             }
         ],
     },
-
-    ["new-game-modal"]: {
-        title: null,
-        areas: [
-            {
-                name: "new-game-modal",
-                type: "buttons",
-                modalText: {
-                    style: "20px sans-serif",
-                    value: "Creating a new game will overwrite any unsaved progress. Are you sure you would like to continue?",
-                },
-                
-                bounds: {
-                    start: {x: 50, y: 160},
-                    width: 400,
-                    height: 130
-                },
-                grid: {rows: 2, columns: 1},
-                padding: 12,
-                isModal: true,
-                isActive: true,
-                units: [],
-                unitTemplates: [
-                    {
-                        name: "new-game-modal-button",
-                        text: {value: "fart", style: "20px sans-serif"},
-                        behavior: null,
-                        clickable: true
-                    },
-        
-                    {
-                        name: "modal-exit",
-                        text: {value: "BACK", style: "20px sans-serif"},
-                        behavior: modalButtonActions["close-modal"],
-                        clickable: true
-                    }
-                ]
-            }
-        ]
-    }
 };
 
 export { pages, currentPage };

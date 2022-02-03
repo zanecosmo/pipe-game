@@ -1,5 +1,5 @@
 import {hoveredUnit, setHoveredUnit} from "./state.js";
-import { currentPage } from "./pages.js";
+import { currentPage } from "./static-pages.js";
 import render from "./render.js";
 
 const areaHoverActions = {
