@@ -42,7 +42,7 @@ const generateButton = (unitTemplate, unit, unitNumber) => {
     return button;
 };
 
-const generateSlot = (unitTemplate, unit, unitNumber) => {
+const generateSlot = (unitTemplate, unit) => {
     const slot = {
         name: unitTemplate.name,
         bounds: {
@@ -62,23 +62,9 @@ const generateSlot = (unitTemplate, unit, unitNumber) => {
 };
 
 const areaTypeActions = {
-    ["buttons"]: (area, unitNumber) => {
-
-    },
+    ["buttons"]: (area, unitNumber) => {console.log("BUTTONS")},
     ["slot"]: () => console.log("SLOTS"),
     ["text-input"]: () => console.log("TEXT-INPUT"),
-};
-
-const buildUnitObject = () => {
-    return {
-        areaType: null,
-        bounds: {
-            start: {x: null, y: null},
-            width: null,
-            height: null,
-        },
-        padding: null
-    }
 };
 
 const buildBasicUnit = (area, column, row) => {
@@ -103,31 +89,17 @@ const generateUnits = (area) => {
     for (let row = 0; row < area.grid.rows; row++) {
         for (let column = 0; column < area.grid.columns; column++) {
             const index = area.grid.columns * row + column;
+            const unitObject = buildBasicUnit(area, column, row);
             
-            // area.type === "slots"
-            // ? []
-            // : area.type === "buttons"
-            //     ? generateButton(area.unitTemplates[index], unitObject, index)
-            //     : textEditRenderer()
-
-            // console.log(`GENERATING`);
-            // console.log(area.unitTemplates.length);
-
             if (area.unitTemplates.length === 0) continue;
 
-            if (area.type === "slots") {
-                const unitObject = buildBasicUnit(area, column, row);
-                unitObject.occupiedBy = generateSlot(area.unitTemplates[index], unitObject, index);
-                area.units.push(unitObject);
-                continue;
-            };
-            
-            if (area.type === "buttons") {
-                const unitObject = buildBasicUnit(area, column, row);
-                unitObject.occupiedBy = generateButton(area.unitTemplates[index], unitObject, index),
-                area.units.push(unitObject);
-            }
-            
+            area.type === "slots"
+                ? unitObject.occupiedBy = generateSlot(area.unitTemplates[index], unitObject)
+                : area.type === "buttons"
+                    ? unitObject.occupiedBy = generateButton(area.unitTemplates[index], unitObject, index)
+                    : console.log("TEXT INPUT PLACEHOLDER");
+
+            area.units.push(unitObject);
         };
     };
 };

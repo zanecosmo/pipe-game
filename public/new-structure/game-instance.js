@@ -2,10 +2,10 @@ export default {
     password: null,
     levels: {
         [1]: {
-            status: "unlocked",
+            status: "complete",
             state: {
-                field: [],
-                inventory: [
+                ["field"]: [],
+                ["inventory"]: [
                     {kind: "end-cap", rotationState: 0, position: 0},
                     {kind: "end-cap", rotationState: 0, position: 0},
                     {kind: "two-way", rotationState: 0, position: 1},
@@ -23,8 +23,8 @@ export default {
         [2]: {
             status: "in-progress",
             state: {
-                field: [],
-                inventory: [
+                ["field"]: [],
+                ["inventory"]: [
                     {kind: "end-cap", rotationState: 0, position: 0},
                     {kind: "two-way", rotationState: 0, position: 1},
                     {kind: "three-way", rotationState: 0, position: 2},
@@ -37,8 +37,8 @@ export default {
         [3]: {
             status: "locked",
             state: {
-                field: [],
-                inventory: [
+                ["field"]: [],
+                ["inventory"]: [
                     {kind: "end-cap", rotationState: 0, position: 0},
                     {kind: "two-way", rotationState: 0, position: 1},
                     {kind: "two-way", rotationState: 0, position: 1},

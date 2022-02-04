@@ -2,11 +2,13 @@ import {setHoveredUnit} from "./state.js";
 import gameInstance from "./game-instance.js";
 import render from "./render.js";
 import {generateUnits} from "./game-tools.js";
+import pieces from "./piece-templates.js";
 
 const canvas = document.getElementById("screen");
 
 let pageQueue = ["start-menu"];
 
+const copy = (item) => JSON.parse(JSON.stringify(item));
 const currentPage = () => pages[pageQueue[pageQueue.length-1]];
 const pushPageToQueue = (pagename) => pageQueue.push(pagename);
 const popPageFromQueue = () => pageQueue.pop();
@@ -108,7 +110,34 @@ const buttonActions = {
         pushPageToQueue("level-select-menu");
         render(currentPage());
     },
-    ["select-level"]: (levelNumber) => console.log(`LEVEL ${levelNumber} SELECTED`),
+    ["select-level"]: (levelNumber) => {
+        // go find level data for that level from "game-instance"
+        const level = gameInstance.levels[levelNumber];
+
+        let areaIndex = 0;
+        for (const area in level.state) {
+            const levelArea = level.state[area]
+
+            for (let i = 0; i < levelArea.length; i++) {
+                if (levelArea.length === 0) break;
+                const unitItem = levelArea[i];
+                console.log(i);
+                console.log(unitItem);
+                const piece = copy(pieces[unitItem.kind]);
+                piece.rotationState = unitItem.rotationState;
+                pages["game-page"].areas[areaIndex].units[unitItem.position].occupiedBy.slot.push(piece);
+            };
+            areaIndex++;
+        };
+
+        console.log(pages["game-page"].areas);
+        
+        
+
+        // populate the game-page units with the appropriate items (based on the level data)
+        // push gameplay page to pageQueue
+        // render the gameplay page
+    },
     ["text-input"]: () => console.log("TEXT INPUT ACTIVATED"),
     ["async-load"]: () => console.log("ASYNC LOAD BUTTON PRESSED"),
     ["play-continue"]: () => {
