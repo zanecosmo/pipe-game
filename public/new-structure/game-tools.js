@@ -23,7 +23,6 @@ const generateButton = (unitTemplate, unit, unitNumber) => {
             y: unit.bounds.start.y + (unit.padding * 2),
             style: unitTemplate.text.style,
         };
-        if (button.status === "locked") button.clickable = false;
         return button;
     };
 
@@ -41,6 +40,25 @@ const generateButton = (unitTemplate, unit, unitNumber) => {
     };
     
     return button;
+};
+
+const generateSlot = (unitTemplate, unit, unitNumber) => {
+    const slot = {
+        name: unitTemplate.name,
+        bounds: {
+            start: {
+                x: unit.bounds.start.x + unit.padding,
+                y: (unit.bounds.start.y + unit.padding)
+            },
+            width: unit.bounds.width - (unit.padding * 2),
+            height: unit.bounds.height - (unit.padding * 2)
+        },
+        behavior: unitTemplate.behavior,
+        clickable: unitTemplate.clickable,
+        slot: []
+    };
+
+    return slot;
 };
 
 const areaTypeActions = {
@@ -63,10 +81,25 @@ const buildUnitObject = () => {
     }
 };
 
-const generateUnits = (area) => {
+const buildBasicUnit = (area, column, row) => {
     const unitWidth = area.bounds.width / area.grid.columns;
-    const unitHeight = area.bounds.height / area.grid.rows;
+    const unitHeight = area.bounds.height /area.grid.rows;
+    
+    return {
+        areaType: area.type,
+        bounds: {
+            start: {
+                x: (area.bounds.start.x + (column * unitWidth)),
+                y: (area.bounds.start.y + (row * unitHeight))
+            },
+            width: unitWidth,
+            height: unitHeight,
+        },
+        padding: area.padding
+    };
+};
 
+const generateUnits = (area) => {
     for (let row = 0; row < area.grid.rows; row++) {
         for (let column = 0; column < area.grid.columns; column++) {
             const index = area.grid.columns * row + column;
@@ -79,40 +112,18 @@ const generateUnits = (area) => {
 
             // console.log(`GENERATING`);
             // console.log(area.unitTemplates.length);
-            
+
             if (area.unitTemplates.length === 0) continue;
 
             if (area.type === "slots") {
-                const unitObject = {
-                    areaType: area.type,
-                    bounds: {
-                        start: {
-                            x: (area.bounds.start.x + (column * unitWidth)),
-                            y: (area.bounds.start.y + (row * unitHeight))
-                        },
-                        width: unitWidth,
-                        height: unitHeight,
-                    },
-                    padding: area.padding
-                };
-                unitObject.occupiedBy = [];
+                const unitObject = buildBasicUnit(area, column, row);
+                unitObject.occupiedBy = generateSlot(area.unitTemplates[index], unitObject, index);
                 area.units.push(unitObject);
                 continue;
             };
             
             if (area.type === "buttons") {
-                const unitObject = {
-                    areaType: area.type,
-                    bounds: {
-                        start: {
-                            x: (area.bounds.start.x + (column * unitWidth)),
-                            y: (area.bounds.start.y + (row * unitHeight))
-                        },
-                        width: unitWidth,
-                        height: unitHeight,
-                    },
-                    padding: area.padding
-                };
+                const unitObject = buildBasicUnit(area, column, row);
                 unitObject.occupiedBy = generateButton(area.unitTemplates[index], unitObject, index),
                 area.units.push(unitObject);
             }

@@ -1,8 +1,7 @@
 import {setHoveredUnit} from "./state.js";
 import gameInstance from "./game-instance.js";
 import render from "./render.js";
-import {populateAreas, generateUnits} from "./game-tools.js";
-import levelPage from "./dynamic-pages.js";
+import {generateUnits} from "./game-tools.js";
 
 const canvas = document.getElementById("screen");
 
@@ -29,9 +28,26 @@ const buildModal = (modalName, text, modalBehavior) => {
     return modal;
 };
 
+const generateSlotTemplates = (areaName) => {
+    const fieldArea = pages["game-page"].areas[areaName === "field" ? 0 : 1];
+    const totalUnits = fieldArea.grid.columns * fieldArea.grid.rows;
+    for (let i = 0; i < totalUnits; i++) {
+        const fieldSlotTemplate = {
+            name: i,
+            text: null,
+            slot: [],
+            behavior: buttonActions["field-action"],
+            clickable: true
+        };
+        fieldArea.unitTemplates.push(fieldSlotTemplate);
+    };
+};
+
+
+
 const generateLevelButtonTemplates = () => {
+    const levelSelectArea = pages["level-select-menu"].areas[0];
     for (const levelNumber in gameInstance.levels) {
-        const levelSelectButtons = pages["level-select-menu"].areas[0];
         const levelTemplate = {
             name: `level-${levelNumber}-button`,
             text: {value: `${levelNumber}`, style: "20px sans-serif"},
@@ -40,21 +56,31 @@ const generateLevelButtonTemplates = () => {
                 ? false
                 : true
         };
-        levelSelectButtons.unitTemplates.push(levelTemplate);
+        levelSelectArea.unitTemplates.push(levelTemplate);
     };
 };
 
+const callLevelSelectGroup = () => {
+    if (pages["level-select-menu"].areas[0].units.length === 0) {
+        generateLevelButtonTemplates();
+        generateUnits(pages["level-select-menu"].areas[0])
+    };
+    pushPageToQueue("game-menu");
+    render(currentPage());
+};
 
+const callNewModalGroup = (button, text) => {
+    deactivatePage();
+    setHoveredUnit(null);
+    const modal = buildModal("new-game-warning-modal", text, modalButtonActions[button]);
+    currentPage().areas.push(modal);
+    render(currentPage());
+};
 
 const modalButtonActions = {
     ["new-game"]: () => {
         safelyRemoveModal();
-        if (pages["level-select-menu"].areas[0].units.length === 0) {
-            generateLevelButtonTemplates();
-            generateUnits(pages["level-select-menu"].areas[0])
-        };
-        pushPageToQueue("game-menu");
-        render(currentPage());
+        callLevelSelectGroup();
     },
     ["load-game"]: () => console.log("LOAD GAME BUTTON PRESSED"),
     ["close-modal"]: () => {
@@ -66,34 +92,16 @@ const modalButtonActions = {
 
 const buttonActions = {
     ["load-game"]: function(button, text) {
-        if (gameInstance.levels[1].status === "unlocked") {
-            console.log("LOAD GAME GREENLIGHT");
-        } else {
-            deactivatePage();
-            setHoveredUnit(null);
-            const modal = buildModal("new-game-modal", text, modalButtonActions[button]);
-            currentPage().areas.push(modal);
-            render(currentPage());
-        }
+        if (gameInstance.levels[1].status === "unlocked") console.log("LOAD GAME GREENLIGHT");
+        else callNewModalGroup(button, text);
     },
 
     ["new-game"]: function(button, text) {
         if (gameInstance.levels[1].status === "unlocked") {
             // async get default level data from server
             // put returned data into "gameInstance"
-            if (pages["level-select-menu"].areas[0].units.length === 0) {
-                generateLevelButtonTemplates();
-                generateUnits(pages["level-select-menu"].areas[0])
-            };
-            pushPageToQueue("game-menu");
-            render(currentPage());
-        } else {
-            deactivatePage();
-            setHoveredUnit(null);
-            const modal = buildModal("new-game-modal", text, modalButtonActions[button]);
-            currentPage().areas.push(modal);
-            render(currentPage());
-        };
+            callLevelSelectGroup();
+        } else callNewModalGroup(button, text);
     },
     
     ["level-select"]: () => {
@@ -110,7 +118,8 @@ const buttonActions = {
     ["save-progress"]: () => console.log("SAVE PROGRESS BUTTON PRESSED"),
     ["submit-password"]: () => console.log("SUBMiT PASSWORD PRESSED"),
     ["async-save"]: () => console.log("ASYNC SAVE BUTTON PRESSED"),
-    
+    ["field-action"]: () => console.log("YOU PRESSED A FIELD BUTTON"),
+    ["inventory-action"]: () => console.log("YOU PRESSED AN INVENTORY BUTTON"),
     ["close-out"]: () => {
         popPageFromQueue();
         // remove event listener
@@ -410,7 +419,7 @@ const pages = {
         ],
     },
 
-    ["new-game-modal"]: {
+    ["new-game-warning-modal"]: {
         title: null,
         areas: [
             {
@@ -470,7 +479,7 @@ const pages = {
                 isModal: false,
                 isActive: true,
                 units: [],
-                unitTemplates: []
+                unitTemplates: [],
             },
 
             {
@@ -486,7 +495,7 @@ const pages = {
                     columns: 6,
                     rule: function() {return (canvas.width*(.6)/this.columns)}
                 },
-                padding: 0,
+                padding: 5,
                 isModal: false,
                 isActive: true,
                 units: [],
@@ -551,4 +560,4 @@ const pages = {
     },
 };
 
-export { pages, currentPage };
+export { pages, currentPage , generateSlotTemplates};
