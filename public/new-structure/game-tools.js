@@ -76,8 +76,10 @@ const generateUnits = (area) => {
             // : area.type === "buttons"
             //     ? generateButton(area.unitTemplates[index], unitObject, index)
             //     : textEditRenderer()
-            console.log(`GENERATING`);
-            console.log(area.unitTemplates.length);
+
+            // console.log(`GENERATING`);
+            // console.log(area.unitTemplates.length);
+            
             if (area.unitTemplates.length === 0) continue;
 
             if (area.type === "slots") {

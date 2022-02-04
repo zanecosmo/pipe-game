@@ -44,11 +44,15 @@ const generateLevelButtonTemplates = () => {
     };
 };
 
+
+
 const modalButtonActions = {
     ["new-game"]: () => {
         safelyRemoveModal();
-        generateLevelButtonTemplates();
-        generateUnits(pages["level-select-menu"].areas[0])
+        if (pages["level-select-menu"].areas[0].units.length === 0) {
+            generateLevelButtonTemplates();
+            generateUnits(pages["level-select-menu"].areas[0])
+        };
         pushPageToQueue("game-menu");
         render(currentPage());
     },
@@ -77,9 +81,10 @@ const buttonActions = {
         if (gameInstance.levels[1].status === "unlocked") {
             // async get default level data from server
             // put returned data into "gameInstance"
-            generateLevelButtonTemplates();
-            generateUnits(pages["level-select-menu"].areas[0])
-            populateAreas(levelPage);
+            if (pages["level-select-menu"].areas[0].units.length === 0) {
+                generateLevelButtonTemplates();
+                generateUnits(pages["level-select-menu"].areas[0])
+            };
             pushPageToQueue("game-menu");
             render(currentPage());
         } else {
