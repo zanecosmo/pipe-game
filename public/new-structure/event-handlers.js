@@ -7,7 +7,7 @@ const areaHoverActions = {
         if (isInBounds(mousePosition, unit.occupiedBy.bounds)) setHoveredUnit(unit);
         else setHoveredUnit(null);
     },
-    ["slot"]: (mousePosition, unit) => console.log("SLOT ACTION"),
+    ["slots"]: (mousePosition, unit) => setHoveredUnit(unit),
     ["text-input"]: () => console.log("TEXT INPUT ACTION"),
 };
 
@@ -57,6 +57,7 @@ export default {
     onMouseMove: (e) => {
         const mousePosition = getPosition(e);
         const unit = getUnitFromArea(mousePosition, currentPage());
+        // console.log(unit);
         if (unit === undefined || unit.clickable === false) setHoveredUnit(null);
         else areaHoverActions[unit.areaType](mousePosition, unit);
         render(currentPage());

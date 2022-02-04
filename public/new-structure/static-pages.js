@@ -1,4 +1,4 @@
-import {setHoveredUnit} from "./state.js";
+import {hoveredUnit, setHoveredUnit} from "./state.js";
 import gameInstance from "./game-instance.js";
 import render from "./render.js";
 import {generateUnits} from "./game-tools.js";
@@ -38,14 +38,12 @@ const generateSlotTemplates = (areaName) => {
             name: i,
             text: null,
             slot: [],
-            behavior: buttonActions["field-action"],
+            behavior: buttonActions[`${areaName}-action`],
             clickable: true
         };
         fieldArea.unitTemplates.push(fieldSlotTemplate);
     };
 };
-
-
 
 const generateLevelButtonTemplates = () => {
     const levelSelectArea = pages["level-select-menu"].areas[0];
@@ -112,6 +110,7 @@ const buttonActions = {
     },
     ["select-level"]: (levelNumber) => {
         // go find level data for that level from "game-instance"
+        // populate the game-page units with the appropriate items (based on the level data)
         const level = gameInstance.levels[levelNumber];
 
         let areaIndex = 0;
@@ -121,8 +120,6 @@ const buttonActions = {
             for (let i = 0; i < levelArea.length; i++) {
                 if (levelArea.length === 0) break;
                 const unitItem = levelArea[i];
-                console.log(i);
-                console.log(unitItem);
                 const piece = copy(pieces[unitItem.kind]);
                 piece.rotationState = unitItem.rotationState;
                 pages["game-page"].areas[areaIndex].units[unitItem.position].occupiedBy.slot.push(piece);
@@ -132,9 +129,9 @@ const buttonActions = {
 
         console.log(pages["game-page"].areas);
         
-        
+        pushPageToQueue("game-page");
+        render(currentPage());
 
-        // populate the game-page units with the appropriate items (based on the level data)
         // push gameplay page to pageQueue
         // render the gameplay page
     },
@@ -147,8 +144,8 @@ const buttonActions = {
     ["save-progress"]: () => console.log("SAVE PROGRESS BUTTON PRESSED"),
     ["submit-password"]: () => console.log("SUBMiT PASSWORD PRESSED"),
     ["async-save"]: () => console.log("ASYNC SAVE BUTTON PRESSED"),
-    ["field-action"]: () => console.log("YOU PRESSED A FIELD BUTTON"),
-    ["inventory-action"]: () => console.log("YOU PRESSED AN INVENTORY BUTTON"),
+    ["field-action"]: () => console.log(hoveredUnit),
+    ["inventory-action"]: () => console.log(hoveredUnit),
     ["close-out"]: () => {
         popPageFromQueue();
         // remove event listener
@@ -296,9 +293,7 @@ const pages = {
                 isModal: false,
                 isActive: true,
                 units: [],
-                unitTemplates: [
-                    
-                ]
+                unitTemplates: []
             },
 
             {
@@ -495,14 +490,14 @@ const pages = {
                 name: "field",
                 type: "slots",
                 bounds: {
-                    start: {x: 0, y: 0},
-                    width: canvas.width,
-                    height: canvas.height*(.75),
+                    start: {x: 100, y: 0},
+                    width: 400,
+                    height: 400,
                 },
                 grid: {
                     rows: 8,
                     columns: 8,
-                    rule: function() {return (canvas.width/this.columns)}
+                    rule: function() {return (400/this.columns)}
                 },
                 padding: 0,
                 isModal: false,
@@ -515,14 +510,14 @@ const pages = {
                 name: "inventory",
                 type: "slots",
                 bounds: {
-                    start: {x: 0, y: 300},
-                    width: canvas.width*(.6),
-                    height: canvas.height*(.25),
+                    start: {x: 0, y: 0},
+                    width: 100,
+                    height: 200
                 },
                 grid: {
-                    rows: 2,
-                    columns: 6,
-                    rule: function() {return (canvas.width*(.6)/this.columns)}
+                    rows: 4,
+                    columns: 2,
+                    rule: function() {return (100/this.columns)}
                 },
                 padding: 5,
                 isModal: false,
@@ -535,14 +530,14 @@ const pages = {
                 name: "menu",
                 type: "buttons",
                 bounds: {
-                    start: {x: 0, y: 250},
+                    start: {x: 0, y: 200},
                     width: 100,
-                    height: 250,
+                    height: 200,
                 },
                 grid: {
                     rows: 5,
                     columns: 1,
-                    rule: function() {return (canvas.width*(.6)/this.columns)}
+                    rule: function() {return (100/this.columns)}
                 },
                 padding: 5,
                 isModal: false,
@@ -557,7 +552,7 @@ const pages = {
                     },
 
                     {
-                        name: "save-progressibuttn",
+                        name: "save-progressbutton",
                         text: {value: "SAVE", style: "10px sans-serif"},
                         behavior: buttonActions["save-progress"],
                         clickable: true
@@ -583,6 +578,32 @@ const pages = {
                         behavior: buttonActions["next-level"],
                         clickable: false
                     },
+                ]
+            },
+
+            {
+                name: "mouse-area",
+                type: "slots",
+                bounds: {
+                    start: {x: 0, y: 0},
+                    height: 50,
+                    width: 50
+                },
+                grid: {
+                    rows: 1,
+                    cilumns: 1
+                },
+                padding: 0,
+                isModal: false,
+                isActive: false,
+                units: [],
+                unitTemplates: [
+                    {
+                        name: "mouse-unit",
+                        text: null,
+                        behavior: null,
+                        clickable: false
+                    }
                 ]
             }
         ],

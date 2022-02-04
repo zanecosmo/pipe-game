@@ -43,6 +43,8 @@ const generateButton = (unitTemplate, unit, unitNumber) => {
 };
 
 const generateSlot = (unitTemplate, unit) => {
+    // console.log(unitTemplate);
+    // console.log(unit);
     const slot = {
         name: unitTemplate.name,
         bounds: {

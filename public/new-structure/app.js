@@ -10,4 +10,5 @@ populateAreas(pages);
 canvas.addEventListener("mousemove", eventHandlers.onMouseMove);
 canvas.addEventListener("click", eventHandlers.onClick);
 render(currentPage());
-console.log(pages["game-page"].areas);
+
+
