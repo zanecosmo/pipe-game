@@ -1,14 +1,23 @@
 import {hoveredUnit, setHoveredUnit} from "./state.js";
 import { currentPage } from "./static-pages.js";
 import render from "./render.js";
+import {mouseUnit} from "./static-pages.js";
 
 const areaHoverActions = {
     ["buttons"]: (mousePosition, unit) => {
         if (isInBounds(mousePosition, unit.occupiedBy.bounds)) setHoveredUnit(unit);
         else setHoveredUnit(null);
     },
-    ["slots"]: (mousePosition, unit) => setHoveredUnit(unit),
+    ["slots"]: (mousePosition, unit) => {
+        setHoveredUnit(unit);
+        updateMouseUnitPosition(mousePosition);
+    },
     ["text-input"]: () => console.log("TEXT INPUT ACTION"),
+};
+
+const updateMouseUnitPosition = (mousePosition) => {
+    mouseUnit.bounds.start.x = mousePosition.x -25;
+    mouseUnit.bounds.start.y = mousePosition.y -25;
 };
 
 const isInBounds =  (position, bounds) => {
@@ -57,7 +66,6 @@ export default {
     onMouseMove: (e) => {
         const mousePosition = getPosition(e);
         const unit = getUnitFromArea(mousePosition, currentPage());
-        // console.log(unit);
         if (unit === undefined || unit.clickable === false) setHoveredUnit(null);
         else areaHoverActions[unit.areaType](mousePosition, unit);
         render(currentPage());

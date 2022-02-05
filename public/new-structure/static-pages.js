@@ -30,6 +30,12 @@ const buildModal = (modalName, text, modalBehavior) => {
     return modal;
 };
 
+const resetInventory = () => {
+    console.log("INVENTORY RESET");
+    const inventory = pages["game-page"].areas[1];
+    for (let i = 0; i < inventory.units.length; i++) inventory.units[i].occupiedBy.slot = [];
+};
+
 const generateSlotTemplates = (areaName) => {
     const fieldArea = pages["game-page"].areas[areaName === "field" ? 0 : 1];
     const totalUnits = fieldArea.grid.columns * fieldArea.grid.rows;
@@ -77,6 +83,46 @@ const callNewModalGroup = (button, text) => {
     render(currentPage());
 };
 
+const grabItem = () => {
+    const grabbedItem = hoveredUnit.occupiedBy.slot.pop();
+    mouseUnit.occupiedBy.slot.push(grabbedItem);
+};
+
+const placeItem = () => {
+    const grabbedItem = mouseUnit.occupiedBy.slot.pop();
+    hoveredUnit.occupiedBy.slot.push(grabbedItem);
+    console.log(grabbedItem);
+    console.log(hoveredUnit.occupiedBy.slot);
+};
+
+const rotateKeypress = (e) => {
+    if (e.key === " ") {
+        mouseUnit.occupiedBy.slot[0].rotationState++;
+        rotateConnValues();
+        render(currentPage());
+    };
+};
+
+const rotateConnValues = () => {
+    console.log("SOMETHING");
+    const directions = mouseUnit.occupiedBy.slot[0].connectable;
+    let rotationValues = [];
+    
+    for (let i = 0; i < directions.length; i++) {
+        const value = Object.values(directions[i])
+        rotationValues.push(value[0]);
+    };
+    
+    const rotationValue = rotationValues.pop();
+    rotationValues.unshift(rotationValue);
+    
+    for (let i = 0; i < directions.length; i++) {
+        for (const direction in directions[i]) {
+            directions[i][direction] = rotationValues[i];
+        };
+    };
+};
+
 const modalButtonActions = {
     ["new-game"]: () => {
         safelyRemoveModal();
@@ -109,6 +155,7 @@ const buttonActions = {
         render(currentPage());
     },
     ["select-level"]: (levelNumber) => {
+        document.addEventListener("keypress", rotateKeypress);
         // go find level data for that level from "game-instance"
         // populate the game-page units with the appropriate items (based on the level data)
         const level = gameInstance.levels[levelNumber];
@@ -126,8 +173,6 @@ const buttonActions = {
             };
             areaIndex++;
         };
-
-        console.log(pages["game-page"].areas);
         
         pushPageToQueue("game-page");
         render(currentPage());
@@ -144,14 +189,60 @@ const buttonActions = {
     ["save-progress"]: () => console.log("SAVE PROGRESS BUTTON PRESSED"),
     ["submit-password"]: () => console.log("SUBMiT PASSWORD PRESSED"),
     ["async-save"]: () => console.log("ASYNC SAVE BUTTON PRESSED"),
-    ["field-action"]: () => console.log(hoveredUnit),
-    ["inventory-action"]: () => console.log(hoveredUnit),
+    ["field-action"]: () => {
+        const hoveredSlot = hoveredUnit.occupiedBy.slot;
+        const mouseSlot = mouseUnit.occupiedBy.slot;
+
+        if (hoveredSlot.length === 0) {
+            if (mouseSlot.length === 0) return;
+            else {
+                placeItem();
+                return render(currentPage());
+            };
+        };
+
+        if (hoveredSlot.length > 0) {
+            if (mouseSlot.length === 0) grabItem();
+            else return render(currentPage());
+        };
+    },
+    ["inventory-action"]: () => {
+        const hoveredSlot = hoveredUnit.occupiedBy.slot;
+        const mouseSlot = mouseUnit.occupiedBy.slot;
+
+        if (hoveredSlot.length === 0) {
+            if (mouseSlot.length === 0) return;
+            else {
+                placeItem();
+                return render(currentPage());
+            };
+        };
+
+        if (hoveredSlot.length > 0) {
+            if (mouseSlot.length === 0) grabItem();
+            else if (mouseSlot[0].kind === hoveredSlot[0].kind) {
+                placeItem();
+                render(currentPage());
+            }
+            else render(currentPage());
+        };
+    },
     ["close-out"]: () => {
         popPageFromQueue();
         // remove event listener
         setHoveredUnit(null);
         render(currentPage());
     }
+};
+
+const mouseUnit = {
+    bounds: {
+        start: {x: 0, y: 0},
+        width: 50,
+        height: 50
+    },
+    padding: 0,
+    occupiedBy: {slot: []}
 };
 
 const pages = {
@@ -313,7 +404,7 @@ const pages = {
                     {
                         name: "level-select-back-button",
                         text: {value: "BACK", style: "20px sans-serif"},
-                        behavior: buttonActions["close-out"],
+                        behavior: () => buttonActions["close-out"](),
                         clickable: true
                     }
                 ]
@@ -519,7 +610,7 @@ const pages = {
                     columns: 2,
                     rule: function() {return (100/this.columns)}
                 },
-                padding: 5,
+                padding: 10,
                 isModal: false,
                 isActive: true,
                 units: [],
@@ -552,7 +643,7 @@ const pages = {
                     },
 
                     {
-                        name: "save-progressbutton",
+                        name: "save-progress-button",
                         text: {value: "SAVE", style: "10px sans-serif"},
                         behavior: buttonActions["save-progress"],
                         clickable: true
@@ -568,7 +659,10 @@ const pages = {
                     {
                         name: "exit-to-menu",
                         text: {value: "EXIT", style: "10px sans-serif"},
-                        behavior: buttonActions["close-out"],
+                        behavior: () => {
+                            resetInventory();
+                            buttonActions["close-out"]();
+                        },
                         clickable: true
                     },
 
@@ -579,35 +673,9 @@ const pages = {
                         clickable: false
                     },
                 ]
-            },
-
-            {
-                name: "mouse-area",
-                type: "slots",
-                bounds: {
-                    start: {x: 0, y: 0},
-                    height: 50,
-                    width: 50
-                },
-                grid: {
-                    rows: 1,
-                    cilumns: 1
-                },
-                padding: 0,
-                isModal: false,
-                isActive: false,
-                units: [],
-                unitTemplates: [
-                    {
-                        name: "mouse-unit",
-                        text: null,
-                        behavior: null,
-                        clickable: false
-                    }
-                ]
             }
         ],
     },
 };
 
-export { pages, currentPage , generateSlotTemplates};
+export { pages, currentPage , generateSlotTemplates, mouseUnit};

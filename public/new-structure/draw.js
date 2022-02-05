@@ -1,4 +1,5 @@
 import { copy } from "./utils.js";
+import {mouseUnit} from "./static-pages.js";
 
 const canvas = document.getElementById("screen");
 const c = document.getElementById("screen").getContext("2d");
@@ -34,9 +35,9 @@ const wrapText = (modalText, boxWidth, lineHeight, x, y) => {
 
 const rotateUnit = (unit) => {
     const bounds = unit.bounds;
-    c.translate(bounds.start.x + bounds.width/2, bounds.start.y + bounds.width/2);
+    c.translate(bounds.start.x + bounds.width / 2, bounds.start.y + bounds.width / 2);
     c.rotate((unit.occupiedBy.slot[0].rotationState * 90) * Math.PI/180);
-    c.translate(-1*(bounds.start.x + bounds.width/2), -1*(bounds.start.y + bounds.width/2));
+    c.translate(-1*(bounds.start.x + bounds.width / 2), -1*(bounds.start.y + bounds.width / 2));
 };
 
 export default {
@@ -149,10 +150,10 @@ export default {
             c.lineTo(X + width - padding, Y + width - padding - depth);
         },
         ["two-way"]: function(width, X, Y, padding, depth) {
-            c.moveTo(X+padding, Y + depth + padding);
-            c.lineTo(X-padding + width, Y + depth + padding);
-            c.moveTo(X+padding, Y + width - depth - padding);
-            c.lineTo(X-padding + width, Y + width - depth - padding);
+            c.moveTo(X + padding, Y + depth + padding);
+            c.lineTo(X - padding + width, Y + depth + padding);
+            c.moveTo(X + padding, Y + width - depth - padding);
+            c.lineTo(X - padding + width, Y + width - depth - padding);
         },
         ["three-way"]: function(width, X, Y, padding, depth) {
             c.moveTo(X + padding, Y + padding + depth);
@@ -190,19 +191,17 @@ export default {
     },
 
     stackQuantity: (quantity, x,y) => {
-        console.log("STACK QUANITITY CALLED")
         c.font = "12px sans-serif";
         c.fillStyle = renderColor;
-        c.fillText(quantity, x+3, y+13)
+        c.fillText(quantity, x + 3, y + 13)
     },
 
     item: function(unit) {
         const X = unit.bounds.start.x;
         const Y = unit.bounds.start.y;
         const padding = unit.padding;
-        const depth = unit.width / 4;
+        const depth = (unit.bounds.width - (padding *2)) / 6;
         const unitKind = unit.occupiedBy.slot[0].kind;
-        // console.log(unitKind);
         
         c.strokeStyle = renderColor;
         c.lineWidth = 2;
@@ -210,7 +209,7 @@ export default {
         c.save()
         c.beginPath();
         rotateUnit(unit);
-        this.itemPaths[unitKind](unit.width, X, Y, padding, depth);
+        this.itemPaths[unitKind](unit.bounds.width, X, Y, padding, depth);
         c.stroke();
         c.restore();
     },

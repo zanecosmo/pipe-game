@@ -12,8 +12,8 @@ const rotateItem = () => {
         rotation.push(value[0]);
     };
     
-    const conndirection = rotation.pop();
-    rotation.unshift(conndirection);
+    const connDirection = rotation.pop();
+    rotation.unshift(connDirection);
 
     for (let i = 0; i < grabbedConns.length; i++) {
         for (const direction in grabbedConns[i]) {
@@ -46,9 +46,7 @@ const rotateValues = (item) => {
 export default {
     rotateAlt: (item) => {
         if (item.rotationState === 4) item.rotationState = 0;
-        for (let i = 0; i < item.rotationState; i++) {
-            rotateValues(item);
-        };
+        for (let i = 0; i < item.rotationState; i++) rotateValues(item);
     },
 
     grabItem: function(slot) {

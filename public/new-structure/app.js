@@ -11,4 +11,3 @@ canvas.addEventListener("mousemove", eventHandlers.onMouseMove);
 canvas.addEventListener("click", eventHandlers.onClick);
 render(currentPage());
 
-

@@ -49,11 +49,11 @@ const generateSlot = (unitTemplate, unit) => {
         name: unitTemplate.name,
         bounds: {
             start: {
-                x: unit.bounds.start.x + unit.padding,
-                y: (unit.bounds.start.y + unit.padding)
+                x: unit.bounds.start.x,
+                y: unit.bounds.start.y
             },
-            width: unit.bounds.width - (unit.padding * 2),
-            height: unit.bounds.height - (unit.padding * 2)
+            width: unit.bounds.width,
+            height: unit.bounds.height
         },
         behavior: unitTemplate.behavior,
         clickable: unitTemplate.clickable,

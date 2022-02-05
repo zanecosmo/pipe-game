@@ -1,5 +1,6 @@
 import draw from "./draw.js";
 import { hoveredUnit } from "./state.js";
+import {pages, mouseUnit} from "./static-pages.js";
 
 const unitTypeRenderers = {
     ["buttons"]: (unit, hoveredUnit) => draw.button(unit, hoveredUnit),
@@ -32,6 +33,7 @@ const renderAreas = (currentPage) => {
 export default (currentPage) => {
     draw.clearScreen();
     draw.screen();
-    if (currentPage.title !== null) draw.title(currentPage.title);
     renderAreas(currentPage);
+    if (currentPage.title !== null) draw.title(currentPage.title);
+    if (mouseUnit.occupiedBy.slot.length > 0) draw.item(mouseUnit);
 };
