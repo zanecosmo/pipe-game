@@ -6,7 +6,7 @@ const generateButton = (unitTemplate, unit, unitNumber) => {
         bounds: {
             start: {
                 x: unit.bounds.start.x + unit.padding,
-                y: (unit.bounds.start.y + unit.padding)
+                y: unit.bounds.start.y + unit.padding
             },
             width: unit.bounds.width - (unit.padding * 2),
             height: unit.bounds.height - (unit.padding * 2)
@@ -30,6 +30,9 @@ const generateButton = (unitTemplate, unit, unitNumber) => {
         const pseudoStart = unit.bounds.width * (3/5);
         button.bounds.start.x = unit.bounds.start.x + pseudoStart;
         button.bounds.width = unit.bounds.width - pseudoStart - unit.padding;
+        button.bounds.height = unit.bounds.height - unit.padding - (unit.padding / 2);
+
+        if (unitNumber > 0) button.bounds.start.y = unit.bounds.start.y + (unit.padding / 2);
     };
 
     button.text = {

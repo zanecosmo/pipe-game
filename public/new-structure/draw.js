@@ -36,7 +36,14 @@ const wrapText = (modalText, boxWidth, lineHeight, x, y) => {
 const rotateUnit = (unit) => {
     const bounds = unit.bounds;
     c.translate(bounds.start.x + bounds.width / 2, bounds.start.y + bounds.width / 2);
-    c.rotate((unit.occupiedBy.slot[0].rotationState * 90) * Math.PI/180);
+    c.rotate((unit.occupiedBy.slot[unit.occupiedBy.slot.length - 1].rotationState * 90) * Math.PI/180);
+    c.translate(-1*(bounds.start.x + bounds.width / 2), -1*(bounds.start.y + bounds.width / 2));
+};
+
+const rotateShadow = (mouseUnit, hoveredUnit) => {
+    const bounds = hoveredUnit.bounds;
+    c.translate(bounds.start.x + bounds.width / 2, bounds.start.y + bounds.width / 2);
+    c.rotate((mouseUnit.occupiedBy.slot[0].rotationState * 90) * Math.PI/180);
     c.translate(-1*(bounds.start.x + bounds.width / 2), -1*(bounds.start.y + bounds.width / 2));
 };
 
@@ -55,6 +62,41 @@ export default {
         c.textBaseline = "middle",
         c.textAlign = "center",
         c.fillText(title.text, title.x, title.y);
+    },
+    menuBox: function() {
+        c.lineWidth = 1.5;
+        c.strokeStyle = renderColor;
+        // c.globalAlpha = .25;
+        
+        c.beginPath();
+        c.moveTo(100.5, 0);
+        c.lineTo(100.5, 400);
+        c.moveTo(0, 199.5);
+        c.lineTo(100, 199.5);
+        c.stroke();
+        c.closePath();
+        
+        // c.globalAlpha = 1;
+    },
+    itemShadow: function(mouseUnit, hoveredUnit) {
+        const unitKind = mouseUnit.occupiedBy.slot[0].kind;
+        const X = hoveredUnit.bounds.start.x;
+        const Y = hoveredUnit.bounds.start.y;
+        const padding = hoveredUnit.padding;
+        const depth = (hoveredUnit.bounds.width - (padding *2)) / 6;
+
+        c.globalAlpha = .5;
+        c.strokeStyle = hoverColor;
+        
+        c.save()
+        c.beginPath();
+        rotateShadow(mouseUnit, hoveredUnit);
+        this.itemPaths[unitKind](hoveredUnit.bounds.width, X, Y, padding, depth);
+        c.stroke();
+        c.restore(); 
+        
+        c.globalAlpha = 1;
+        c.fillStyle = renderColor;
     },
     status: function(color, buttonBounds, status) {
         c.beginPath();
@@ -105,8 +147,8 @@ export default {
         let boxColor = screenColor;
         let textColor = renderColor;
         const button = unit.occupiedBy;
-        const buttonBounds = button.bounds;
-        const start = buttonBounds.start;
+        const bounds = button.bounds;
+        const start = bounds.start;
     
         if (unit.occupiedBy.clickable === false) c.globalAlpha = .6;
         else if (unit === hoveredUnit) {
@@ -116,13 +158,13 @@ export default {
         
         c.beginPath();
         c.fillStyle = boxColor;
-        c.fillRect(start.x, start.y, buttonBounds.width, buttonBounds.height);
+        c.fillRect(start.x, start.y, bounds.width, bounds.height);
         c.closePath();
     
         c.beginPath();
         c.strokeStyle = borderColor;
         c.lineWidth = 2;
-        c.strokeRect(start.x, start.y, buttonBounds.width, buttonBounds.height);
+        c.strokeRect(start.x, start.y, bounds.width, bounds.height);
         c.closePath();
     
         c.beginPath();
@@ -138,7 +180,7 @@ export default {
         c.globalAlpha = 1;
     
         if (unit.name === "select-level-button") {
-            this.status(textColor, buttonBounds, button.status);
+            this.status(textColor, bounds, button.status);
         };
     },
 
@@ -190,10 +232,12 @@ export default {
         ["placeHolder"]: function() {console.log(this.name)}
     },
 
-    stackQuantity: (quantity, x,y) => {
+    stackQuantity: (quantity, x, y) => {
+        c.textBaseline = "hanging";
         c.font = "12px sans-serif";
         c.fillStyle = renderColor;
-        c.fillText(quantity, x + 3, y + 13)
+        c.fillText(quantity, x + 1, y + 2)
+        c.textBaseline = "middle";
     },
 
     item: function(unit) {

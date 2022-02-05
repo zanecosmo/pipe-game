@@ -31,10 +31,11 @@ const buildModal = (modalName, text, modalBehavior) => {
 };
 
 const resetInventory = () => {
-    console.log("INVENTORY RESET");
     const inventory = pages["game-page"].areas[1];
     for (let i = 0; i < inventory.units.length; i++) inventory.units[i].occupiedBy.slot = [];
 };
+
+const emptyMouseUnit = () => mouseUnit.occupiedBy.slot = [];
 
 const generateSlotTemplates = (areaName) => {
     const fieldArea = pages["game-page"].areas[areaName === "field" ? 0 : 1];
@@ -91,20 +92,20 @@ const grabItem = () => {
 const placeItem = () => {
     const grabbedItem = mouseUnit.occupiedBy.slot.pop();
     hoveredUnit.occupiedBy.slot.push(grabbedItem);
-    console.log(grabbedItem);
-    console.log(hoveredUnit.occupiedBy.slot);
 };
 
 const rotateKeypress = (e) => {
     if (e.key === " ") {
-        mouseUnit.occupiedBy.slot[0].rotationState++;
+        const pieceObject = mouseUnit.occupiedBy.slot[0];
+        if (pieceObject === undefined) return;
+        if (pieceObject.rotationState === 4) pieceObject.rotationState = 0;
+        pieceObject.rotationState++;
         rotateConnValues();
         render(currentPage());
     };
 };
 
 const rotateConnValues = () => {
-    console.log("SOMETHING");
     const directions = mouseUnit.occupiedBy.slot[0].connectable;
     let rotationValues = [];
     
@@ -156,8 +157,7 @@ const buttonActions = {
     },
     ["select-level"]: (levelNumber) => {
         document.addEventListener("keypress", rotateKeypress);
-        // go find level data for that level from "game-instance"
-        // populate the game-page units with the appropriate items (based on the level data)
+
         const level = gameInstance.levels[levelNumber];
 
         let areaIndex = 0;
@@ -176,9 +176,6 @@ const buttonActions = {
         
         pushPageToQueue("game-page");
         render(currentPage());
-
-        // push gameplay page to pageQueue
-        // render the gameplay page
     },
     ["text-input"]: () => console.log("TEXT INPUT ACTIVATED"),
     ["async-load"]: () => console.log("ASYNC LOAD BUTTON PRESSED"),
@@ -546,12 +543,12 @@ const pages = {
                 },
                 
                 bounds: {
-                    start: {x: 50, y: 160},
+                    start: {x: 50, y: 165},
                     width: 400,
-                    height: 130
+                    height: 120
                 },
                 grid: {rows: 2, columns: 1},
-                padding: 12,
+                padding: 13,
                 isModal: true,
                 isActive: true,
                 units: [],
@@ -660,6 +657,8 @@ const pages = {
                         name: "exit-to-menu",
                         text: {value: "EXIT", style: "10px sans-serif"},
                         behavior: () => {
+                            document.removeEventListener("keypress", rotateKeypress);
+                            emptyMouseUnit();
                             resetInventory();
                             buttonActions["close-out"]();
                         },
