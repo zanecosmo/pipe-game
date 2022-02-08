@@ -31,6 +31,7 @@ const behaviors = {
     ["restart-level"]: () => console.log("RESTART BUTTON PRESSED"),
     ["field-action"]: () => {
         const hoveredSlot = hoveredUnit.occupiedBy.slot;
+        // if (hoveredSlot[0])
         const mouseSlot = getCurrentPage().mouseUnit.occupiedBy.slot;
 
         if (hoveredSlot.length === 0) {

@@ -56,7 +56,27 @@ const getUnitFromArea = (mousePosition, page) => {
 };
 
 const rotateConnValues = () => {
+    const connections = getCurrentPage().mouseUnit.occupiedBy.slot[0].connections;
+    connections.unshift(connections.pop());
+};
 
+const rotateConnValuesAlt = () => {
+    const connections = getCurrentPage().mouseUnit.occupiedBy.slot[0].connections;
+    let directions = [];
+    
+    for (let i = 0; i < connections.length; i++) {
+        const value = Object.values(connections[i])[0];
+        directions.push(value);
+    };
+    
+    const connectionValue = directions.pop();
+    directions.unshift(connectionValue);
+    
+    for (let i = 0; i < connections.length; i++) {
+        for (const direction in connections[i]) {
+            connections[i][direction] = directions[i];
+        };
+    };
 };
 
 export default {
@@ -79,6 +99,7 @@ export default {
             if (pieceObject === undefined) return;
             if (pieceObject.rotation === 4) pieceObject.rotation = 0;
             pieceObject.rotation++;
+            rotateConnValuesAlt();
             render();
         };
     }

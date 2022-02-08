@@ -27,7 +27,6 @@ const renderUnits = (area) => {
 
 const renderAreas = (currentPage) => {
     for (let i = 0; i < currentPage.areas.length; i++) {
-        if (currentPage.areas[i].isModal) draw.modal(currentPage.areas[i]);
         if (currentPage.areas[0].name === "field") draw.menuBox();
         renderUnits(currentPage.areas[i]);
     };

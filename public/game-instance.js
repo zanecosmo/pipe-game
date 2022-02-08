@@ -3,14 +3,17 @@ export default [
         isUnlocked: true,
         state: {
             ["field"]: [
-                {type: "end-cap", position: 12, rotation: 0},
-                {type: "two-way", position: 13, rotation: 0},
-                {type: "end-cap", position: 14, rotation: 0}
+                {type: "start-permanent", position: 8, rotation: 0},
+                {type: "end-permanent", position: 23, rotation: 2},
             ],
             ["inventory"]: [
-                {type: "end-cap", position: 0, rotation: 0},
                 {type: "two-way", position: 1, rotation: 0},
-                {type: "two-way", position: 1, rotation: 0}
+                {type: "two-way", position: 1, rotation: 0},
+                {type: "two-way", position: 1, rotation: 0},
+                {type: "two-way", position: 1, rotation: 0},
+                {type: "two-way", position: 1, rotation: 0},
+                {type: "elbow", position: 0, rotation: 0},
+                {type: "elbow", position: 0, rotation: 0}
             ]
         }
     },

@@ -58,6 +58,7 @@ export default {
 
         c.globalAlpha = .5;
         c.strokeStyle = hoverColor;
+        c.fillStyle = hoverColor;
         
         c.save()
         c.beginPath();
@@ -67,7 +68,9 @@ export default {
         c.restore(); 
         
         c.globalAlpha = 1;
+        c.strokeStyle = renderColor;
         c.fillStyle = renderColor;
+        
     },
     status: function(color, buttonBounds, status) {
         c.beginPath();
@@ -167,7 +170,31 @@ export default {
             c.lineTo(X + padding + depth, Y + width - depth - padding);
             c.lineTo(X + padding + depth, Y + width - padding);
         },
-        ["placeHolder"]: function() {console.log(this.name)}
+        ["placeHolder"]: function() {console.log(this.name)},
+        ["start-permanent"]: function(width, X, Y, padding, depth) {
+            c.moveTo(X + padding, Y + padding + depth);
+            c.lineTo(X + width - padding, Y + padding + depth);
+            c.moveTo(X + padding, (Y + width) - padding - depth);
+            c.lineTo(X + width - padding, (Y + width) - padding - depth);
+            c.fillRect(
+                X + padding,
+                Y + depth + padding,
+                (width - (padding * 2)) / 2,
+                width - (depth * 2) - (padding * 2)
+            );
+        },
+        ["end-permanent"]: function(width, X, Y, padding, depth) {
+            c.moveTo(X + padding, Y + padding + depth);
+            c.lineTo(X + width - padding, Y + padding + depth);
+            c.moveTo(X + padding, (Y + width) - padding - depth);
+            c.lineTo(X + width - padding, (Y + width) - padding - depth);
+            c.fillRect(
+                X + padding,
+                Y + depth + padding,
+                (width - (padding * 2)) / 2,
+                width - (depth * 2) - (padding * 2)
+            );
+        }
     },
 
     stackQuantity: (quantity, x, y) => {
@@ -186,6 +213,7 @@ export default {
         const pieceType = unit.occupiedBy.slot[0].type;
         
         c.strokeStyle = renderColor;
+        c.fillStyle = renderColor;
         c.lineWidth = 2;
 
         c.save()

@@ -2,6 +2,7 @@ import {hoveredUnit, pageQueue, getCurrentPage} from "./state.js";
 import eventHandlers from "./event-handlers.js";
 import gameInstance from "./game-instance.js";
 import pieceRotations from "./piece-rotations.js";
+import { checkConnections, connectedUnits } from "./connection-check.js";
 
 const copy = (item) => JSON.parse(JSON.stringify(item));
 const pushPageToQueue = (page) => pageQueue.push(page);
@@ -22,11 +23,13 @@ const resetGamePageSlots = () => {
 const grabItem = () => {
     const grabbedItem = hoveredUnit.occupiedBy.slot.pop();
     getCurrentPage().mouseUnit.occupiedBy.slot.push(grabbedItem);
+    checkConnections();
 };
 
 const placeItem = () => {
     const grabbedItem = getCurrentPage().mouseUnit.occupiedBy.slot.pop();
     hoveredUnit.occupiedBy.slot.push(grabbedItem);
+    checkConnections();
 };
 
 const extractState = (levelIndex) => {
@@ -44,7 +47,10 @@ const extractState = (levelIndex) => {
         for (let pieceTemplate = 0; pieceTemplate < state[area].length; pieceTemplate++) {
             const piece = copy(state[area][pieceTemplate]);
             piece.connections = copy(pieceRotations[piece.type]);
-            gamePageAreas[areaIndex].units[piece.position].occupiedBy.slot.push(piece);
+            const unit = gamePageAreas[areaIndex].units[piece.position];
+            unit.occupiedBy.slot.push(piece);
+            if (piece.type.includes("permanent")) unit.occupiedBy.clickable = false;
+            if (piece.type === "start-permanent") connectedUnits.push(unit);
         };
 
         areaIndex++;
