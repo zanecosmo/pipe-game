@@ -1,36 +1,8 @@
-import { copy } from "./utils.js";
-
 const canvas = document.getElementById("screen");
 const c = document.getElementById("screen").getContext("2d");
 const screenColor = "rgb(190, 0, 190)";
 const renderColor = "rgb(170, 255, 0)";
 const hoverColor = "rgb(250, 60, 200)";
-
-const wrapText = (modalText, boxWidth, lineHeight, x, y) => {
-    const wordArray = modalText.split(" ");
-    
-    let lineNumber = 0;
-    let givenLine = "";
-    
-    const testLineWidth = (word) => {
-        let givenLineCopy = copy(givenLine);
-        let testLine = givenLineCopy += (word + " ");
-        const lineWidth = c.measureText(testLine).width;
-
-        if (lineWidth < boxWidth) givenLine += (word + " ")
-        else {
-            drawLine(givenLine);
-            givenLine = word + " ";
-            lineNumber++;
-        };
-    };
-    
-    const drawLine = (line) => c.fillText(line, x, y + (lineHeight * lineNumber));
-
-    for (let i = 0; i < wordArray.length; i++) testLineWidth(wordArray[i]);
-    
-    drawLine(givenLine);
-};
 
 const rotateUnit = (unit) => {
     const bounds = unit.bounds;

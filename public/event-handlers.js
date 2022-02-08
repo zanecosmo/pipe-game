@@ -1,124 +1,85 @@
-import mouseUnit from "./storage/mouse-unit.js";
-import player from "./utils/player-actions.js";
-import mouseEvent from "./utils/mouse-event-utils.js";
-import render from "./graphics/render.js";
-import pages from "./pages.js";
-import state from "./storage/state.js"
-import levelsArea from "./storage/levels-area.js"
+import {getCurrentPage, hoveredUnit, setHoveredUnit} from "./state.js";
+import {gameplayPage} from "./page-templates/gameplay-page.js";
+import render from "./render.js";
+
+const areaHoverActions = {
+    ["buttons"]: (mousePosition, unit) => {
+        if (isInBounds(mousePosition, unit.occupiedBy.bounds)) setHoveredUnit(unit);
+        else setHoveredUnit(null);
+    },
+    ["slots"]: (mousePosition, unit) => {
+        setHoveredUnit(unit);
+        updateMouseUnitPosition(mousePosition);
+    }
+};
+
+const updateMouseUnitPosition = (mousePosition) => {
+    gameplayPage.mouseUnit.bounds.start.x = mousePosition.x -25;
+    gameplayPage.mouseUnit.bounds.start.y = mousePosition.y -25;
+};
+
+const isInBounds =  (position, bounds) => {
+    if (position.x < bounds.start.x + bounds.width && position.x >= bounds.start.x
+        && position.y < bounds.start.y + bounds.height && position.y >= bounds.start.y)
+        return true;
+    return false;
+};
+
+const getPosition = (e) => {
+    const canvas = document.getElementById("screen");
+    const screen = canvas.getBoundingClientRect();
+    const eventPosition = {x: (e.clientX - screen.left), y: (e.clientY - screen.top)};
+    return eventPosition;
+};
+
+const whichUnit = (area, position) => {
+    const unitWidth = area.bounds.width / area.grid.columns;
+    const unitHeight = area.bounds.height / area.grid.rows;
+
+    const eventPositionX = position.x - area.bounds.start.x;
+    const eventPositionY = position.y - area.bounds.start.y;
+
+    const unitsDeepX = Math.floor(eventPositionX/unitWidth);
+    const unitsDeepY = Math.floor(eventPositionY/unitHeight);
+
+    const foundUnit = unitsDeepY*area.grid.columns+unitsDeepX;
+    return area.units[foundUnit];
+};
+
+const getUnitFromArea = (mousePosition, page) => {
+    for (let i = 0; i < page.areas.length; i++) {
+        if (page.areas[i].isActive === false) continue;
+        if (isInBounds(mousePosition, page.areas[i].bounds) === true) {
+            return whichUnit(page.areas[i], mousePosition);
+        };
+    };
+};
+
+const rotateConnValues = () => {
+
+};
 
 export default {
-    ["start-page"]: {
-        ["mousemove"]: function(e) {
-            const mousePosition = mouseEvent.getPosition(e);
-            mouseEvent.setButtonHover(mousePosition);
-
-            render(pages[state.page].components);
-        },
-
-        ["click"]: function(e) {
-            const mousePosition = mouseEvent.getPosition(e);
-            const button = mouseEvent.whichButton(mousePosition);
-            if (button !== undefined){
-                button.clickAction(button.link);
-                mouseEvent.setButtonHover(mousePosition);
-            };
-            render(pages[state.page].components)
-        }
+    onClick: () => {
+        if (hoveredUnit === null) return
+        if (hoveredUnit.occupiedBy.clickable) hoveredUnit.occupiedBy.behavior();
+    },
+    
+    onMouseMove: (e) => {
+        const mousePosition = getPosition(e);
+        const unit = getUnitFromArea(mousePosition, getCurrentPage());
+        if (unit === undefined || unit.clickable === false) setHoveredUnit(null);
+        else areaHoverActions[unit.areaType](mousePosition, unit);
+        render();
     },
 
-    ["play-page"]: {
-        ["mousemove"]: function(e) {
-            const mousePosition = mouseEvent.getPosition(e);
-            mouseEvent.setButtonHover(mousePosition);
-            if (mousePosition.x > 0 && mousePosition.y > 0) {
-                const area = mouseEvent.whichArea(mousePosition);
-                if (area !== undefined) {
-                    const unit = mouseEvent.whichUnit(area, mousePosition);
-                    mouseEvent.updateMouseUnit(mousePosition, area, unit);
-                };
-            };
-            render(pages[state.page].components);
-        },
-
-        ["click"]: function(e) {
-            const mousePosition = mouseEvent.getPosition(e);
-
-            const button = mouseEvent.whichButton(mousePosition);
-            if (button !== undefined){
-                button.clickAction(button.link);
-                mouseEvent.setButtonHover(mousePosition);
-                render(pages[state.page].components);
-                return
-            };
-
-            const area = mouseEvent.whichArea(mousePosition);
-            const unit = mouseEvent.whichUnit(area, mousePosition);
-        
-            if (area.name === "inventory") {
-                if (mouseUnit.occupiedBy.length === 0) {
-                    if (unit.occupiedBy.length > 0) player.grabItem(unit.occupiedBy);
-                } else {
-                    if (unit.occupiedBy.length > 0 && unit.occupiedBy[0].kind === mouseUnit.occupiedBy[0].kind) {
-                        player.placeItem(unit.occupiedBy);
-                    } else if (unit.occupiedBy.length === 0) {
-                        player.placeItem(unit.occupiedBy);
-                    };
-                };
-        
-            } else if (area.name === "field") {
-                if (mouseUnit.occupiedBy.length === 0) {
-                    if (unit.occupiedBy.length > 0) player.grabItem(unit.occupiedBy);
-                } else if (unit.occupiedBy.length === 0) {
-                    player.placeItem(unit.occupiedBy);
-                    // game.checkSystem(); ///////////////////////////////////////////////////////////////
-                }
-            
-            } else if (mouseUnit.occupiedBy.length === 0) player.pressButton(unit);
-        
-            render(pages[state.page].components);
-        },
-
-        ["keypress"]: function(e) {
-            if (e.key === " " && mouseUnit.occupiedBy.length === 1) {
-                mouseUnit.occupiedBy[0].rotationState++;
-                player.rotateAlt(mouseUnit.occupiedBy[0]);
-                render(pages[state.page].components);
-            };
-        },
-    },
-
-    ["levels-page"]: { ////////////////////////////////////////////////
-        ["mousemove"]: function(e) {
-            const mousePosition = mouseEvent.getPosition(e);
-            if (mousePosition.x > 0 && mousePosition.y > 0) {
-                if (mouseEvent.isInBounds(mousePosition, levelsArea.bounds) === true) {
-                    const unit = mouseEvent.whichUnit(levelsArea, mousePosition);
-                    mouseEvent.updateMouseUnit(mousePosition, levelsArea, unit);
-                } else {
-                    mouseEvent.updateMouseUnit(mousePosition, null, null);
-                    mouseEvent.setButtonHover(mousePosition);
-                };
-            };
-            render(pages[state.page].components);
-        },
-
-        ["click"]: function(e) {
-            const mousePosition = mouseEvent.getPosition(e);
-            if (mousePosition.x > 0 && mousePosition.y > 0) {
-                if (mouseEvent.isInBounds(mousePosition, levelsArea.bounds) === true) {
-                    const unit = mouseEvent.whichUnit(levelsArea, mousePosition);
-                    mouseEvent.updateMouseUnit(mousePosition, levelsArea, unit);
-
-                } else {
-                    mouseEvent.updateMouseUnit(mousePosition, null, null);
-                    const button = mouseEvent.whichButton(mousePosition);
-                    if (button !== undefined) {
-                        button.clickAction(button.link);
-                        mouseEvent.setButtonHover(mousePosition);
-                     };
-                };
-            };
-            render(pages[state.page].components)
-        }
+    rotateKeypress: (e) => {
+        if (e.key === " ") {
+            const pieceObject = getCurrentPage().mouseUnit.occupiedBy.slot[0];
+            if (pieceObject === undefined) return;
+            if (pieceObject.rotation === 4) pieceObject.rotation = 0;
+            pieceObject.rotation++;
+            render();
+        };
     }
 };
