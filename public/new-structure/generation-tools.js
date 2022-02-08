@@ -1,4 +1,35 @@
-// import gameInstance from "./game-instance.js";
+import gameInstance from "./game-instance.js";
+import {gameplayPage} from "./page-templates/gameplay-page.js";
+import {levelSelectMenu} from "./page-templates/level-select-menu.js";
+import {behaviors} from "./behaviors.js";
+
+const generateSlotTemplates = (areaName) => {
+    const fieldArea = gameplayPage.areas[areaName === "field" ? 0 : 1];
+    const totalUnits = fieldArea.grid.columns * fieldArea.grid.rows;
+    for (let i = 0; i < totalUnits; i++) {
+        const fieldSlotTemplate = {
+            name: i,
+            text: null,
+            slot: [],
+            behavior: behaviors[`${areaName}-action`],
+            clickable: true
+        };
+        fieldArea.unitTemplates.push(fieldSlotTemplate);
+    };
+};
+
+const generateLevelButtonTemplates = () => {
+    const buttonArea = levelSelectMenu.areas[0];
+    for (let i = 0; i < gameInstance.length; i++) {
+        const levelTemplate = {
+            name: `level-${i + 1}-button`,
+            text: {value: `${i + 1}`, style: "20px sans-serif"},
+            behavior: () => behaviors["select-given-level"](gameplayPage, i),
+            clickable: gameInstance[i].isUnlocked ? true : false
+        };
+        buttonArea.unitTemplates.push(levelTemplate);
+    };
+};
 
 const generateButton = (unitTemplate, unit, unitNumber) => {
     const button = {
@@ -26,15 +57,6 @@ const generateButton = (unitTemplate, unit, unitNumber) => {
         return button;
     };
 
-    if (unitTemplate.name === "new-game-modal-button" || unitTemplate.name === "modal-exit") {
-        const pseudoStart = unit.bounds.width * (3/5);
-        button.bounds.start.x = unit.bounds.start.x + pseudoStart;
-        button.bounds.width = unit.bounds.width - pseudoStart - unit.padding;
-        button.bounds.height = unit.bounds.height - unit.padding - (unit.padding / 2);
-
-        if (unitNumber > 0) button.bounds.start.y = unit.bounds.start.y + (unit.padding / 2);
-    };
-
     button.text = {
         value: unitTemplate.text.value,
         x: button.bounds.start.x + (button.bounds.width / 2),
@@ -46,8 +68,6 @@ const generateButton = (unitTemplate, unit, unitNumber) => {
 };
 
 const generateSlot = (unitTemplate, unit) => {
-    // console.log(unitTemplate);
-    // console.log(unit);
     const slot = {
         name: unitTemplate.name,
         bounds: {
@@ -64,12 +84,6 @@ const generateSlot = (unitTemplate, unit) => {
     };
 
     return slot;
-};
-
-const areaTypeActions = {
-    ["buttons"]: (area, unitNumber) => {console.log("BUTTONS")},
-    ["slot"]: () => console.log("SLOTS"),
-    ["text-input"]: () => console.log("TEXT-INPUT"),
 };
 
 const buildBasicUnit = (area, column, row) => {
@@ -116,4 +130,4 @@ const populateAreas = (pages) => {
     };
 };
 
-export {populateAreas, generateUnits};
+export {populateAreas, generateSlotTemplates, generateLevelButtonTemplates};

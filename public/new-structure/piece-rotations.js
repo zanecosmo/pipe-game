@@ -1,4 +1,4 @@
-export default {
+const pieces = {
     ["end-cap"]: {
         kind: "end-cap",
         rotationState: 0,
@@ -49,4 +49,12 @@ export default {
             {left: false}
         ]
     },
+};
+
+export default {
+    ["end-cap"]: [false, true, false, false],
+    ["two-way"]: [false, true, false, true],
+    ["three-way"]: [false, true, true, true],
+    ["four-way"]: [true, true, true, true],
+    ["elbow"]: [false, false, true ,true]
 };

@@ -1,5 +1,4 @@
 import { copy } from "./utils.js";
-import {mouseUnit} from "./static-pages.js";
 
 const canvas = document.getElementById("screen");
 const c = document.getElementById("screen").getContext("2d");
@@ -36,14 +35,14 @@ const wrapText = (modalText, boxWidth, lineHeight, x, y) => {
 const rotateUnit = (unit) => {
     const bounds = unit.bounds;
     c.translate(bounds.start.x + bounds.width / 2, bounds.start.y + bounds.width / 2);
-    c.rotate((unit.occupiedBy.slot[unit.occupiedBy.slot.length - 1].rotationState * 90) * Math.PI/180);
+    c.rotate((unit.occupiedBy.slot[0].rotation * 90) * Math.PI/180);
     c.translate(-1*(bounds.start.x + bounds.width / 2), -1*(bounds.start.y + bounds.width / 2));
 };
 
 const rotateShadow = (mouseUnit, hoveredUnit) => {
     const bounds = hoveredUnit.bounds;
     c.translate(bounds.start.x + bounds.width / 2, bounds.start.y + bounds.width / 2);
-    c.rotate((mouseUnit.occupiedBy.slot[0].rotationState * 90) * Math.PI/180);
+    c.rotate((mouseUnit.occupiedBy.slot[0].rotation * 90) * Math.PI/180);
     c.translate(-1*(bounds.start.x + bounds.width / 2), -1*(bounds.start.y + bounds.width / 2));
 };
 
@@ -79,7 +78,7 @@ export default {
         // c.globalAlpha = 1;
     },
     itemShadow: function(mouseUnit, hoveredUnit) {
-        const unitKind = mouseUnit.occupiedBy.slot[0].kind;
+        const pieceType = mouseUnit.occupiedBy.slot[0].type;
         const X = hoveredUnit.bounds.start.x;
         const Y = hoveredUnit.bounds.start.y;
         const padding = hoveredUnit.padding;
@@ -91,7 +90,7 @@ export default {
         c.save()
         c.beginPath();
         rotateShadow(mouseUnit, hoveredUnit);
-        this.itemPaths[unitKind](hoveredUnit.bounds.width, X, Y, padding, depth);
+        this.itemPaths[pieceType](hoveredUnit.bounds.width, X, Y, padding, depth);
         c.stroke();
         c.restore(); 
         
@@ -106,39 +105,6 @@ export default {
             status,
             buttonBounds.start.x + buttonBounds.width - 4,
             buttonBounds.start.y + (buttonBounds.height / 2)
-        );
-        c.closePath();
-    },
-    modal: function(area) {
-        const lineHeight = area.modalText.style[0] + area.modalText.style[1];
-
-        c.beginPath;
-        c.fillStyle = screenColor;
-        c.fillRect(
-            area.bounds.start.x,
-            area.bounds.start.y,
-            area.bounds.width,
-            area.bounds.height
-            );
-            
-        c.textBaseline =  "top";
-        c.fillStyle = renderColor;
-        c.font = area.modalText.style;
-
-        wrapText(
-            area.modalText.value,
-            210,
-            lineHeight,
-            area.bounds.start.x + 6,
-            area.bounds.start.y + 6
-        );
-
-        c.strokeStyle = renderColor;
-        c.strokeRect(
-            area.bounds.start.x,
-            area.bounds.start.y,
-            area.bounds.width,
-            area.bounds.height
         );
         c.closePath();
     },
@@ -245,7 +211,7 @@ export default {
         const Y = unit.bounds.start.y;
         const padding = unit.padding;
         const depth = (unit.bounds.width - (padding *2)) / 6;
-        const unitKind = unit.occupiedBy.slot[0].kind;
+        const pieceType = unit.occupiedBy.slot[0].type;
         
         c.strokeStyle = renderColor;
         c.lineWidth = 2;
@@ -253,7 +219,7 @@ export default {
         c.save()
         c.beginPath();
         rotateUnit(unit);
-        this.itemPaths[unitKind](unit.bounds.width, X, Y, padding, depth);
+        this.itemPaths[pieceType](unit.bounds.width, X, Y, padding, depth);
         c.stroke();
         c.restore();
     },

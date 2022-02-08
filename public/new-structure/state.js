@@ -1,6 +1,9 @@
+let pageQueue = [];
+let getCurrentPage = () => pageQueue[pageQueue.length - 1];
+
 let hoveredUnit = null;
-const setHoveredUnit = (newHovered) => hoveredUnit = newHovered;
+const setHoveredUnit = (newUnit) => hoveredUnit = newUnit;
 
 let password = null;
 
-export { password, setHoveredUnit, hoveredUnit };
+export {hoveredUnit, setHoveredUnit, pageQueue, getCurrentPage};

@@ -1,7 +1,6 @@
-import {hoveredUnit, setHoveredUnit} from "./state.js";
-import { currentPage } from "./static-pages.js";
+import {getCurrentPage, hoveredUnit, setHoveredUnit} from "./state.js";
+import {gameplayPage} from "./page-templates/gameplay-page.js";
 import render from "./render.js";
-import {mouseUnit} from "./static-pages.js";
 
 const areaHoverActions = {
     ["buttons"]: (mousePosition, unit) => {
@@ -11,13 +10,12 @@ const areaHoverActions = {
     ["slots"]: (mousePosition, unit) => {
         setHoveredUnit(unit);
         updateMouseUnitPosition(mousePosition);
-    },
-    ["text-input"]: () => console.log("TEXT INPUT ACTION"),
+    }
 };
 
 const updateMouseUnitPosition = (mousePosition) => {
-    mouseUnit.bounds.start.x = mousePosition.x -25;
-    mouseUnit.bounds.start.y = mousePosition.y -25;
+    gameplayPage.mouseUnit.bounds.start.x = mousePosition.x -25;
+    gameplayPage.mouseUnit.bounds.start.y = mousePosition.y -25;
 };
 
 const isInBounds =  (position, bounds) => {
@@ -57,6 +55,10 @@ const getUnitFromArea = (mousePosition, page) => {
     };
 };
 
+const rotateConnValues = () => {
+
+};
+
 export default {
     onClick: () => {
         if (hoveredUnit === null) return
@@ -65,9 +67,19 @@ export default {
     
     onMouseMove: (e) => {
         const mousePosition = getPosition(e);
-        const unit = getUnitFromArea(mousePosition, currentPage());
+        const unit = getUnitFromArea(mousePosition, getCurrentPage());
         if (unit === undefined || unit.clickable === false) setHoveredUnit(null);
         else areaHoverActions[unit.areaType](mousePosition, unit);
-        render(currentPage());
+        render();
+    },
+
+    rotateKeypress: (e) => {
+        if (e.key === " ") {
+            const pieceObject = getCurrentPage().mouseUnit.occupiedBy.slot[0];
+            if (pieceObject === undefined) return;
+            if (pieceObject.rotation === 4) pieceObject.rotation = 0;
+            pieceObject.rotation++;
+            render();
+        };
     }
 };

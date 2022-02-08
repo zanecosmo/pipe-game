@@ -1,62 +1,55 @@
-export default {
-    password: null,
-    levels: {
-        [1]: {
-            status: "complete",
-            state: {
-                ["field"]: [],
-                ["inventory"]: [
-                    {kind: "end-cap", rotationState: 0, position: 0},
-                    {kind: "end-cap", rotationState: 0, position: 0},
-                    {kind: "two-way", rotationState: 0, position: 1},
-                    {kind: "two-way", rotationState: 0, position: 1},
-                    {kind: "three-way", rotationState: 0, position: 2},
-                    {kind: "three-way", rotationState: 0, position: 2},
-                    {kind: "four-way", rotationState: 0, position: 3},
-                    {kind: "four-way", rotationState: 0, position: 3},
-                    {kind: "elbow", rotationState: 0, position: 4},
-                    {kind: "elbow", rotationState: 0, position: 4},
-                ]
-            }
-        },
+export default [
+    {
+        isUnlocked: true,
+        state: {
+            ["field"]: [
+                {type: "end-cap", position: 12, rotation: 0},
+                {type: "two-way", position: 13, rotation: 0},
+                {type: "end-cap", position: 14, rotation: 0}
+            ],
+            ["inventory"]: [
+                {type: "end-cap", position: 0, rotation: 0},
+                {type: "two-way", position: 1, rotation: 0},
+                {type: "two-way", position: 1, rotation: 0}
+            ]
+        }
+    },
 
-        [2]: {
-            status: "in-progress",
-            state: {
-                ["field"]: [],
-                ["inventory"]: [
-                    {kind: "end-cap", rotationState: 0, position: 0},
-                    {kind: "two-way", rotationState: 0, position: 1},
-                    {kind: "three-way", rotationState: 0, position: 2},
-                    {kind: "four-way", rotationState: 0, position: 3},
-                    {kind: "elbow", rotationState: 0, position: 4},
-                ]
-            }
-        },
+    {
+        isUnlocked: false,
+        state: {
+            ["field"]: [],
+            ["inventory"]: [
+                {type: "end-cap", position: 0, rotation: 0},
+                {type: "two-way", position: 1, rotation: 0},
+                {type: "two-way", position: 1, rotation: 0},
+                {type: "three-way", position: 2, rotation: 0}
+            ]
+        }
+    },
 
-        [3]: {
-            status: "locked",
-            state: {
-                ["field"]: [],
-                ["inventory"]: [
-                    {kind: "end-cap", rotationState: 0, position: 0},
-                    {kind: "two-way", rotationState: 0, position: 1},
-                    {kind: "two-way", rotationState: 0, position: 1},
-                    {kind: "two-way", rotationState: 0, position: 1},
-                    {kind: "three-way", rotationState: 0, position: 2},
-                    {kind: "four-way", rotationState: 0, position: 3},
-                    {kind: "elbow", rotationState: 0, position: 4},
-                    {kind: "elbow", rotationState: 0, position: 4},
-                    {kind: "elbow", rotationState: 0, position: 4},
-                ]
-            }
-        },
+    {
+        isUnlocked: false,
+        state: {
+            ["field"]: [],
+            ["inventory"]: [
+                {type: "end-cap", position: 0, rotation: 0},
+                {type: "end-cap", position: 0, rotation: 0},
+                {type: "end-cap", position: 0, rotation: 0},
+                {type: "end-cap", position: 0, rotation: 0},
+                {type: "two-way", position: 1, rotation: 0},
+                {type: "two-way", position: 1, rotation: 0},
+                {type: "two-way", position: 1, rotation: 0},
+                {type: "two-way", position: 1, rotation: 0},
+                {type: "three-way", position: 2, rotation: 0},
+                {type: "three-way", position: 2, rotation: 0},
+                {type: "three-way", position: 2, rotation: 0},
+                {type: "three-way", position: 2, rotation: 0},
+                {type: "four-way", position: 3, rotation: 0},
+                {type: "four-way", position: 3, rotation: 0},
+                {type: "four-way", position: 3, rotation: 0},
+                {type: "four-way", position: 3, rotation: 0}
+            ]
+        }
     }
-};
-
-
-
-[
-    {number: 1, state: null, status: "locked"},
-    {number: 2, state: null, status: "locked"}
 ];

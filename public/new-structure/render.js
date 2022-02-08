@@ -1,11 +1,12 @@
 import draw from "./draw.js";
-import { hoveredUnit } from "./state.js";
-import {pages, mouseUnit} from "./static-pages.js";
+import {hoveredUnit} from "./state.js";
+import {getCurrentPage} from "./state.js";
 
 const unitTypeRenderers = {
     ["buttons"]: (unit, hoveredUnit) => draw.button(unit, hoveredUnit),
     ["slots"]: (unit, hoveredUnit) => {
-        if (hoveredUnit !== null && mouseUnit.occupiedBy.slot .length > 0) {
+        const mouseUnit = getCurrentPage().mouseUnit;
+        if (hoveredUnit !== null && mouseUnit.occupiedBy.slot.length > 0) {
             draw.itemShadow(mouseUnit, hoveredUnit);
         };
         if (unit.occupiedBy.slot.length > 0) draw.item(unit)
@@ -32,10 +33,11 @@ const renderAreas = (currentPage) => {
     };
 };
 
-export default (currentPage) => {
+export default () => {
+    const currentPage = getCurrentPage();
     draw.clearScreen();
     draw.screen();
     renderAreas(currentPage);
-    if (currentPage.title !== null) draw.title(currentPage.title);
-    if (mouseUnit.occupiedBy.slot.length > 0) draw.item(mouseUnit);
+    if (currentPage.title !== null) return draw.title(currentPage.title);
+    if (currentPage.mouseUnit.occupiedBy.slot.length > 0) draw.item(currentPage.mouseUnit);
 };
