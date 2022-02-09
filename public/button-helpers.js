@@ -48,6 +48,8 @@ const extractState = (levelIndex) => {
         for (let pieceTemplate = 0; pieceTemplate < state[area].length; pieceTemplate++) {
             const piece = copy(state[area][pieceTemplate]);
             piece.connections = copy(pieceRotations[piece.type]);
+            // console.log(piece.rotation);
+            for (let i = 0; i < piece.rotation; i++) rotateDirections(piece.connections);
             const unit = gamePageAreas[areaIndex].units[piece.position];
             unit.occupiedBy.slot.push(piece);
             if (piece.type.includes("permanent")) unit.occupiedBy.clickable = false;

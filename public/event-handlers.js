@@ -76,7 +76,8 @@ export default {
             if (pieceObject === undefined) return;
             if (pieceObject.rotation === 4) pieceObject.rotation = 0;
             pieceObject.rotation++;
-            rotateDirections();
+            const connections = getCurrentPage().mouseUnit.occupiedBy.slot[0].connections
+            rotateDirections(connections);
             render();
         };
     }

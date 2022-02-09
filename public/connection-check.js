@@ -22,8 +22,7 @@ const checkAdjacentUnit = {
 
         if (adjacentUnit === undefined || adjacentIndex % 8 === 0) return;
         if (adjacentSlot.length === 0) return connectedUnits.splice(queueIndex + 1, queueLength - queueIndex);
-        if (adjacentSlot[0].connections[3].left !== true) return; // rotation of directions not occuring upon extraction
-        console.log(adjacentUnit);
+        if (adjacentSlot[0].connections[3].left !== true) return;
         if (!connectedUnits.includes(adjacentUnit)) connectedUnits.push(adjacentUnit);
     },
     bottom: (unitIndex, queueIndex) => {
@@ -56,13 +55,15 @@ const checkConnections = () => {
         for (let j = 0; j < connections.length; j++) {
             for (const direction in connections[j]) {
                 if (connections[j][direction] === true)  {
-                    // console.log(connectedUnits[unit].occupiedBy.name);
                     checkAdjacentUnit[direction](connectedUnits[i].occupiedBy.name, i);
                 };
             };
         };
     };
-    // console.log(connectedUnits);
+    
+    if (connectedUnits[connectedUnits.length - 1].occupiedBy.slot[0].type === "end-permanent") {
+        console.log("LEVEL-COMPLETE");
+    };
 };
 
 export { checkConnections, connectedUnits };

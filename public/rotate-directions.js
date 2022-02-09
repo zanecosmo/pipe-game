@@ -1,5 +1,4 @@
-export default () => {
-    const connections = getCurrentPage().mouseUnit.occupiedBy.slot[0].connections;
+export default (connections) => {
     let directions = [];
     
     for (let i = 0; i < connections.length; i++) {
