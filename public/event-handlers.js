@@ -1,5 +1,6 @@
-import {getCurrentPage, hoveredUnit, setHoveredUnit} from "./state.js";
-import {gameplayPage} from "./page-templates/gameplay-page.js";
+import { getCurrentPage, hoveredUnit, setHoveredUnit } from "./state.js";
+import { gameplayPage } from "./page-templates/gameplay-page.js";
+import rotateDirections from "./rotate-directions.js";
 import render from "./render.js";
 
 const areaHoverActions = {
@@ -55,30 +56,6 @@ const getUnitFromArea = (mousePosition, page) => {
     };
 };
 
-const rotateConnValues = () => {
-    const connections = getCurrentPage().mouseUnit.occupiedBy.slot[0].connections;
-    connections.unshift(connections.pop());
-};
-
-const rotateConnValuesAlt = () => {
-    const connections = getCurrentPage().mouseUnit.occupiedBy.slot[0].connections;
-    let directions = [];
-    
-    for (let i = 0; i < connections.length; i++) {
-        const value = Object.values(connections[i])[0];
-        directions.push(value);
-    };
-    
-    const connectionValue = directions.pop();
-    directions.unshift(connectionValue);
-    
-    for (let i = 0; i < connections.length; i++) {
-        for (const direction in connections[i]) {
-            connections[i][direction] = directions[i];
-        };
-    };
-};
-
 export default {
     onClick: () => {
         if (hoveredUnit === null) return
@@ -99,7 +76,7 @@ export default {
             if (pieceObject === undefined) return;
             if (pieceObject.rotation === 4) pieceObject.rotation = 0;
             pieceObject.rotation++;
-            rotateConnValuesAlt();
+            rotateDirections();
             render();
         };
     }

@@ -1,52 +1,52 @@
 
 export default {
     ["end-cap"]: [
-        {top: null},
-        {right: false},
-        {bottom: null},
-        {left: null}
+        {top: false},
+        {right: true},
+        {bottom: false},
+        {left: false}
     ],
 
     ["two-way"]: [
-        {top: null},
-        {right: false},
-        {bottom: null},
-        {left: false}
+        {top: false},
+        {right: true},
+        {bottom: false},
+        {left: true}
     ],
 
     ["three-way"]: [
-        {top: null},
-        {right: false},
-        {bottom: false},
-        {left: false}
+        {top: false},
+        {right: true},
+        {bottom: true},
+        {left: true}
     ],
 
     ["four-way"]: [
-        {top: false},
-        {right: false},
-        {bottom: false},
-        {left: false}
+        {top: true},
+        {right: true},
+        {bottom: true},
+        {left: true}
     ],
 
     ["elbow"]: [
-        {top: null},
-        {right: null},
+        {top: false},
+        {right: false},
+        {bottom: true},
+        {left: true}
+    ],
+
+    ["start-permanent"]: [
+        {top: false},
+        {right: true},
         {bottom: false},
         {left: false}
     ],
 
-    ["start-permanent"]: [
-        {top: null},
-        {right: false},
-        {bottom: null},
-        {left: null}
-    ],
-
     ["end-permanent"]: [
-        {top: null},
-        {right: false},
-        {bottom: null},
-        {left: null}
+        {top: false},
+        {right: true},
+        {bottom: false},
+        {left: false}
     ]
 };
 

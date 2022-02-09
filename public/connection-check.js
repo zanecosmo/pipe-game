@@ -2,23 +2,67 @@ import { hoveredUnit, setHoveredUnit, getCurrentPage } from "./state.js";
 
 let connectedUnits = []; // start-permanent unit(s) get pushed here from button-helpers: extractState
 
-const directionChecks = {
-    top: () => console.log("checking top"),
-    right: () => console.log("checking right"),
-    bottom: () => console.log("checking top"),
-    left: () => console.log("checking top")
+const checkAdjacentUnit = {
+    top: (unitIndex, queueIndex) => {
+        const adjacentIndex = unitIndex - 8;
+        const adjacentUnit = getCurrentPage().areas[0].units[adjacentIndex];
+        const adjacentSlot = adjacentUnit.occupiedBy.slot;
+        const queueLength = connectedUnits.length;
+
+        if (adjacentUnit === undefined) return;
+        if (adjacentSlot.length === 0) return connectedUnits.splice(queueIndex + 1, queueLength - queueIndex);
+        if (adjacentSlot[0].connections[2].bottom !== true) return;
+        if (!connectedUnits.includes(adjacentUnit)) connectedUnits.push(adjacentUnit);
+    },
+    right: (unitIndex, queueIndex) => {
+        const adjacentIndex = unitIndex + 1;
+        const adjacentUnit = getCurrentPage().areas[0].units[adjacentIndex];
+        const adjacentSlot = adjacentUnit.occupiedBy.slot;
+        const queueLength = connectedUnits.length;
+
+        if (adjacentUnit === undefined || adjacentIndex % 8 === 0) return;
+        if (adjacentSlot.length === 0) return connectedUnits.splice(queueIndex + 1, queueLength - queueIndex);
+        if (adjacentSlot[0].connections[3].left !== true) return; // rotation of directions not occuring upon extraction
+        console.log(adjacentUnit);
+        if (!connectedUnits.includes(adjacentUnit)) connectedUnits.push(adjacentUnit);
+    },
+    bottom: (unitIndex, queueIndex) => {
+        const adjacentIndex = unitIndex + 8;
+        const adjacentUnit = getCurrentPage().areas[0].units[adjacentIndex];
+        const adjacentSlot = adjacentUnit.occupiedBy.slot;
+        const queueLength = connectedUnits.length;
+
+        if (adjacentUnit === undefined) return;
+        if (adjacentSlot.length === 0) return connectedUnits.splice(queueIndex + 1, queueLength - queueIndex);
+        if (adjacentSlot[0].connections[0].top !== true) return;
+        if (!connectedUnits.includes(adjacentUnit)) connectedUnits.push(adjacentUnit);
+    },
+    left: (unitIndex, queueIndex) => {
+        const adjacentIndex = unitIndex - 1;
+        const adjacentUnit = getCurrentPage().areas[0].units[adjacentIndex];
+        const adjacentSlot = adjacentUnit.occupiedBy.slot;
+        const queueLength = connectedUnits.length;
+
+        if (adjacentUnit === undefined || unitIndex % 8 === 0) return;
+        if (adjacentSlot.length === 0) return connectedUnits.splice(queueIndex + 1, queueLength - queueIndex);
+        if (adjacentSlot[0].connections[1].right !== true) return;
+        if (!connectedUnits.includes(adjacentUnit)) connectedUnits.push(adjacentUnit);
+    }
 };
 
 const checkConnections = () => {
-    console.log(connectedUnits);
-    for (let unit = 0; unit < connectedUnits.length; unit++) {
-        const connections = connectedUnits[unit].occupiedBy.slot[0].connections;
-        for (let i = 0; i < connections.length; i++) {
-            for (const direction in connections[i]) {
-                directionChecks[direction]();
+    for (let i = 0; i < connectedUnits.length; i++) {
+        const connections = connectedUnits[i].occupiedBy.slot[0].connections;
+        for (let j = 0; j < connections.length; j++) {
+            for (const direction in connections[j]) {
+                if (connections[j][direction] === true)  {
+                    // console.log(connectedUnits[unit].occupiedBy.name);
+                    checkAdjacentUnit[direction](connectedUnits[i].occupiedBy.name, i);
+                };
             };
         };
     };
+    // console.log(connectedUnits);
 };
 
 export { checkConnections, connectedUnits };

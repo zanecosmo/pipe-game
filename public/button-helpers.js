@@ -1,7 +1,8 @@
-import {hoveredUnit, pageQueue, getCurrentPage} from "./state.js";
+import { hoveredUnit, pageQueue, getCurrentPage } from "./state.js";
 import eventHandlers from "./event-handlers.js";
 import gameInstance from "./game-instance.js";
 import pieceRotations from "./piece-rotations.js";
+import rotateDirections from "./rotate-directions.js";
 import { checkConnections, connectedUnits } from "./connection-check.js";
 
 const copy = (item) => JSON.parse(JSON.stringify(item));
