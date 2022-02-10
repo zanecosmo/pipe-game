@@ -51,12 +51,8 @@ const extractState = (levelIndex) => {
             const unit = gamePageAreas[areaIndex].units[piece.position];
             unit.occupiedBy.slot.push(piece);
             if (piece.type.includes("permanent")) unit.occupiedBy.clickable = false;
-            // console.log(piece.type);
-            if (piece.type === "start-permanent") {
-                // console.log("PUSHING TO CONNECTED UNITS");
-                connectedUnits.push(unit);
-                // console.log(connectedUnits);
-            }
+            if (piece.type !== "start-permanent") continue;
+            connectedUnits.push(unit);
         };
 
         areaIndex++;
