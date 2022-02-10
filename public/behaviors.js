@@ -1,6 +1,7 @@
 import render from "./render.js";
 import {pageQueue, getCurrentPage} from "./state.js";
 import {hoveredUnit, setHoveredUnit} from "./state.js";
+import { checkConnections } from "./connection-check.js";
 import {
     pushPageToQueue,
     popPageFromQueue,
@@ -37,12 +38,17 @@ const behaviors = {
             if (mouseSlot.length === 0) return;
             else {
                 placeItem();
+                checkConnections();
                 return render();
             };
         };
 
         if (hoveredSlot.length > 0) {
-            if (mouseSlot.length === 0) grabItem();
+            if (mouseSlot.length === 0) {
+                grabItem();
+                checkConnections();
+                render();
+            }
             else return render();
         };
     },
@@ -54,14 +60,20 @@ const behaviors = {
             if (mouseSlot.length === 0) return;
             else {
                 placeItem();
+                checkConnections();
                 return render();
             };
         };
 
         if (hoveredSlot.length > 0) {
-            if (mouseSlot.length === 0) grabItem("inventory");
+            if (mouseSlot.length === 0) {
+                grabItem("inventory");
+                checkConnections();
+                render();
+            }
             else if (mouseSlot[0].kind === hoveredSlot[0].kind) {
                 placeItem("inventory");
+                checkConnections();
                 render();
             }
             else render();

@@ -4,6 +4,7 @@ export default [
         state: {
             ["field"]: [
                 {type: "start-permanent", position: 8, rotation: 0},
+                {type: "start-permanent", position: 16, rotation: 0},
                 {type: "end-permanent", position: 23, rotation: 2},
             ],
             ["inventory"]: [
@@ -12,7 +13,8 @@ export default [
                 {type: "two-way", position: 1, rotation: 0},
                 {type: "two-way", position: 1, rotation: 0},
                 {type: "two-way", position: 1, rotation: 0},
-                {type: "elbow", position: 0, rotation: 0},
+                {type: "two-way", position: 1, rotation: 0},
+                {type: "three-way", position: 2, rotation: 0},
                 {type: "elbow", position: 0, rotation: 0}
             ]
         }
