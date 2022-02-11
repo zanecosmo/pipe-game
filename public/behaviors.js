@@ -21,7 +21,6 @@ const behaviors = {
         render();
     },
     ["select-given-level"]: (gameplayPage, levelIndex) => {
-        console.log(currentLevel);
         currentLevel.value = levelIndex;
 
         if (pageQueue[pageQueue.length - 2] === gameplayPage) popPageFromQueue();
@@ -33,7 +32,13 @@ const behaviors = {
         addRotateListener();
         render();
     },
-    ["restart-level"]: () => console.log("RESTART BUTTON PRESSED"),
+    ["restart-level"]: () => {
+        // console.log("RESTART PRESSED")
+        emptyMouseUnit();
+        resetGamePageSlots();
+        extractState(currentLevel.value);
+        render();
+    },
     ["next-level"]: (levelSelectMenu) => {
         console.log(levelSelectMenu);
         currentLevel.value++;
