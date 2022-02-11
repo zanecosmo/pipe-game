@@ -50,7 +50,7 @@ const whichUnit = (area, position) => {
 const getUnitFromArea = (mousePosition, page) => {
     for (let i = 0; i < page.areas.length; i++) {
         if (page.areas[i].isActive === false) continue;
-        if (isInBounds(mousePosition, page.areas[i].bounds) === true) {
+        if (isInBounds(mousePosition, page.areas[i].bounds)) {
             return whichUnit(page.areas[i], mousePosition);
         };
     };

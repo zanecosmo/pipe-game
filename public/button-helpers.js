@@ -32,12 +32,12 @@ const placeItem = () => {
 };
 
 const unlockNextLevel = (levelIndex, levelSelectMenu) => {
-    console.log(`LEVEL ${levelIndex} IS UNLOCKED`);
     gameInstance[levelIndex].isUnlocked = true;
     levelSelectMenu.areas[0].units[levelIndex].occupiedBy.clickable = true;
 };
 
 const extractState = (levelIndex) => {
+    connectedUnits.splice(0, connectedUnits.length);
     const state = gameInstance[levelIndex].state;
     const gamePageAreas = getCurrentPage().areas;
     
@@ -71,9 +71,9 @@ export {
     grabItem,
     placeItem,
     extractState,
-    resetGamePageSlots,
     addRotateListener,
     removeRotateListener,
     emptyMouseUnit,
+    resetGamePageSlots,
     unlockNextLevel
 };

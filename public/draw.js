@@ -7,7 +7,7 @@ const hoverColor = "rgb(250, 60, 200)";
 const rotateUnit = (unit) => {
     const bounds = unit.bounds;
     c.translate(bounds.start.x + bounds.width / 2, bounds.start.y + bounds.width / 2);
-    c.rotate((unit.occupiedBy.slot[0].rotation * 90) * Math.PI/180);
+    c.rotate((unit.occupiedBy.slot[unit.occupiedBy.slot.length - 1].rotation * 90) * Math.PI/180);
     c.translate(-1*(bounds.start.x + bounds.width / 2), -1*(bounds.start.y + bounds.width / 2));
 };
 
@@ -194,6 +194,12 @@ export default {
                 (width - (padding * 2)) / 2,
                 width - (depth * 2) - (padding * 2)
             );
+        },
+
+        ["block-permanent"]: function(width, X, Y, padding, _depth) {
+            c.fillStyle = hoverColor;
+            c.fillRect(X + padding, Y + padding, width, width);
+            c.fillStyle = renderColor;
         }
     },
 

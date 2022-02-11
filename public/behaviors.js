@@ -33,14 +33,12 @@ const behaviors = {
         render();
     },
     ["restart-level"]: () => {
-        // console.log("RESTART PRESSED")
         emptyMouseUnit();
         resetGamePageSlots();
         extractState(currentLevel.value);
         render();
     },
     ["next-level"]: (levelSelectMenu) => {
-        console.log(levelSelectMenu);
         currentLevel.value++;
 
         emptyMouseUnit();
@@ -58,10 +56,7 @@ const behaviors = {
             if (mouseSlot.length === 0) return;
             else {
                 placeItem();
-                if (checkForWin()) {
-                    
-                    getCurrentPage().areas[2].units[3].occupiedBy.clickable = true;;
-                };
+                if (checkForWin()) getCurrentPage().areas[2].units[3].occupiedBy.clickable = true;
                 return render();
             };
         };

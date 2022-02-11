@@ -47,13 +47,12 @@ export default {
         {right: true},
         {bottom: false},
         {left: false}
-    ]
-};
+    ],
 
-const pieces = {
-    ["end-cap"]: [false, true, false, false],
-    ["two-way"]: [false, true, false, true],
-    ["four-way"]: [true, true, true, true],
-    ["three-way"]: [false, true, true, true],
-    ["elbow"]: [false, false, true ,true]
+    ["block-permanent"]: [
+        {top: false},
+        {rght: false},
+        {bottom: false},
+        {left: false}
+    ]
 };

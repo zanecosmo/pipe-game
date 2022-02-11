@@ -103,4 +103,14 @@ const gameplayPage = {
     ]
 };
 
+window.getGameState = () => {
+    copy(gameplayPage.areas[0].units
+                    .filter(unit => unit.occupiedBy.slot.length > 0)
+                    .map(unit => {
+                        const slotUnit = unit.occupiedBy.slot[0];
+                        delete slotUnit.connections;
+                        return slotUnit;
+                    }));
+};
+
 export {gameplayPage};

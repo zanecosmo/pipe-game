@@ -6,9 +6,13 @@ const unitTypeRenderers = {
     ["buttons"]: (unit, hoveredUnit) => draw.button(unit, hoveredUnit),
     ["slots"]: (unit, hoveredUnit) => {
         const mouseUnit = getCurrentPage().mouseUnit;
-        if (hoveredUnit !== null && mouseUnit.occupiedBy.slot.length > 0) {
-            draw.itemShadow(mouseUnit, hoveredUnit);
-        };
+        
+        if (hoveredUnit !== null &&
+            hoveredUnit.areaType === "slots" &&
+            mouseUnit.occupiedBy.slot.length > 0 && 
+            hoveredUnit.occupiedBy.slot.length === 0
+            ) draw.itemShadow(mouseUnit, hoveredUnit);
+
         if (unit.occupiedBy.slot.length > 0) draw.item(unit)
     },
     ["text-input"]: () => console.log("TEXT INPUT")
