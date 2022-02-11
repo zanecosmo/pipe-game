@@ -23,7 +23,9 @@ export default [
     {
         isUnlocked: false,
         state: {
-            ["field"]: [],
+            ["field"]: [
+                {type: "start-permanent", position: 0, rotation: 0},
+            ],
             ["inventory"]: [
                 {type: "end-cap", position: 0, rotation: 0},
                 {type: "two-way", position: 1, rotation: 0},

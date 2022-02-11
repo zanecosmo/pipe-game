@@ -1,4 +1,4 @@
-import { hoveredUnit, setHoveredUnit, getCurrentPage } from "./state.js";
+import { getCurrentPage } from "./state.js";
 
 let connectedUnits = []; // start-permanent unit(s) get pushed here from button-helpers: extractState
 
@@ -57,7 +57,7 @@ const openings = { // "adj-" = "adjacent"
     }
 };
 
-const checkConnections = () => {
+const checkForWin = () => {
     for (let i = 0; i < connectedUnits.length; i++) {
         const currentUnit = connectedUnits[i];
         if (connectedUnits[i].occupiedBy.slot[0] === undefined) break;
@@ -71,9 +71,8 @@ const checkConnections = () => {
         };
     };
     
-    if (connectedUnits[connectedUnits.length - 1].occupiedBy.slot[0].type === "end-permanent") {
-        console.log("LEVEL-COMPLETE");
-    };
+    if (connectedUnits[connectedUnits.length - 1].occupiedBy.slot[0].type === "end-permanent") return true;
+    else return false;
 };
 
-export { checkConnections, connectedUnits };
+export { checkForWin, connectedUnits };

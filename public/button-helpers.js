@@ -31,6 +31,16 @@ const placeItem = () => {
     hoveredUnit.occupiedBy.slot.push(grabbedItem);
 };
 
+const unlockNextLevel = (levelIndex, levelSelectMenu) => {
+    console.log(`LEVEL ${levelIndex} IS UNLOCKED`);
+    gameInstance[levelIndex].isUnlocked = true;
+    console.log(levelSelectMenu);
+    console.log(levelSelectMenu.areas[0].units[levelIndex]);
+
+    levelSelectMenu.areas[0].units[levelIndex].occupiedBy.clickable = true;
+    console.log(gameInstance[levelIndex].isUnlocked);
+};
+
 const extractState = (levelIndex) => {
     const state = gameInstance[levelIndex].state;
     const gamePageAreas = getCurrentPage().areas;
@@ -68,5 +78,6 @@ export {
     resetGamePageSlots,
     addRotateListener,
     removeRotateListener,
-    emptyMouseUnit
+    emptyMouseUnit,
+    unlockNextLevel
 };

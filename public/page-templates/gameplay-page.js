@@ -88,14 +88,14 @@ const gameplayPage = {
                 {
                     name: "exit-to-menu",
                     text: {value: "EXIT", style: "10px sans-serif"},
-                    behavior: () => {behaviors["page-close-out"]()},
+                    behavior: () => behaviors["page-close-out"](),
                     clickable: true
                 },
 
                 {
                     name: "next-level-button",
                     text: {value: "NEXT", style: "10px sans-serif"},
-                    behavior: behaviors["next-level"],
+                    behavior: () => behaviors["next-level"](levelSelectMenu),
                     clickable: false
                 },
             ]

@@ -1,7 +1,7 @@
 import render from "./render.js";
-import {pageQueue, getCurrentPage} from "./state.js";
-import {hoveredUnit, setHoveredUnit} from "./state.js";
-import { checkConnections } from "./connection-check.js";
+import { pageQueue, getCurrentPage, currentLevel } from "./state.js";
+import { hoveredUnit, setHoveredUnit } from "./state.js";
+import { checkForWin } from "./connection-check.js";
 import {
     pushPageToQueue,
     popPageFromQueue,
@@ -11,7 +11,8 @@ import {
     addRotateListener,
     removeRotateListener,
     emptyMouseUnit,
-    resetGamePageSlots
+    resetGamePageSlots,
+    unlockNextLevel
 } from "./button-helpers.js";
 
 const behaviors = {    
@@ -20,8 +21,11 @@ const behaviors = {
         render();
     },
     ["select-given-level"]: (gameplayPage, levelIndex) => {
-        if (pageQueue[pageQueue.length -2] === gameplayPage) popPageFromQueue();
-        else pushPageToQueue(gameplayPage);
+        console.log(currentLevel);
+        currentLevel.value = levelIndex;
+
+        if (pageQueue[pageQueue.length - 2] === gameplayPage) popPageFromQueue();
+        else if (getCurrentPage() !== gameplayPage) pushPageToQueue(gameplayPage);
 
         emptyMouseUnit();
         resetGamePageSlots();
@@ -30,6 +34,17 @@ const behaviors = {
         render();
     },
     ["restart-level"]: () => console.log("RESTART BUTTON PRESSED"),
+    ["next-level"]: (levelSelectMenu) => {
+        console.log(levelSelectMenu);
+        currentLevel.value++;
+
+        emptyMouseUnit();
+        resetGamePageSlots();
+        unlockNextLevel(currentLevel.value, levelSelectMenu);
+        extractState(currentLevel.value);
+        getCurrentPage().areas[2].units[3].occupiedBy.clickable = false;
+        render();
+    },
     ["field-action"]: () => {
         const hoveredSlot = hoveredUnit.occupiedBy.slot;
         const mouseSlot = getCurrentPage().mouseUnit.occupiedBy.slot;
@@ -38,7 +53,10 @@ const behaviors = {
             if (mouseSlot.length === 0) return;
             else {
                 placeItem();
-                checkConnections();
+                if (checkForWin()) {
+                    
+                    getCurrentPage().areas[2].units[3].occupiedBy.clickable = true;;
+                };
                 return render();
             };
         };
@@ -46,7 +64,7 @@ const behaviors = {
         if (hoveredSlot.length > 0) {
             if (mouseSlot.length === 0) {
                 grabItem();
-                checkConnections();
+                if (checkForWin()) getCurrentPage().areas[2].units[3].occupiedBy.clickable = true;;
                 render();
             }
             else return render();
@@ -60,7 +78,7 @@ const behaviors = {
             if (mouseSlot.length === 0) return;
             else {
                 placeItem();
-                checkConnections();
+                if (checkForWin()) getCurrentPage().areas[2].units[3].occupiedBy.clickable = true;;
                 return render();
             };
         };
@@ -68,12 +86,12 @@ const behaviors = {
         if (hoveredSlot.length > 0) {
             if (mouseSlot.length === 0) {
                 grabItem("inventory");
-                checkConnections();
+                if (checkForWin()) getCurrentPage().areas[2].units[3].occupiedBy.clickable = true;;
                 render();
             }
             else if (mouseSlot[0].kind === hoveredSlot[0].kind) {
                 placeItem("inventory");
-                checkConnections();
+                if (checkForWin()) getCurrentPage().areas[2].units[3].occupiedBy.clickable = true;;
                 render();
             }
             else render();
