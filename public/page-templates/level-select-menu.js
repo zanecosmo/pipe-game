@@ -15,7 +15,7 @@ const levelSelectMenu = {
                 width: 400,
                 height: 240
             },
-            grid: {rows: 1, columns: 3},
+            grid: {rows: 2, columns: 3},
             padding: 10,
             isModal: false,
             isActive: true,

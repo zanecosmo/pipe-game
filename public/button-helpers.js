@@ -56,7 +56,7 @@ const extractState = (levelIndex) => {
             for (let j = 0; j < piece.rotation; j++) rotateDirections(piece.connections);
             const unit = gamePageAreas[areaIndex].units[piece.position];
             unit.occupiedBy.slot.push(piece);
-            if (piece.type.includes("permanent")) unit.occupiedBy.clickable = false;
+            // if (piece.type.includes("permanent")) unit.occupiedBy.clickable = false;
             if (piece.type !== "start-permanent") continue;
             connectedUnits.push(unit);
         };
