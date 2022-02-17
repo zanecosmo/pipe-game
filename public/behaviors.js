@@ -38,15 +38,19 @@ const behaviors = {
         extractState(currentLevel.value);
         render();
     },
-    ["next-level"]: (levelSelectMenu) => {
+    ["next-level"]: function(levelSelectMenu) {
         currentLevel.value++;
 
-        emptyMouseUnit();
-        resetGamePageSlots();
-        unlockNextLevel(currentLevel.value, levelSelectMenu);
-        extractState(currentLevel.value);
-        getCurrentPage().areas[2].units[3].occupiedBy.clickable = false;
-        render();
+        if (currentLevel.value === 8) this["page-close-out"]();
+        else {
+            resetGamePageSlots();
+            emptyMouseUnit();
+            unlockNextLevel(currentLevel.value, levelSelectMenu);
+            extractState(currentLevel.value);
+            getCurrentPage().areas[2].units[3].occupiedBy.clickable = false;
+            render();
+        };
+        
     },
     ["field-action"]: () => {
         const hoveredSlot = hoveredUnit.occupiedBy.slot;
@@ -64,7 +68,7 @@ const behaviors = {
         if (hoveredSlot.length > 0) {
             if (mouseSlot.length === 0) {
                 grabItem();
-                if (checkForWin()) getCurrentPage().areas[2].units[3].occupiedBy.clickable = true;;
+                if (checkForWin()) getCurrentPage().areas[2].units[3].occupiedBy.clickable = true;
                 render();
             }
             else return render();
@@ -78,7 +82,7 @@ const behaviors = {
             if (mouseSlot.length === 0) return;
             else {
                 placeItem();
-                if (checkForWin()) getCurrentPage().areas[2].units[3].occupiedBy.clickable = true;;
+                if (checkForWin()) getCurrentPage().areas[2].units[3].occupiedBy.clickable = true;
                 return render();
             };
         };
@@ -86,12 +90,12 @@ const behaviors = {
         if (hoveredSlot.length > 0) {
             if (mouseSlot.length === 0) {
                 grabItem("inventory");
-                if (checkForWin()) getCurrentPage().areas[2].units[3].occupiedBy.clickable = true;;
+                if (checkForWin()) getCurrentPage().areas[2].units[3].occupiedBy.clickable = true;
                 render();
             }
-            else if (mouseSlot[0].kind === hoveredSlot[0].kind) {
+            else if (mouseSlot[0].type === hoveredSlot[0].type) {
                 placeItem("inventory");
-                if (checkForWin()) getCurrentPage().areas[2].units[3].occupiedBy.clickable = true;;
+                if (checkForWin()) getCurrentPage().areas[2].units[3].occupiedBy.clickable = true;
                 render();
             }
             else render();

@@ -3,7 +3,7 @@ import {behaviors} from "./../behaviors.js";
 const levelSelectMenu = {
     title: {
         text: "LEVEL SELECT",
-        x: 100,
+        x: 105,
         y: 50
     },
     areas: [
@@ -11,11 +11,11 @@ const levelSelectMenu = {
             name: "level-select-buttons",
             type: "buttons",
             bounds: {
-                start: {x: 50, y: 70},
-                width: 400,
+                start: {x: 25, y: 70},
+                width: 450,
                 height: 240
             },
-            grid: {rows: 2, columns: 3},
+            grid: {rows: 2, columns: 4},
             padding: 10,
             isModal: false,
             isActive: true,

@@ -88,10 +88,12 @@ export default {
         let boxColor = screenColor;
         let textColor = renderColor;
         const button = unit.occupiedBy;
+        let text = button.text.value;
         const bounds = button.bounds;
         const start = bounds.start;
+        const buttonIsLocked = unit.occupiedBy.clickable === false;
     
-        if (unit.occupiedBy.clickable === false) c.globalAlpha = .6;
+        if (buttonIsLocked) c.globalAlpha = .6;
         else if (unit === hoveredUnit) {
             boxColor = renderColor;
             textColor = screenColor;
@@ -114,7 +116,7 @@ export default {
         c.textBaseline =  "middle";
         c.textAlign = unit.name === "select-level-button" ? "left" : "center";
         c.font = button.text.style;
-        c.fillText(button.text.value, button.text.x, button.text.y + 2);
+        c.fillText(buttonIsLocked ? "LOCKED" : text, button.text.x, button.text.y + 2);
         c.closePath();
     
         c.textAlign = "left";

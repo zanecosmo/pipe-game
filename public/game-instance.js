@@ -21,7 +21,7 @@ var gameInstance = [
     },
 
     {
-        isUnlocked: true,
+        isUnlocked: false,
         state: {
             ["field"]: [
                 {type: "start-permanent", position: 0, rotation: 0},
@@ -49,7 +49,7 @@ var gameInstance = [
     },
 
     {
-        isUnlocked: true,
+        isUnlocked: false,
         state: {
             ["field"]: [
                 {type: "start-permanent", position: 8, rotation: 0},
@@ -79,7 +79,7 @@ var gameInstance = [
     },
 
     {
-        isUnlocked: true,
+        isUnlocked: false,
         state: {
             ["field"]: [
                 {type: "start-permanent", position: 2, rotation: 1},
@@ -114,7 +114,7 @@ var gameInstance = [
     },
 
     {
-        isUnlocked: true,
+        isUnlocked: false,
         state: {
             ["field"]: [
                 {type: "block-permanent", position: 51, rotation: 0},
@@ -143,144 +143,106 @@ var gameInstance = [
     },
 
     {
-        isUnlocked: true,
+        isUnlocked: false,
         state: {
-            ["field"]: [],
+            ["field"]: [
+                {type: "start-permanent", position: 1, rotation: 1},
+                {type: "start-permanent", position: 2, rotation: 1},
+                {type: "start-permanent", position: 23, rotation: 2},
+                {type: "end-permanent", position: 57, rotation: 3},
+            ],
             ["inventory"]: [
-                {type: "end-cap", position: 0, rotation: 0},
-                {type: "end-cap", position: 0, rotation: 0},
-                {type: "end-cap", position: 0, rotation: 0},
-                {type: "end-cap", position: 0, rotation: 0},
-                {type: "end-cap", position: 0, rotation: 0},
-                {type: "end-cap", position: 0, rotation: 0},
-                {type: "end-cap", position: 0, rotation: 0},
-                {type: "end-cap", position: 0, rotation: 0},
-                {type: "end-cap", position: 0, rotation: 0},
-                {type: "end-cap", position: 0, rotation: 0},
-                {type: "end-cap", position: 0, rotation: 0},
                 {type: "two-way", position: 1, rotation: 0},
                 {type: "two-way", position: 1, rotation: 0},
                 {type: "two-way", position: 1, rotation: 0},
                 {type: "two-way", position: 1, rotation: 0},
                 {type: "two-way", position: 1, rotation: 0},
                 {type: "two-way", position: 1, rotation: 0},
-                {type: "two-way", position: 1, rotation: 0},
-                {type: "two-way", position: 1, rotation: 0},
-                {type: "two-way", position: 1, rotation: 0},
-                {type: "two-way", position: 1, rotation: 0},
-                {type: "two-way", position: 1, rotation: 0},
-                {type: "three-way", position: 2, rotation: 0},
-                {type: "three-way", position: 2, rotation: 0},
-                {type: "three-way", position: 2, rotation: 0},
-                {type: "three-way", position: 2, rotation: 0},
-                {type: "three-way", position: 2, rotation: 0},
-                {type: "three-way", position: 2, rotation: 0},
-                {type: "three-way", position: 2, rotation: 0},
-                {type: "three-way", position: 2, rotation: 0},
-                {type: "three-way", position: 2, rotation: 0},
-                {type: "three-way", position: 2, rotation: 0},
-                {type: "three-way", position: 2, rotation: 0},
-                {type: "three-way", position: 2, rotation: 0},
-                {type: "three-way", position: 2, rotation: 0},
-                {type: "four-way", position: 3, rotation: 0},
-                {type: "four-way", position: 3, rotation: 0},
-                {type: "four-way", position: 3, rotation: 0},
-                {type: "four-way", position: 3, rotation: 0},
-                {type: "four-way", position: 3, rotation: 0},
-                {type: "four-way", position: 3, rotation: 0},
-                {type: "four-way", position: 3, rotation: 0},
-                {type: "four-way", position: 3, rotation: 0},
-                {type: "four-way", position: 3, rotation: 0},
-                {type: "four-way", position: 3, rotation: 0},
-                {type: "four-way", position: 3, rotation: 0},
                 {type: "elbow", position: 4, rotation: 0},
                 {type: "elbow", position: 4, rotation: 0},
                 {type: "elbow", position: 4, rotation: 0},
                 {type: "elbow", position: 4, rotation: 0},
                 {type: "elbow", position: 4, rotation: 0},
                 {type: "elbow", position: 4, rotation: 0},
-                {type: "elbow", position: 4, rotation: 0},
-                {type: "elbow", position: 4, rotation: 0},
-                {type: "elbow", position: 4, rotation: 0},
-                {type: "elbow", position: 4, rotation: 0},
-                {type: "elbow", position: 4, rotation: 0},
-                {type: "elbow", position: 4, rotation: 0},
-                {type: "elbow", position: 4, rotation: 0},
-                {type: "block-permanent", position: 5, rotation:0},
-                {type: "block-permanent", position: 5, rotation:0},
-                {type: "block-permanent", position: 5, rotation:0},
-                {type: "block-permanent", position: 5, rotation:0},
-                {type: "block-permanent", position: 5, rotation:0},
-                {type: "block-permanent", position: 5, rotation:0},
-                {type: "block-permanent", position: 5, rotation:0},
-                {type: "block-permanent", position: 5, rotation:0},
-                {type: "block-permanent", position: 5, rotation:0},
-                {type: "block-permanent", position: 5, rotation:0},
-                {type: "block-permanent", position: 5, rotation:0},
-                {type: "block-permanent", position: 5, rotation:0},
-                {type: "block-permanent", position: 5, rotation:0},
-                {type: "block-permanent", position: 5, rotation:0},
-                {type: "block-permanent", position: 5, rotation:0},
-                {type: "block-permanent", position: 5, rotation:0},
-                {type: "block-permanent", position: 5, rotation:0},
-                {type: "block-permanent", position: 5, rotation:0},
-                {type: "start-permanent", position: 6, rotation: 0},
-                {type: "start-permanent", position: 6, rotation: 0},
-                {type: "start-permanent", position: 6, rotation: 0},
-                {type: "start-permanent", position: 6, rotation: 0},
-                {type: "start-permanent", position: 6, rotation: 0},
-                {type: "start-permanent", position: 6, rotation: 0},
-                {type: "start-permanent", position: 6, rotation: 0},
-                {type: "start-permanent", position: 6, rotation: 0},
-                {type: "start-permanent", position: 6, rotation: 0},
-                {type: "end-permanent", position: 7, rotation: 1},
-                {type: "end-permanent", position: 7, rotation: 1},
-                {type: "end-permanent", position: 7, rotation: 1},
-                {type: "end-permanent", position: 7, rotation: 1},
-                {type: "end-permanent", position: 7, rotation: 1},
-                {type: "end-permanent", position: 7, rotation: 1},
+                {type: "three-way", position: 3, rotation: 0},
+                {type: "three-way", position: 3, rotation: 0},
+                {type: "three-way", position: 3, rotation: 0},
+                {type: "three-way", position: 3, rotation: 0},
+                {type: "three-way", position: 3, rotation: 0},
+                {type: "three-way", position: 3, rotation: 0},
             ]
         }
-                
+    },
+    
+    {
+        isUnlocked: false,
+        state: {
+            ["field"]: [
+                {type: "start-permanent", position: 32, rotation: 0},
+                {type: "start-permanent", position: 26, rotation: 3},
+                {type: "start-permanent", position: 42, rotation: 1},
+                {type: "end-permanent", position: 35, rotation: 0},
+                {type: "block-permanent", position: 34, rotation: 0}
+            ],
+            ["inventory"]: [
+                {type: "elbow", position: 4, rotation: 0},
+                {type: "elbow", position: 4, rotation: 0},
+                {type: "elbow", position: 4, rotation: 0},
+                {type: "elbow", position: 4, rotation: 0},
+                {type: "elbow", position: 4, rotation: 0},
+                {type: "elbow", position: 4, rotation: 0},
+                {type: "elbow", position: 4, rotation: 0},
+                {type: "two-way", position: 1, rotation: 0},
+                {type: "two-way", position: 1, rotation: 0},
+                {type: "three-way", position: 3, rotation: 0},
+                {type: "three-way", position: 3, rotation: 0},
+                {type: "three-way", position: 3, rotation: 0},
+                {type: "three-way", position: 3, rotation: 0},
+                {type: "three-way", position: 3, rotation: 0},
+                {type: "three-way", position: 3, rotation: 0},
+            ]
+        }
+    },
+
+    {
+        isUnlocked: false,
+        state: {
+            ["field"]: [
+                {type: "start-permanent", position: 1, rotation: 1},
+                {type: "start-permanent", position: 5, rotation: 1},
+                {type: "start-permanent", position: 8, rotation: 0},
+                {type: "start-permanent", position: 23, rotation: 2},
+                {type: "end-permanent", position: 39, rotation: 2},
+                {type: "start-permanent", position: 48, rotation: 0},
+                {type: "start-permanent", position: 55, rotation: 2},
+                {type: "start-permanent", position: 58, rotation: 3},
+                {type: "block-permanent", position: 17, rotation: 0},
+                {type: "block-permanent", position: 41, rotation: 0},
+            ],
+            ["inventory"]: [
+                {type: "two-way", position: 1, rotation: 0},
+                {type: "two-way", position: 1, rotation: 0},
+                {type: "two-way", position: 1, rotation: 0},
+                {type: "two-way", position: 1, rotation: 0},
+                {type: "two-way", position: 1, rotation: 0},
+                {type: "three-way", position: 2, rotation: 0},
+                {type: "three-way", position: 2, rotation: 0},
+                {type: "three-way", position: 2, rotation: 0},
+                {type: "three-way", position: 2, rotation: 0},
+                {type: "three-way", position: 2, rotation: 0},
+                {type: "three-way", position: 2, rotation: 0},
+                {type: "three-way", position: 2, rotation: 0},
+                {type: "three-way", position: 2, rotation: 0},
+                {type: "elbow", position: 4, rotation: 0},
+                {type: "elbow", position: 4, rotation: 0},
+                {type: "elbow", position: 4, rotation: 0},
+                {type: "elbow", position: 4, rotation: 0},
+                {type: "elbow", position: 4, rotation: 0},
+                {type: "elbow", position: 4, rotation: 0},
+                {type: "elbow", position: 4, rotation: 0}
+            ]
+        }
     }
-    // {
-    //     isUnlocked: false,
-    //     state: {
-    //         ["field"]: [],
-    //         ["inventory"]: [
-    //             {
-    //                 "type": "start-permanent",
-    //                 "position": 8,
-    //                 "rotation": 0
-    //             },
-    //             {
-    //                 "type": "elbow",
-    //                 "position": 0,
-    //                 "rotation": 0
-    //             },
-    //             {
-    //                 "type": "start-permanent",
-    //                 "position": 16,
-    //                 "rotation": 0
-    //             },
-    //             {
-    //                 "type": "three-way",
-    //                 "position": 2,
-    //                 "rotation": 2
-    //             },
-    //             {
-    //                 "type": "end-cap",
-    //                 "position": 3,
-    //                 "rotation": 2
-    //             },
-    //             {
-    //                 "type": "end-permanent",
-    //                 "position": 23,
-    //                 "rotation": 2
-    //             }
-    //         ]
-    //     }
-    // }
 ];
 
 window.gameInstance = gameInstance;

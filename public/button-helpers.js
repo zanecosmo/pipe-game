@@ -17,7 +17,10 @@ const resetGamePageSlots = () => {
     for (let i = 0; i < currentPage.areas.length; i++) {
         const area = currentPage.areas[i];
         if (area.type !== "slots") continue;
-        for (let j = 0; j < area.units.length; j++) area.units[j].occupiedBy.slot = [];
+        for (let j = 0; j < area.units.length; j++) {
+            area.units[j].occupiedBy.slot = [];
+            area.units[j].occupiedBy.clickable = true;
+        };
     };
 };
 
@@ -56,7 +59,7 @@ const extractState = (levelIndex) => {
             for (let j = 0; j < piece.rotation; j++) rotateDirections(piece.connections);
             const unit = gamePageAreas[areaIndex].units[piece.position];
             unit.occupiedBy.slot.push(piece);
-            // if (piece.type.includes("permanent")) unit.occupiedBy.clickable = false;
+            if (piece.type.includes("permanent")) unit.occupiedBy.clickable = false;
             if (piece.type !== "start-permanent") continue;
             connectedUnits.push(unit);
         };
