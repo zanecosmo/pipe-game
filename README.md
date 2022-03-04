@@ -7,7 +7,7 @@ My purpose for this project was the following:
 * build a project using a rendering technology (HTML5 Canvas) besides CSS and HTML elements
 
 ## Status
-In development.
+Deployed!
 
 #### Possible Features:
 * ability to save level states and progress with password (this would entail creating a DB and wiring up some async HTTP-request functionality)
