@@ -6,11 +6,11 @@ My purpose for this project was the following:
 * employ knowledge I've gained about data structures
 * build a project using a rendering technology (HTML5 Canvas) besides CSS and HTML elements
 
-## Status
-Deployed!
+## How it Works
+In your browser, go to https://zanecosmo.com/pipe-game/. From there you can click the play button, and the game will start you off on the first level. The only controls for the game are **LMB** to pick up and subsequently place pieces, and the **SPACEBAR** to rotate pieces 90 degrees at a time if they are being held. There are several menu buttons in the gameplay menu, including restart, level selection, exit, and as long as the current level has been completed, next level.
 
 #### Possible Features:
 * ability to save level states and progress with password (this would entail creating a DB and wiring up some async HTTP-request functionality)
 
 ## About
-I will use [heroku](https://www.heroku.com/about) to host this game on an Express/Node.js back-end. It uses almost entirely Javascript and utilizes HTML5's Canvas element for rendering.
+I the game uses [Heroku](https://www.heroku.com/about) as a hosting service, and the code is written with an Express/Node.js back-end. It uses almost entirely Javascript and utilizes HTML5's Canvas element for rendering.
